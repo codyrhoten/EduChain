@@ -37,18 +37,14 @@ class Blockchain(object):
         """
         timestamp = time()
         prev_hash = self.chain[-1]["myhash"]
-        #prev_hash = "test"
 
         current_hash = self.hash2(timestamp, prev_hash, self.pending_transactions)
-        print(f'current_hash:  {current_hash}')
-        print(f'previous block hash {self.chain[-1]}')
         
         block = {
             'index'         : len(self.chain) + 1,
             'timestamp'     : timestamp,
             'transactions'  : self.pending_transactions,
             'proof'         : proof,
-            #'previous_hash' : previous_hash or self.hash(self.chain[-1]),
             'previous_hash' : prev_hash,
             'myhash'        : current_hash
         }
@@ -95,6 +91,7 @@ class Blockchain(object):
     @staticmethod
     def hash(block):
         """
+        JM - I've replaced this with hash2 - keeping it around just in case
         Creates a SHA-256 hash of a Block
         :param block: <dict> Block
         :return: <str>
@@ -104,6 +101,27 @@ class Blockchain(object):
         block_string = json.dumps(block, sort_keys = True).encode()
         return hashlib.sha256(block_string).hexdigest()
     
+    
+    @staticmethod
+    def proof_of_work(block):
+        """
+        Proof-of-Work algorithm
+        Iterate the "proof" field until the conditions are satisfied
+        :param block: <dict>
+        """
+        while not Blockchain.valid_proof(block):
+            block["proof"] += 1
+
+    @staticmethod
+    def valid_proof(block):
+        """
+        The Proof-of-Work conditions
+        Check if the hash of the block starts with 4 zeroes
+        higher difficulty == more zeroes, lover difficulty == fewer zeroes
+        :param block: <dict>
+        """
+        return Blockchain.hash2(block)[:4] == "0000"
+
     @property
     def last_block(self):
         # Returns the last Block in the chain
@@ -111,12 +129,15 @@ class Blockchain(object):
     
 if __name__=="__main__":
     blockchain = Blockchain()      
-    print(blockchain.chain)
-    print(blockchain.hash(blockchain.last_block))
+    #print(blockchain.chain)
+    #print(blockchain.hash(blockchain.last_block))
 
     blockchain.new_transaction("Alice", "Bob", 50)
+    #blockchain.new_block(0)
+    blockchain.new_transaction("Jean", "Cody", 199)
     blockchain.new_block(0)
-    # blockchain.proof_of_work(blockchain.last_block)
-    #print(blockchain.hash(blockchain.last_block))
+
+    blockchain.proof_of_work(blockchain.last_block)
+    print(blockchain.hash2(blockchain.last_block))
     print(blockchain.chain)
 
