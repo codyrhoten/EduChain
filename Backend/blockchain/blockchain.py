@@ -1,5 +1,6 @@
 import hashlib
 import json
+from flask import Flask, jsonify, request
 from sqlite3 import TimestampFromTicks
 from time import time
 
@@ -128,6 +129,10 @@ class Blockchain(object):
         return self.chain[-1]
     
 if __name__=="__main__":
+    #app = Flask(__name__)
+
+    #app.run(host='0.0.0.0', port=5000)
+
     blockchain = Blockchain()      
     #print(blockchain.chain)
     #print(blockchain.hash(blockchain.last_block))
@@ -140,4 +145,5 @@ if __name__=="__main__":
     blockchain.proof_of_work(blockchain.last_block)
     print(blockchain.hash2(blockchain.last_block))
     print(blockchain.chain)
+    
 
