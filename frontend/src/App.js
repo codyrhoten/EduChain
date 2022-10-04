@@ -1,9 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import Container from 'react-bootstrap/Container';
+import Header from './Components/Header/Header';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     return (
-        <div></div>
+        <div>
+            <Container>
+                <Header />
+            </Container>
+        </div>
     );
 }
 
