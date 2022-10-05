@@ -3,7 +3,6 @@ import json
 from flask import Flask, jsonify, request
 from sqlite3 import TimestampFromTicks
 from time import time
-from util import hex_to_binary
 
 
 class Blockchain(object):
@@ -26,7 +25,6 @@ class Blockchain(object):
             'index'         : 1,
             'timestamp'     : timestamp,
             'transactions'  : [],
-            'proof'         : 100,
             'nonce'         : 0,
             'previous_hash' : '0000',
             'myhash'        : "genesis_hash"
@@ -81,11 +79,6 @@ class Blockchain(object):
             'previous_hash' : prev_hash,
             'myhash'        : myhash
         }
-        # new stuff
-        print(f'block before pow: {block}')
-        #proofed_block = self.proof_of_work(block)
-        #block["nonce"] = proofed_block["nonce"]
-        #  end new stuff
         # Reset the current list of transactions
         self.pending_transactions = []
         #self.chain.append(Blockchain.proof_of_work(block))
@@ -104,8 +97,7 @@ class Blockchain(object):
     
       
     @staticmethod
-    def hash(block):
-        
+    def hash(block): 
         # Hashes a block
         # We must make sure that the Dictionary is ordered, or we will have inconsistent hashes
         block_string = json.dumps(block, sort_keys = True).encode()
@@ -159,8 +151,8 @@ if __name__=="__main__":
     blockchain.new_transaction("Jean", "Cody", 199)
     blockchain.new_block(0)
 
-    #blockchain.proof_of_work(blockchain.last_block)
-    #print(blockchain.hash2(blockchain.last_block))
+    blockchain.proof_of_work(blockchain.last_block)
+    print(blockchain.hash(blockchain.last_block))
     print(blockchain.chain)
     
 
