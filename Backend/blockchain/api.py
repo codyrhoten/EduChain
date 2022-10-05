@@ -14,14 +14,30 @@ node_identifier = str(uuid4()).replace('-', '')
 # Instance the Blockchain
 blockchain = Blockchain()
 
+# This is for testing, it adds 3 transactions
+for i in range(3):
+    blockchain.new_transaction("A", "B", i)
+    blockchain.new_block(i)
+print(blockchain.chain)
+# end test code
+
+
+@app.route('/')
+def route_default():
+    return 'Welcome to the blockchain final project'
+
+@app.route('/blockchain', methods = ["GET"])
+def route_blockchain():
+    return jsonify(blockchain.chain)
+
 
 @app.route('/chain', methods = ["GET"])
 def full_chain():
 
     response = {
         'chain': blockchain.chain,
-        "length": len(blockchain.chain),
-        "nodes":  list(blockchain.nodes)
+        "length": len(blockchain.chain)
+        #"nodes":  list(blockchain.nodes)
 
     }
     return jsonify(response), 200

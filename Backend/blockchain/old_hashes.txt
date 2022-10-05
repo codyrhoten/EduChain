@@ -1,0 +1,41 @@
+    @staticmethod
+    def hash3(timestamp, prev_hash, pending_transactions, nonce):
+        """
+        Creates a SHA-256 hash for a new Block, not genesis
+        :param usually: timestamp, previous_hash, self.pending_transactions
+        :return: <str>
+        """
+        # Hashes a block
+        # We must make sure that the args are ordered, or we will have inconsistent hashes
+        stringified_timestamp = json.dumps(timestamp).encode()
+        print(f'timestamp: {stringified_timestamp}')
+        
+        stringified_prev_hash = json.dumps(prev_hash)
+        print(f'prev_hash: {stringified_prev_hash}')
+        
+        stringified_pending_transactions = json.dumps(pending_transactions)
+        print(f'pending_transactions: {stringified_pending_transactions}')
+        
+        stringified_nonce = json.dumps(nonce)
+        print(f'nonce: {stringified_nonce}')
+        
+        #joined_data = ''.join(stringified_args)
+        #print(f'joined_data: {joined_data}')
+        #return hashlib.sha256(joined_data.encode('utf-8')).hexdigest()    
+    
+    
+    @staticmethod
+    def hash2(*args):
+        """
+        Creates a SHA-256 hash for a new Block, not genesis
+        :param usually: timestamp, previous_hash, self.pending_transactions
+        :return: <str>
+        """
+        # Hashes a block
+        # We must make sure that the args are ordered, or we will have inconsistent hashes
+        stringified_args = map(stringify, args)
+        #stringifiedargs = sorted(map(lambda data: json.dumps(data), args))
+        print(f'stringified_args: {stringified_args}')
+        joined_data = ''.join(stringified_args)
+        #print(f'joined_data: {joined_data}')
+        return hashlib.sha256(joined_data.encode('utf-8')).hexdigest()
