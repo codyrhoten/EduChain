@@ -1,25 +1,25 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
-import mapImage from '../../Assets/scroll-with-map.png';
+import mapImage from '../assets/scroll-with-map.png';
 
 const Header = () => {
     const navLinks = [
-        { name: 'link1', url: '/link1' },
+        { name: 'My Wallet', url: '/wallet' },
         { name: 'link2', url: '/link2' },
         { name: 'link3', url: '/link3' },
     ];
 
     return (
-        <Navbar fixed='top'>
-            <Container style={{  backgroundColor: 'rgb(95,158,160)' }}>
+        <Navbar>
+            <Container style={{ backgroundColor: 'rgb(95,158,160)' }}>
                 <Navbar.Brand href='/'>
-                    <img 
-                        src={mapImage} 
-                        height='36' 
-                        alt='map scroll unfurled' 
+                    <img
+                        src={mapImage}
+                        height='36'
+                        alt='map scroll unfurled'
                     />
-                    <span>Chain Explorer</span>
+                    <span>name of chain here</span>
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>
                     <Nav className='ms-auto'>
