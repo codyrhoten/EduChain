@@ -20,7 +20,7 @@ const SearchBar = () => {
     return (
         <Container>
             <Form.Label htmlFor='destination'>
-                Noobchain PoW Testnet Explorer
+                Chain PoW Testnet Explorer
             </Form.Label>
             <InputGroup className='mb-3' /* style={{ height: "25px" }} */>
                 <Form.Control

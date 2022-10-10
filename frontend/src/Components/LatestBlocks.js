@@ -9,14 +9,18 @@ const LatestBlocks = ({ blocks }) => {
                 <Card.Body>
                     <Card.Title>Latest Blocks</Card.Title>
                     {blocks && blocks.map((block, i) => {
-                        <Row key={i}>
-                            <Col>{block.myHash}</Col>
-                            <Col>{block.index}</Col>
-                            <Col>{block.transactions.length}</Col>
-                        </Row>
+                        return (
+                            <Row key={i}>
+                                <Col>{block.hash}</Col>
+                                <Col>{block.index}</Col>
+                                <Col>{block.txs.length}</Col>
+                            </Row>
+                        );
                     })}
                 </Card.Body>
             </Card>
         </Col>
     )
 }
+
+export default LatestBlocks;
