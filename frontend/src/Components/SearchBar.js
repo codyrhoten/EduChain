@@ -20,7 +20,7 @@ const SearchBar = () => {
     return (
         <Container>
             <Form.Label htmlFor='destination'>
-                Chain PoW Testnet Explorer
+                <i>Chain PoW Testnet Explorer</i>
             </Form.Label>
             <InputGroup className='mb-3' /* style={{ height: "25px" }} */>
                 <Form.Control
@@ -31,22 +31,23 @@ const SearchBar = () => {
                     }}
                     value={search}
                     style={{
-                        borderTopLeftRadius: "10px",
-                        borderBottomLeftRadius: "10px",
+                        borderTopLeftRadius: '10px',
+                        borderBottomLeftRadius: '10px',
                     }}
-                    id="destination"
-                    placeholder="Search by address / block Hash / txn Hash"
+                    id='destination'
+                    placeholder='Search by address / block Hash / txn Hash'
                 />
                 <InputGroup.Text
-                    id="basic-addon1"
+                    id='basic-addon1'
                     style={{
-                        borderTopRightRadius: "10px",
-                        borderBottomRightRadius: "10px",
+                        borderTopRightRadius: '10px',
+                        borderBottomRightRadius: '10px',
                         cursor: "pointer",
                         backgroundColor: 'rgb(95,158,160)'
                     }}
                     onClick={query}
                 >
+                    Explore
                 </InputGroup.Text>
             </InputGroup>
         </Container>
