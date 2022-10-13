@@ -31,11 +31,10 @@ const LatestBlocks = ({ blocks }) => {
                                         Block # {block.index}<br />
                                         <i>{getTimestamp(block)}</i>
                                     </Col>
-                                    <Col>{block.txs.length}</Col>
+                                    <Col>{block.txs.length} Txs</Col>
                                 </Row>
-                                <br></br>
+                                <br />
                             </Container>
-
                         );
                     })}
                 </Card.Body>
