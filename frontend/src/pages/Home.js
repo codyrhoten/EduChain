@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import SearchBar from "../components/SearchBar";
 import Row from 'react-bootstrap/Row';
@@ -7,20 +8,29 @@ import LatestTxs from '../components/LatestTxs';
 import blockchain from '../blockchain.json';
 
 function Home() {
-    let latestBlocks = blockchain.chain.slice(0, 5).reverse();
-    let latestTxs = [];
+    const [blocks, setBlocks] = useState([]);
+    const [txs, setTxs] = useState([]);
 
-    latestBlocks.forEach(block => {
-        latestTxs.push(...block.txs.reverse());
-        if (latestTxs.length > 4) return;
-    });
+    useEffect(() => {
+        let latestBlocks = blockchain.chain.reverse().slice(0, 5);
+        let latestTxs = [];
+
+        latestBlocks.forEach(block => {
+            if (latestTxs.length > 4) return;
+            latestTxs.push(...block.txs.reverse());
+        });
+
+        latestTxs = latestTxs.slice(0, 5);
+        setBlocks(latestBlocks);
+        setTxs(latestTxs);
+    }, []);
 
     return (
         <Container className='postion-relative'>
             <SearchBar />
             <Row>
-                <LatestBlocks blocks={latestBlocks} />
-                <LatestTxs txs={latestTxs} />
+                <LatestBlocks blocks={blocks} />
+                <LatestTxs txs={txs} />
             </Row>
         </Container>
     );

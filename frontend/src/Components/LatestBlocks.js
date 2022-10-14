@@ -25,8 +25,8 @@ const LatestBlocks = ({ blocks }) => {
                     <Card.Title>Latest Blocks</Card.Title>
                     {blocks && blocks.map((block, i) => {
                         return (
-                            <Container>
-                                <Row key={i}>
+                            <Container key={i}>
+                                <Row>
                                     <Col>
                                         Block # {block.index}<br />
                                         <i>{getTimestamp(block)}</i>

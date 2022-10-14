@@ -5,11 +5,11 @@ import Container from 'react-bootstrap/Container';
 
 const LatestTxs = ({ txs }) => {
     const shortenAddress = address => {
-        let start = address.split('').slice(0, 6).join('');
-        let end = address.split('').slice(-6).join('');
+        let start = address.substring(0, 6);
+        let end = address.substring(address.length - 6);
         return start + '...' + end;
-    }
-
+    };
+/* CHANGE TXS IN BLOCKCHAIN.JSON TO HAVE ONLY LOWERCASE HASHES */
     return (
         <Col className='lg-6'>
             <Card>
@@ -17,15 +17,10 @@ const LatestTxs = ({ txs }) => {
                     <Card.Title>Latest Transactions</Card.Title>
                     {txs && txs.map((tx, i) => {
                         return (
-                            <Container>
-                                <Row key={i}>
+                            <Container key={i}>
+                                <Row>
                                     <Col>
-                                        Tx {
-                                            tx.hash
-                                            /* .split('')
-                                            .splice(0, 11) 
-                                            .join('')
-                                         */}
+                                        Tx {tx.hash.substring(0, 8)}...
                                     </Col>
                                     <Col>
                                         From: {shortenAddress(tx.sender)}<br />
