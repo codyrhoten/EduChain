@@ -5,8 +5,8 @@ import Container from 'react-bootstrap/Container';
 
 const LatestTxs = ({ txs }) => {
     const shortenAddress = address => {
-        let start = address.substring(0, 6);
-        let end = address.substring(address.length - 6);
+        let start = address.substring(0, 4);
+        let end = address.substring(address.length - 4);
         return start + '...' + end;
     };
 /* CHANGE TXS IN BLOCKCHAIN.JSON TO HAVE ONLY LOWERCASE HASHES */
