@@ -1,8 +1,6 @@
 import explorer from '../lib/explorer';
 import { useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Container from 'react-bootstrap/Container';
+import { Container, Form, InputGroup } from 'react-bootstrap';
 
 const SearchBar = () => {
     const [search, setSearch] = useState('');

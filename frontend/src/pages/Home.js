@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
+import { Container, Row } from 'react-bootstrap';
 import SearchBar from "../components/SearchBar";
-import Row from 'react-bootstrap/Row';
 import LatestBlocks from '../components/LatestBlocks';
 import LatestTxs from '../components/LatestTxs';
 // dummy data

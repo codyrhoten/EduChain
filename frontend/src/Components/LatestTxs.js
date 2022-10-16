@@ -1,7 +1,4 @@
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 
 const LatestTxs = ({ txs }) => {
     const shortenAddress = address => {
@@ -9,7 +6,7 @@ const LatestTxs = ({ txs }) => {
         let end = address.substring(address.length - 4);
         return start + '...' + end;
     };
-/* CHANGE TXS IN BLOCKCHAIN.JSON TO HAVE ONLY LOWERCASE HASHES */
+
     return (
         <Col className='lg-6'>
             <Card>
