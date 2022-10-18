@@ -1,5 +1,7 @@
-function Wallet() {
-    return(
+function Wallet({ setWalletSide }) {
+    setWalletSide(true);
+
+    return (
         <h1>Wallet page</h1>
     );
 }

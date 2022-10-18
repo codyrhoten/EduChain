@@ -1,4 +1,4 @@
-import explorer from '../lib/explorer';
+import explorer from '../utils/explorer';
 import { useState } from 'react';
 import { Container, Form, InputGroup } from 'react-bootstrap';
 

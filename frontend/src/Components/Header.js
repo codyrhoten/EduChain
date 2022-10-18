@@ -1,13 +1,7 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import mapImage from '../assets/scroll-with-map.png';
 
-const Header = () => {
-    const navLinks = [
-        { name: 'My Wallet', url: '/wallet' },
-        { name: 'link2', url: '/link2' },
-        { name: 'link3', url: '/link3' },
-    ];
-
+const Header = ({ navLinks }) => {
     return (
         <Navbar>
             <Container style={{ backgroundColor: 'rgb(95,158,160)' }}>
