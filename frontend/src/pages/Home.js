@@ -16,12 +16,12 @@ function Home({ blocks, txs }) {
     ];
 
     const _blocks = blocks.slice(0, 5);
-    const _txs = txs.reverse().slice(0, 5);
+    const _txs = txs.slice(0, 5);
     
     useEffect(() => {
         setLatestBlx(_blocks);
         setLatestTxs(_txs);
-    }, [_blocks, _txs]);
+    }, []);
 
     return (
         <>

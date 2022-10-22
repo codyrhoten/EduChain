@@ -14,26 +14,31 @@
             "txs": [
                 {
                     "amount": 20,
+                    "hash": "awurd3498tuw0mu20rdwurxumq9rxac",
                     "recipient": "AKE43UT43FT3MU0FTQ8D2MUD0Q",
                     "sender": "ADSFCA9W84UT9438TU0FTUMFT"
                 },
                 {
                     "amount": 50,
+                    "hash": "awurd3498tuw0mu20rdwurxumq9rxac",
                     "recipient": "ADSFCA9W84UT9438TU0FTUMFT",
                     "sender": "AKE43UT43FT3MU0FTQ8D2MUD0Q"
                 },
                 {
                     "amount": 10,
+                    "hash": "awurd3498tuw0mu20rdwurxumq9rxac",
                     "recipient": "ADSFCA9W84UT9438TU0FTUMFT",
                     "sender": "AKE43UT43FT3MU0FTQ8D2MUD0Q"
                 },
                 {
                     "amount": 20,
+                    "hash": "awurd3498tuw0mu20rdwurxumq9rxac",
                     "recipient": "alkjt8359o4eut3qmco4wut09mut0",
                     "sender": "ADSFCA9W84UT9438TU0FTUMFT"
                 },
                 {
                     "amount": 100,
+                    "hash": "awurd3498tuw0mu20rdwurxumq9rxac",
                     "recipient": "ewoiuft0943muft430muft0tuq8ujh",
                     "sender": "alkjt8359o4eut3qmco4wut09mut0"
                 }

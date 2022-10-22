@@ -7,6 +7,8 @@ const LatestTxs = ({ txs }) => {
         return start + '...' + end;
     };
 
+    console.log(txs)
+
     return (
         <Col className='lg-6'>
             <Card>
