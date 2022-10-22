@@ -15,12 +15,13 @@ function Home({ blocks, txs }) {
         { name: 'Miner', url: '/miner' },
     ];
 
-
-
+    const _blocks = blocks.slice(0, 5);
+    const _txs = txs.reverse().slice(0, 5);
+    
     useEffect(() => {
-        setLatestBlx(blocks.reverse().slice(0, 5));
-        setLatestTxs(txs.reverse().slice(0, 5));
-    }, [blocks, txs]);
+        setLatestBlx(_blocks);
+        setLatestTxs(_txs);
+    }, [_blocks, _txs]);
 
     return (
         <>

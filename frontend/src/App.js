@@ -11,11 +11,12 @@ function App() {
     const [txs, setTxs] = useState([]);
 
     useEffect(() => {
+        // const _blocks = blockchain.chain;
         setBlocks(blockchain.chain);
         let _txs = [];
-        blocks.forEach(b => _txs.push(b._txs));
+        blocks.forEach(b => _txs.push(...b.txs));
         setTxs(_txs);
-    }, [blockchain])
+    }, [blocks]);
 
     return (
         <div className='App'>
