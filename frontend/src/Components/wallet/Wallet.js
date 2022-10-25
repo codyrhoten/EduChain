@@ -1,16 +1,10 @@
 import { Container } from "react-bootstrap";
 import Header from "../Header";
 
-function Wallet() {
-    const walletLinks = [
-        { name: 'Explorer', url: '/' },
-        { name: 'Create', url: '/create-wallet' },
-        { name: 'Open', url: '/open-wallet' },
-    ];
-
+function Wallet({ navLinks }) {
     return (
         <>
-            <Header navLinks={walletLinks} />
+            <Header navLinks={navLinks} />
             <Container className='postion-relative'>
                 <h1 >Wallet page</h1>
             </Container>

@@ -29,6 +29,7 @@ const LatestBlocks = ({ blocks }) => {
                                         <i>{getTimestamp(block)}</i>
                                     </Col>
                                     <Col>{block.txs.length} Txs</Col>
+                                    {/* <Col>{block.minedBy}</Col> */}
                                 </Row>
                                 <br />
                             </Container>
