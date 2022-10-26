@@ -9,7 +9,7 @@ const LatestTxs = ({ latestTxs }) => {
 
     return (
         <Col className='lg-6'>
-            <Card>
+            <Card className='text-center'>
                 <Card.Body>
                     <Card.Title>Latest Transactions</Card.Title>
                     {latestTxs && latestTxs.map((tx, i) => {
@@ -17,7 +17,7 @@ const LatestTxs = ({ latestTxs }) => {
                             <Container key={i}>
                                 <Row>
                                     <Col>
-                                        Tx {tx.hash.substring(0, 8)}...
+                                        Tx {tx.hash.substring(0, 12)}...
                                     </Col>
                                     <Col>
                                         From: {shortenAddress(tx.sender)}<br />
@@ -29,6 +29,7 @@ const LatestTxs = ({ latestTxs }) => {
                             </Container>
                         );
                     })}
+                    <Card.Link href='all-txs'>See all transactions</Card.Link>
                 </Card.Body>
             </Card>
         </Col>

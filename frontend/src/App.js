@@ -3,12 +3,14 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Wallet from './components/wallet/Wallet';
 import AllBlocks from './pages/AllBlocks';
+import AllTxs from './pages/AllTxs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
 import api from './dummyApi';
 
 function App() {
     const [blocks, setBlocks] = useState([]);
+    const [txs, setTxs] = useState([]);
     const [latestBlx, setLatestBlx] = useState([]);
     const [latestTxs, setLatestTxs] = useState([]);
 
@@ -26,7 +28,8 @@ function App() {
 
     useEffect(() => {
         const data = api();
-        setBlocks(data.blocks)
+        setBlocks(data.blocks);
+        setTxs(data.txs);
         setLatestBlx(data.latestBlx);
         setLatestTxs(data.latestTxs);
     }, []);
@@ -51,6 +54,13 @@ function App() {
                     element={<AllBlocks 
                         navLinks={explorerLinks} 
                         blocks={blocks}
+                    />}
+                />
+                <Route
+                    path='/all-txs'
+                    element={<AllTxs 
+                        navLinks={explorerLinks} 
+                        txs={txs}
                     />}
                 />
             </Routes>
