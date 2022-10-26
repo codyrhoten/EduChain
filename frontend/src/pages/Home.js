@@ -5,15 +5,15 @@ import LatestBlocks from '../components/explorer/LatestBlocks';
 import LatestTxs from '../components/explorer/LatestTxs';
 
 
-function Home ({ blocks, txs, navLinks }) {
+function Home ({ latestBlx, latestTxs, navLinks }) {
     return (
         <>
             <Header navLinks={navLinks} />
             <Container className='postion-relative'>
                 <SearchBar />
                 <Row>
-                    <LatestBlocks blocks={blocks} />
-                    <LatestTxs txs={txs} />
+                    <LatestBlocks latestBlx={latestBlx} />
+                    <LatestTxs latestTxs={latestTxs} />
                 </Row>
             </Container>
         </>

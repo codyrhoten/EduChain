@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Wallet from './components/wallet/Wallet';
+import AllBlocks from './pages/AllBlocks';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
 import api from './dummyApi';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     const [blocks, setBlocks] = useState([]);
-    const [txs, setTxs] = useState([]);
+    const [latestBlx, setLatestBlx] = useState([]);
+    const [latestTxs, setLatestTxs] = useState([]);
 
     const explorerLinks = [
         { name: 'Wallet', url: '/wallet' },
@@ -24,8 +26,9 @@ function App() {
 
     useEffect(() => {
         const data = api();
-        setBlocks(data.latestBlx);
-        setTxs(data.latestTxs);
+        setBlocks(data.blocks)
+        setLatestBlx(data.latestBlx);
+        setLatestTxs(data.latestTxs);
     }, []);
 
     return (
@@ -33,11 +36,22 @@ function App() {
             <Routes>
                 <Route 
                     path='/' 
-                    element={<Home navLinks={explorerLinks} blocks={blocks} txs={txs} />} 
+                    element={<Home 
+                        navLinks={explorerLinks} 
+                        latestBlx={latestBlx} 
+                        latestTxs={latestTxs} 
+                    />} 
                 />
                 <Route
                     path='/wallet'
                     element={<Wallet navLinks={walletLinks} />}
+                />
+                <Route
+                    path='/all-blocks'
+                    element={<AllBlocks 
+                        navLinks={explorerLinks} 
+                        blocks={blocks}
+                    />}
                 />
             </Routes>
         </div>
