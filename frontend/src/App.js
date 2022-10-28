@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'; 
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/explorer/Home';
 import Wallet from './components/wallet/Wallet';
-import AllBlocks from './pages/AllBlocks';
-import AllTxs from './pages/AllTxs';
+import AllBlocks from './pages/explorer/AllBlocks';
+import AllTxs from './pages/explorer/AllTxs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
 import api from './dummyApi';

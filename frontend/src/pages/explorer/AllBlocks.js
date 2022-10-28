@@ -1,6 +1,6 @@
 import { Card, Container, Table } from 'react-bootstrap';
-import SearchBar from '../components/SearchBar';
-import Header from '../components/Header';
+import SearchBar from '../../components/explorer/SearchBar';
+import Header from '../../components/Header';
 
 const AllBlocks = ({ blocks, navLinks }) => {
     return (

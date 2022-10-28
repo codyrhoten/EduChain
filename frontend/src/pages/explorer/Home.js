@@ -1,8 +1,8 @@
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { Container, Row } from 'react-bootstrap';
-import SearchBar from "../components/SearchBar";
-import LatestBlocks from '../components/explorer/LatestBlocks';
-import LatestTxs from '../components/explorer/LatestTxs';
+import SearchBar from "../../components/explorer/SearchBar";
+import LatestBlocks from '../../components/explorer/LatestBlocks';
+import LatestTxs from '../../components/explorer/LatestTxs';
 
 
 function Home ({ latestBlx, latestTxs, navLinks }) {

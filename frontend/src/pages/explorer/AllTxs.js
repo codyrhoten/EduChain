@@ -1,7 +1,7 @@
 import { Card, Container, Table } from 'react-bootstrap';
-import SearchBar from '../components/SearchBar';
-import Header from '../components/Header';
-import formatTimestamp from '../utils/formatTimestamp';
+import SearchBar from '../../components/explorer/SearchBar';
+import Header from '../../components/Header';
+import formatTimestamp from '../../utils/formatTimestamp';
 
 const AllTxs = ({ txs, navLinks }) => {
     return (
