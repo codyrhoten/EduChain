@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'; 
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/explorer/Home';
-import Wallet from './components/wallet/Wallet';
+import Wallet from './pages/Wallet';
+import Faucet from './pages/Faucet';
+import Miner from './pages/Miner';
 import AllBlocks from './pages/explorer/AllBlocks';
 import AllTxs from './pages/explorer/AllTxs';
 import Block from './pages/explorer/Block';
@@ -27,6 +29,18 @@ function App() {
         { name: 'Open', url: '/open-wallet' },
     ];
 
+    const faucetLinks = [
+        { name: 'Explorer', url: '/'},
+        { name: 'Wallet', url: '/wallet'},
+        { name: 'Miner', url: '/miner'},
+    ]
+
+    const minerLinks = [
+        { name: 'Explorer', url: '/'},
+        { name: 'Wallet', url: '/wallet'},
+        { name: 'Faucet', url: '/faucet'},
+    ]
+
     useEffect(() => {
         const data = api();
         setBlocks(data.blocks);
@@ -34,6 +48,8 @@ function App() {
         setLatestBlx(data.latestBlx);
         setLatestTxs(data.latestTxs);
     }, []);
+
+    console.log(blocks)
 
     return (
         <div className='App'>
@@ -49,6 +65,14 @@ function App() {
                 <Route
                     path='/wallet'
                     element={<Wallet navLinks={walletLinks} />}
+                />
+                <Route
+                    path='/faucet'
+                    element={<Faucet navLinks={faucetLinks} />}
+                />
+                <Route
+                    path='/miner'
+                    element={<Miner navLinks={minerLinks} />}
                 />
                 <Route
                     path='/blocks'

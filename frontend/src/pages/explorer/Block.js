@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 
 const Block = ({ blocks, navLinks }) => {
     const { blockIndex } = useParams();
-    const [block, setBlock] = useState();
+    const [block, setBlock] = useState({});
 
     useEffect(() => {
         setBlock(blocks.find(b => b.index === blockIndex));
-    }, [blocks, blockIndex])
-
+    }, [block, blocks, blockIndex]);
+    
+    console.log(blocks, block)
+    
     return (
         <>
             <Header navLinks={navLinks} />
@@ -25,16 +27,16 @@ const Block = ({ blocks, navLinks }) => {
                                 <tr>
                                     <th>Timestamp</th>
                                     <th>Transactions</th>
-                                    <th>Mined by</th>
-                                    <th>Reward</th>
+                                    {/* <th>Mined by</th>
+                                    <th>Reward</th> */}
                                     <th>Hash</th>
-                                    <th>Nonce</th>
-                                    <th>Previous Block Hash</th>
+                                    {/* <th>Nonce</th>
+                                    <th>Previous Block Hash</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>{block.timestamp}</tr>
-                                <tr>{block.txs.length}</tr>
+                                {<tr>{block.txs.length}</tr>}
                                 {/* <tr>{block.minedBy}</tr>
                                 <tr>{block.reward}</tr> */}
                                 <tr>{block.hash}</tr>

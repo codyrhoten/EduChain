@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import Header from "../Header";
+import Header from "../components/Header";
 
 function Wallet({ navLinks }) {
     return (
