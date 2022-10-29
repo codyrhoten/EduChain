@@ -4,6 +4,7 @@ import Home from './pages/explorer/Home';
 import Wallet from './components/wallet/Wallet';
 import AllBlocks from './pages/explorer/AllBlocks';
 import AllTxs from './pages/explorer/AllTxs';
+import Block from './pages/explorer/Block';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
 import api from './dummyApi';
@@ -50,17 +51,24 @@ function App() {
                     element={<Wallet navLinks={walletLinks} />}
                 />
                 <Route
-                    path='/all-blocks'
+                    path='/blocks'
                     element={<AllBlocks 
                         navLinks={explorerLinks} 
                         blocks={blocks}
                     />}
                 />
                 <Route
-                    path='/all-txs'
+                    path='/transactions'
                     element={<AllTxs 
                         navLinks={explorerLinks} 
                         txs={txs}
+                    />}
+                />
+                <Route
+                    path='/block/:blockIndex'
+                    element={<Block 
+                        navLinks={explorerLinks}
+                        blocks={blocks}
                     />}
                 />
             </Routes>

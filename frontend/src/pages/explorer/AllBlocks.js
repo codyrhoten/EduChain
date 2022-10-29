@@ -1,6 +1,7 @@
 import { Card, Container, Table } from 'react-bootstrap';
 import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header';
+import formatTimestamp from '../../utils/formatTimestamp';
 
 const AllBlocks = ({ blocks, navLinks }) => {
     return (
@@ -26,7 +27,7 @@ const AllBlocks = ({ blocks, navLinks }) => {
                                     blocks.map((b, i) => (
                                         <tr style={{ cursor: 'pointer'}} key={i}>
                                             <td>{b.index}     </td>
-                                            <td>{b.timestamp}</td>
+                                            <td>{formatTimestamp(b)}</td>
                                             {/* <td>{b.minedBy}</td> */}
                                             <td>{b.txs.length}</td>
                                             {/* <td>{b.reward}</td> */}

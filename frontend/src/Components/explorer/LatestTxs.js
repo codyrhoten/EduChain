@@ -29,7 +29,7 @@ const LatestTxs = ({ latestTxs }) => {
                             </Container>
                         );
                     })}
-                    <Card.Link href='all-txs'>See all transactions</Card.Link>
+                    <Card.Link href='transactions'>See all transactions</Card.Link>
                 </Card.Body>
             </Card>
         </Col>

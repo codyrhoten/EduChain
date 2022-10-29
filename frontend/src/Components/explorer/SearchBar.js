@@ -33,7 +33,7 @@ const SearchBar = () => {
                         borderBottomLeftRadius: '10px',
                     }}
                     id='destination'
-                    placeholder='Search by address / block Hash / txn Hash'
+                    placeholder='Search by address / block index / txn hash'
                 />
                 <InputGroup.Text
                     id='basic-addon1'

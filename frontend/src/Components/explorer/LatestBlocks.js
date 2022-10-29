@@ -11,7 +11,7 @@ const LatestBlocks = ({ latestBlx }) => {
                         <Container key={i}>
                             <Row>
                                 <Col>
-                                    Block # {block.index}
+                                    Block # <Card.Link href={`/block/${block.index}`}>{block.index}</Card.Link>
                                     <br />
                                     <i>{formatTimestamp(block)}</i>
                                 </Col>
@@ -21,7 +21,7 @@ const LatestBlocks = ({ latestBlx }) => {
                             <br />
                         </Container>
                     ))}
-                    <Card.Link href='/all-blocks'>See all blocks</Card.Link>
+                    <Card.Link href='/blocks'>See all blocks</Card.Link>
                 </Card.Body>
             </Card>
         </Col>
