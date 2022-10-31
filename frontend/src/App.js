@@ -39,7 +39,7 @@ function App() {
         { name: 'Explorer', url: '/'},
         { name: 'Wallet', url: '/wallet'},
         { name: 'Faucet', url: '/faucet'},
-    ]
+    ];
 
     useEffect(() => {
         const data = api();

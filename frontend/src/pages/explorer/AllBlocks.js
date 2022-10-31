@@ -27,7 +27,7 @@ const AllBlocks = ({ blocks, navLinks }) => {
                             <tbody>
                                 {blocks.length > 0 &&
                                     blocks.map((b, i) => (
-                                        <tr style={{ cursor: 'pointer'}} key={i}>
+                                        <tr key={i}>
                                             <td>{b.index}     </td>
                                             <td>{formatTimestamp(b)}</td>
                                             {/* <td>{b.minedBy}</td> */}

@@ -27,7 +27,7 @@ const AllTxs = ({ txs, navLinks }) => {
                             <tbody>
                                 {txs.length > 0 &&
                                     txs.map((t, i) => (
-                                        <tr style={{ cursor: 'pointer'}} key={i}>
+                                        <tr key={i}>
                                             <td>{t.hash.substring(0, 20)}...</td>
                                             {/* <td>{tx.minedInBlock}</td> */}
                                             {/* <td>{formatTimestamp(t.timestamp)}</td> */}
