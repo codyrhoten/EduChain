@@ -20,35 +20,42 @@ const Block = ({ blocks, navLinks }) => {
             <Header navLinks={navLinks} />
             <Container>
                 <SearchBar />
+                <h4 align='center'>Block # {blockIndex}</h4>
                 <Card>
                     <Card.Body>
-                        <Card.Title>Block # {blockIndex}</Card.Title>
-                        <Table responsive>
-                            <thead>
+                        {/* <Card.Title>Block # {blockIndex}</Card.Title> */}
+                        {block !== undefined && Object.keys(block).length > 0 &&
+                            <Table responsive>
                                 <tr>
                                     <th>Timestamp</th>
-                                    <th>Transactions</th>
-                                    {/* <th>Mined by</th>
-                                    <th>Reward</th> */}
-                                    <th>Hash</th>
-                                    <th>Nonce</th>
-                                    <th>Previous Block Hash</th>
+                                    <td>{formatTimestamp(block)}</td>
                                 </tr>
-                            </thead>
-                            {block !== undefined && Object.keys(block).length > 0 &&
-                                <tbody>
-                                    <tr>
-                                        <td>{formatTimestamp(block)}</td>
-                                        <td>{block.txs.length}</td>
-                                        {/* <td>{block.minedBy}</td> */}
-                                        {/* <td>{block.reward}</td> */}
-                                        <td>{block.hash}</td>
-                                        <td>{block.nonce}</td>
-                                        <td>{block.prevBlockHash}</td>
-                                    </tr>
-                                </tbody>
-                            }
-                        </Table>
+                                <tr>
+                                    <th>Transactions</th>
+                                    <td>{block.txs.length}</td>
+                                </tr>
+                                {/* <tr>
+                                    <th>Mined by</th>
+                                    <td>{block.minedBy}</td>
+                                </tr>
+                                <tr>
+                                    <th>Reward</th>
+                                    <td>{block.reward}</td>
+                                </tr> */}
+                                <tr>
+                                    <th>Hash</th>
+                                    <td>{block.hash}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nonce</th>
+                                    <td>{block.nonce}</td>
+                                </tr>
+                                <tr>
+                                    <th>Previous Block Hash</th>
+                                    <td>{block.prevBlockHash}</td>
+                                </tr>
+                            </Table>
+                        }
                     </Card.Body>
                 </Card>
             </Container>
