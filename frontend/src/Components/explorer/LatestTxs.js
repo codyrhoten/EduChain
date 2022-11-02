@@ -17,19 +17,21 @@ const LatestTxs = ({ latestTxs }) => {
                             <Container key={i}>
                                 <Row>
                                     <Col>
-                                        Tx {tx.hash.substring(0, 12)}...
+                                        Tx <Card.Link href={`/tx/${tx.hash}`}>{tx.hash.substring(0, 12)}...</Card.Link>
                                     </Col>
                                     <Col>
                                         From: {shortenAddress(tx.sender)}<br />
                                         To: {shortenAddress(tx.recipient)}
                                     </Col>
-                                    <Col>{tx.amount} ETH</Col>
+                                    <Col>{tx.amount} coins</Col>
                                 </Row>
                                 <br />
                             </Container>
                         );
                     })}
-                    <Card.Link href='transactions'>See all transactions</Card.Link>
+                    <Card.Link href='transactions'>
+                        See all transactions
+                    </Card.Link>
                 </Card.Body>
             </Card>
         </Col>

@@ -1,9 +1,9 @@
- const formatTimestamp = _block => {
-    let timestamp = new Date(_block.timestamp);
+const formatTimestamp = obj => {
+    let timestamp = new Date(obj.timestamp);
     let tz = timestamp.toTimeString().match(/\((.+)\)/)[1];
     tz = tz.match(/[A-Z]/g).join('');
-    timestamp = timestamp.getDate() +
-        '/' + (timestamp.getMonth() + 1) +
+    timestamp = (timestamp.getMonth() + 1) +
+        '/' + timestamp.getDate() +
         '/' + timestamp.getFullYear() +
         ' ' + timestamp.getHours() +
         ':' + timestamp.getMinutes() +

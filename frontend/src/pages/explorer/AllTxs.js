@@ -16,8 +16,8 @@ const AllTxs = ({ txs, navLinks }) => {
                             <thead>
                                 <tr>
                                     <th>Hash</th>
-                                    {/* <th>Block</th> */}
-                                    {/* <th>Time</th> */}
+                                    {/* <th>Block</th>
+                                    <th>Time</th> */}
                                     <th>From</th>
                                     <th>To</th>
                                     <th>Amount</th>
@@ -28,9 +28,9 @@ const AllTxs = ({ txs, navLinks }) => {
                                 {txs.length > 0 &&
                                     txs.map((t, i) => (
                                         <tr key={i}>
-                                            <td>{t.hash.substring(0, 20)}...</td>
-                                            {/* <td>{tx.minedInBlock}</td> */}
-                                            {/* <td>{formatTimestamp(t.timestamp)}</td> */}
+                                            <td><Card.Link href={`/tx/${t.hash}`}>{t.hash.substring(0, 20)}...</Card.Link></td>
+                                            {/* <td>{tx.block}</td>
+                                            <td>{formatTimestamp(t.timestamp)}</td> */}
                                             {<td>{t.sender.substring(0, 20)}...</td>}
                                             <td>{t.recipient.substring(0, 20)}...</td>
                                             <td>{t.amount}</td>

@@ -23,9 +23,12 @@ const Block = ({ blocks, navLinks }) => {
                 <h4 align='center'>Block # {blockIndex}</h4>
                 <Card>
                     <Card.Body>
-                        {/* <Card.Title>Block # {blockIndex}</Card.Title> */}
                         {block !== undefined && Object.keys(block).length > 0 &&
                             <Table responsive>
+                                {/* <tr>
+                                    <th>Status</th>
+                                    <td>{block.status}</td>
+                                </tr> */}
                                 <tr>
                                     <th>Timestamp</th>
                                     <td>{formatTimestamp(block)}</td>

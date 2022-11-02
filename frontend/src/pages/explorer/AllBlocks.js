@@ -28,7 +28,7 @@ const AllBlocks = ({ blocks, navLinks }) => {
                                 {blocks.length > 0 &&
                                     blocks.map((b, i) => (
                                         <tr key={i}>
-                                            <td>{b.index}     </td>
+                                            <td><Card.Link href={`/block/${b.index}`}>{b.index}</Card.Link></td>
                                             <td>{formatTimestamp(b)}</td>
                                             {/* <td>{b.minedBy}</td> */}
                                             <td>{b.txs.length}</td>
