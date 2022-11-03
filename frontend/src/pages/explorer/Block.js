@@ -13,8 +13,6 @@ const Block = ({ blocks, navLinks }) => {
         setBlock(blocks.find(b => b.index.toString() === blockIndex));
     }, [blocks, block, blockIndex]);
 
-    console.log(blocks, block)
-
     return (
         <>
             <Header navLinks={navLinks} />
