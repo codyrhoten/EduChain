@@ -14,18 +14,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import api from './dummyApi';
 
 function App() {
+    const data = new api();
     const [blocks, setBlocks] = useState([]);
     const [txs, setTxs] = useState([]);
     const [latestBlx, setLatestBlx] = useState([]);
     const [latestTxs, setLatestTxs] = useState([]);
 
     useEffect(() => {
-        const data = api();
-        setBlocks(data.blocks);
-        setTxs(data.txs);
-        setLatestBlx(data.latestBlx);
-        setLatestTxs(data.latestTxs);
+        setBlocks(data.getBlocks().reverse());
+        setTxs(data.getTxs());
+        setLatestBlx(blocks.slice(0, 5));
+        setLatestTxs(txs.slice(0, 5));
     }, []);
+
+    console.log(blocks)
+    console.log(latestBlx)
 
     return (
         <div className='App'>

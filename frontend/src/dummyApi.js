@@ -1,12 +1,23 @@
 const blockchain = require('./blockchain.json');
 
-const api = () => {
-    const blocks = blockchain.chain.reverse();
-    const latestBlx = blocks.slice(0, 5);
-    let txs = [];
-    latestBlx.forEach(b => txs.push(...b.txs.reverse()));
-    const latestTxs = txs.slice(0, 5);
-    return { blocks, txs, latestBlx, latestTxs };  
-};
+export default class api {
+    constructor() {
+        this.blockchain = blockchain;
+        this.blocks = [];
+        this.txs = [];
+    }
 
-module.exports = api;
+    getBlocks() {
+        this.blocks = blockchain.chain;
+        return this.blocks;
+    }
+
+    getTxs() {
+        this.getBlocks().forEach(b => this.txs.push(...b.txs));
+        this.txs = this.txs.reverse();
+        return this.txs;
+    }
+
+    /* const latestBlx = blocks.slice(0, 5);
+    const latestTxs = txs.slice(0, 5); */
+}

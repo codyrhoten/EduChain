@@ -4,6 +4,8 @@ import Header from '../../components/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const AllTxs = ({ txs, navLinks }) => {
+
+    console.log(txs)
     return (
         <>
             <Header navLinks={navLinks} />

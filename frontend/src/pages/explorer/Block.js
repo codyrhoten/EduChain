@@ -23,38 +23,40 @@ const Block = ({ blocks, navLinks }) => {
                     <Card.Body>
                         {block !== undefined && Object.keys(block).length > 0 &&
                             <Table responsive>
-                                {/* <tr>
-                                    <th>Status</th>
-                                    <td>{block.status}</td>
-                                </tr> */}
-                                <tr>
-                                    <th>Timestamp</th>
-                                    <td>{formatTimestamp(block)}</td>
-                                </tr>
-                                <tr>
-                                    <th>Transactions</th>
-                                    <td>{block.txs.length}</td>
-                                </tr>
-                                {/* <tr>
-                                    <th>Mined by</th>
-                                    <td>{block.minedBy}</td>
-                                </tr>
-                                <tr>
-                                    <th>Reward</th>
-                                    <td>{block.reward}</td>
-                                </tr> */}
-                                <tr>
-                                    <th>Hash</th>
-                                    <td>{block.hash}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nonce</th>
-                                    <td>{block.nonce}</td>
-                                </tr>
-                                <tr>
-                                    <th>Previous Block Hash</th>
-                                    <td>{block.prevBlockHash}</td>
-                                </tr>
+                                <tbody>
+                                    {/* <tr>
+                                        <th>Status</th>
+                                        <td>{block.status}</td>
+                                    </tr> */}
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <td>{formatTimestamp(block)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Transactions</th>
+                                        <td>{block.txs.length}</td>
+                                    </tr>
+                                    {/* <tr>
+                                        <th>Mined by</th>
+                                        <td>{block.minedBy}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Reward</th>
+                                        <td>{block.reward}</td>
+                                    </tr> */}
+                                    <tr>
+                                        <th>Hash</th>
+                                        <td>{block.hash}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nonce</th>
+                                        <td>{block.nonce}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Previous Block Hash</th>
+                                        <td>{block.prevBlockHash}</td>
+                                    </tr>
+                                </tbody>
                             </Table>
                         }
                     </Card.Body>
