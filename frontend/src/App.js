@@ -15,20 +15,21 @@ import api from './dummyApi';
 
 function App() {
     const data = new api();
-    const [blocks, setBlocks] = useState([]);
-    const [txs, setTxs] = useState([]);
-    const [latestBlx, setLatestBlx] = useState([]);
-    const [latestTxs, setLatestTxs] = useState([]);
+    const [blockchain, setBlockchain] = useState({
+        blocks: [],
+        txs: [],
+        latestBlx: [],
+        latestTxs: []
+    });
 
     useEffect(() => {
-        setBlocks(data.getBlocks().reverse());
-        setTxs(data.getTxs());
-        setLatestBlx(blocks.slice(0, 5));
-        setLatestTxs(txs.slice(0, 5));
+        setBlockchain({
+            blocks: data.getBlocks(),
+            txs: data.getTxs(),
+            latestBlx: data.getBlocks().slice(0, 5),
+            latestTxs: data.getTxs().slice(0, 5)
+        })
     }, []);
-
-    console.log(blocks)
-    console.log(latestBlx)
 
     return (
         <div className='App'>
@@ -37,8 +38,8 @@ function App() {
                     path='/' 
                     element={<Home 
                         navLinks={navLinks.explorer}
-                        latestBlx={latestBlx} 
-                        latestTxs={latestTxs} 
+                        latestBlx={blockchain.latestBlx} 
+                        latestTxs={blockchain.latestTxs} 
                     />} 
                 />
                 <Route
@@ -57,28 +58,28 @@ function App() {
                     path='/blocks'
                     element={<AllBlocks 
                         navLinks={navLinks.explorer} 
-                        blocks={blocks}
+                        blocks={blockchain.blocks}
                     />}
                 />
                 <Route
                     path='/transactions'
                     element={<AllTxs 
                         navLinks={navLinks.explorer} 
-                        txs={txs}
+                        txs={blockchain.txs}
                     />}
                 />
                 <Route
                     path='/block/:blockIndex'
                     element={<Block 
                         navLinks={navLinks.explorer}
-                        blocks={blocks}
+                        blocks={blockchain.blocks}
                     />}
                 />
                 <Route
                     path='/tx/:txHash'
                     element={<Transaction 
                         navLinks={navLinks.explorer}
-                        txs={txs}
+                        txs={blockchain.txs}
                     />}
                 />
             </Routes>

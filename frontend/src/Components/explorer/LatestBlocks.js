@@ -1,13 +1,13 @@
 import { Col, Row, Container, Card } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const LatestBlocks = ({ latestBlx }) => {
+const LatestBlocks = ({ latestBlx }) => {    
      return (
         <Col className='lg-6'>
             <Card className='text-center'>
                 <Card.Body>
                     <Card.Title>Latest Blocks</Card.Title>
-                    {latestBlx && latestBlx.map((block, i) => (
+                    {latestBlx.length > 0 && latestBlx.map((block, i) => (
                         <Container key={i}>
                             <Row>
                                 <Col>

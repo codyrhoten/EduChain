@@ -8,7 +8,7 @@ export default class api {
     }
 
     getBlocks() {
-        this.blocks = blockchain.chain;
+        this.blocks = blockchain.chain.reverse();
         return this.blocks;
     }
 
