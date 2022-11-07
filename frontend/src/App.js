@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import navLinks from './utils/navLinks';
 import Home from './pages/explorer/Home';
@@ -9,12 +9,12 @@ import AllBlocks from './pages/explorer/AllBlocks';
 import AllTxs from './pages/explorer/AllTxs';
 import Block from './pages/explorer/Block';
 import Transaction from './pages/explorer/Transaction';
+import Address from './pages/explorer/Address';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
 import api from './dummyApi';
 
 function App() {
-    const data = new api();
     const [blockchain, setBlockchain] = useState({
         blocks: [],
         txs: [],
@@ -23,24 +23,28 @@ function App() {
     });
 
     useEffect(() => {
+        const data = new api();
+        const _blocks = data.getBlocks().reverse();
+        const _txs = data.getTxs().reverse();
+
         setBlockchain({
-            blocks: data.getBlocks(),
-            txs: data.getTxs(),
-            latestBlx: data.getBlocks().slice(0, 5),
-            latestTxs: data.getTxs().slice(0, 5)
-        })
+            blocks: _blocks,
+            txs: _txs,
+            latestBlx: _blocks.slice(0, 5),
+            latestTxs: _txs.slice(0, 5),
+        });
     }, []);
 
     return (
         <div className='App'>
             <Routes>
-                <Route 
-                    path='/' 
-                    element={<Home 
+                <Route
+                    path='/'
+                    element={<Home
                         navLinks={navLinks.explorer}
-                        latestBlx={blockchain.latestBlx} 
-                        latestTxs={blockchain.latestTxs} 
-                    />} 
+                        latestBlx={blockchain.latestBlx}
+                        latestTxs={blockchain.latestTxs}
+                    />}
                 />
                 <Route
                     path='/wallet'
@@ -56,31 +60,35 @@ function App() {
                 />
                 <Route
                     path='/blocks'
-                    element={<AllBlocks 
-                        navLinks={navLinks.explorer} 
+                    element={<AllBlocks
+                        navLinks={navLinks.explorer}
                         blocks={blockchain.blocks}
                     />}
                 />
                 <Route
                     path='/transactions'
-                    element={<AllTxs 
-                        navLinks={navLinks.explorer} 
+                    element={<AllTxs
+                        navLinks={navLinks.explorer}
                         txs={blockchain.txs}
                     />}
                 />
                 <Route
                     path='/block/:blockIndex'
-                    element={<Block 
+                    element={<Block
                         navLinks={navLinks.explorer}
                         blocks={blockchain.blocks}
                     />}
                 />
                 <Route
                     path='/tx/:txHash'
-                    element={<Transaction 
+                    element={<Transaction
                         navLinks={navLinks.explorer}
                         txs={blockchain.txs}
                     />}
+                />
+                <Route
+                    path='/address/:address'
+                    element={<Address navLinks={navLinks.explorer} />}
                 />
             </Routes>
         </div>

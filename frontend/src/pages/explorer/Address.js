@@ -1,27 +1,77 @@
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Table } from "react-bootstrap";
 import SearchBar from "../../components/explorer/SearchBar";
+// dummy data
+import api from '../../dummyApi';
 
-const Address = () => {
+const Address = ({ navLinks }) => {
+    const { address } = useParams();
+    const [addressTxs, setAddressTxs] = useState({});
+
+    useEffect(() => {
+        const data = new api();
+        setAddressTxs(data.getAddressHist(address));
+    }, [address]);
+
+    console.log(addressTxs.txs)
+
     return (
         <>
-            <Header />
+            <Header navLinks={navLinks} />
             <Container>
                 <SearchBar />
-                <h4 align='center'>Address: </h4>
-                <Card>
-                    <Card.Body>
-                        Balance: ___ coins
-                    </Card.Body>
-                    <Table responsive>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <td></td>
-                            </tr>
-                        </thead>
-                    </Table>
-                </Card>
+                {addressTxs !== undefined
+                    && Object.keys(addressTxs).length > 0 &&
+                    <>
+                        <h4 align='center'>Address: {addressTxs.address}</h4>
+                        <Card>
+                            <Card.Body>
+                                Balance: {addressTxs.balance} coins
+                            </Card.Body>
+                            <Table responsive>
+                                <thead>
+                                    <tr>
+                                        <th>Hash</th>
+                                        {/* <th>Status</th> */}
+                                        {/* <th>Block</th> */}
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Amount</th>
+                                        {/* {<th>Fee</th>} */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {addressTxs.txs.length > 0 &&
+                                        addressTxs.txs.map((t, i) => (
+                                            <tr key={i}>
+                                                <td><Card.Link href={`/tx/${t.hash}`}>{t.hash.substring(0, 20)}...</Card.Link></td>
+                                                {/* <td>{tx.status}</td>
+                                                {/* <td>{tx.block}</td> */}
+                                                {<td>{t.sender.substring(0, 20)}...</td>}
+                                                <td>{t.recipient.substring(0, 20)}...</td>
+                                                <td>{t.amount}</td>
+                                                {/* <td>{t.fee}</td> */}
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                                {/* <tbody>
+                                    {addressTxs.txs.length > 0 &&
+                                        addressTxs.txs.forEach(tx => {
+                                            for (const value in tx) {
+                                                <tr>
+                                                    <th>{value}</th>
+                                                    <td>{tx[value]}</td>
+                                                </tr>
+                                            }
+                                        })}
+                                </tbody> */}
+                            </Table>
+                        </Card>
+                    </>
+                }
             </Container>
         </>
     );
