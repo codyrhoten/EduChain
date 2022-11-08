@@ -8,7 +8,7 @@ import Miner from './pages/Miner';
 import AllBlocks from './pages/explorer/AllBlocks';
 import Transactions from './pages/explorer/Transactions';
 import Block from './pages/explorer/Block';
-import Transaction from './pages/explorer/Transaction';
+import TxDetails from './pages/explorer/TxDetails';
 import Address from './pages/explorer/Address';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // dummy data
@@ -77,10 +77,7 @@ function App() {
                 />
                 <Route
                     path='/tx/:txHash'
-                    element={<Transaction
-                        navLinks={navLinks.explorer}
-                        txs={blockchain.txs}
-                    />}
+                    element={<TxDetails navLinks={navLinks.explorer} />}
                 />
                 <Route
                     path='/address/:address'

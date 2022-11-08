@@ -3,7 +3,7 @@ import { Card, Table } from 'react-bootstrap';
 const TxTable = ({ txs, heading }) => {
     return (
         <>
-            <h4 align='center'>{heading}</h4>
+            <h4 align='center'>{heading} Transactions</h4>
             <Card>
                 <Card.Body>
                     <Table responsive>
@@ -29,11 +29,19 @@ const TxTable = ({ txs, heading }) => {
                                         </td>
                                         {/* <td>{tx.block}</td>
                                             <td>{t.timestamp}</td> */}
-                                        {<td>
-                                            {t.sender.substring(0, 20)}...
-                                        </td>}
                                         <td>
-                                            {t.recipient.substring(0, 20)}...
+                                            <Card.Link 
+                                                href={`/address/${t.sender}`}
+                                            >
+                                                {t.sender.substring(0, 20)}...
+                                            </Card.Link>
+                                        </td>
+                                        <td>
+                                            <Card.Link
+                                                href={`/address/${t.recipient}`}
+                                            >
+                                                {t.recipient.substring(0, 20)}...
+                                            </Card.Link>
                                         </td>
                                         <td>{t.amount}</td>
                                         {/* <td>{t.fee}</td> */}

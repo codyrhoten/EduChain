@@ -39,14 +39,18 @@ const Block = ({ navLinks }) => {
                                     <tr>
                                         <th>Transactions</th>
                                         <td>
-                                            <Badge bg='light' style={{ color: 'rgb(95,158,160)' }}>
-                                                <Link 
-                                                    to='/transactions'
-                                                    state={blockIndex}
+                                            <Link
+                                                to='/transactions'
+                                                state={blockIndex}
+                                            >
+                                                <Badge
+                                                    bg='light'
+                                                    style={{ color: 'rgb(95,158,160)' }}
                                                 >
                                                     {block.txs.length}
-                                                </Link>
-                                            </Badge></td>
+                                                </Badge>
+                                            </Link>
+                                        </td>
                                     </tr>
                                     {/* <tr>
                                         <th>Mined by</th>

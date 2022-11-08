@@ -11,8 +11,8 @@ const Address = ({ navLinks }) => {
     const [addressTxs, setAddressTxs] = useState({});
 
     useEffect(() => {
-        const data = new api();
-        setAddressTxs(data.getAddressHist(address));
+        const blockchain = new api();
+        setAddressTxs(blockchain.getAddressHist(address));
     }, [address]);
 
     console.log(addressTxs.txs)
@@ -44,13 +44,31 @@ const Address = ({ navLinks }) => {
                                 </thead>
                                 <tbody>
                                     {addressTxs.txs.length > 0 &&
-                                        addressTxs.txs.map((t, i) => (
+                                        addressTxs.txs.reverse().map((t, i) => (
                                             <tr key={i}>
-                                                <td><Card.Link href={`/tx/${t.hash}`}>{t.hash.substring(0, 20)}...</Card.Link></td>
+                                                <td>
+                                                    <Card.Link
+                                                        href={`/tx/${t.hash}`}
+                                                    >
+                                                        {t.hash.substring(0, 20)}...
+                                                    </Card.Link>
+                                                </td>
                                                 {/* <td>{tx.status}</td>
                                                 {/* <td>{tx.block}</td> */}
-                                                {<td>{t.sender.substring(0, 20)}...</td>}
-                                                <td>{t.recipient.substring(0, 20)}...</td>
+                                                <td>
+                                                    <Card.Link
+                                                        href={`/address/${t.sender}`}
+                                                    >
+                                                        {t.sender.substring(0, 20)}...
+                                                    </Card.Link>
+                                                </td>
+                                                <td>
+                                                    <Card.Link
+                                                        href={`/address/${t.recipient}`}
+                                                    >
+                                                        {t.recipient.substring(0, 20)}...
+                                                    </Card.Link>
+                                                </td>
                                                 <td>{t.amount}</td>
                                                 {/* <td>{t.fee}</td> */}
                                             </tr>

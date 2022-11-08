@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/Header';
@@ -18,10 +18,15 @@ const Transactions = ({ navLinks }) => {
         if (blockIndex !== null) {
             const _block = blockchain.getBlock(blockIndex);
             setTxs(_block.txs);
-            setHeading(`Block ${blockIndex} Transactions`);
+            setHeading(
+                <Link 
+                    to={`/block/${blockIndex}`}
+                >
+                    Block {blockIndex}
+                </Link>
+            );
         } else {
             setTxs(blockchain.getAllTxs());
-            setHeading('Transactions');
         }
     }, []);
 
