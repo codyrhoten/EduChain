@@ -26,7 +26,7 @@ const AllBlocks = ({ blocks, navLinks }) => {
                             </thead>
                             <tbody>
                                 {blocks.length > 0 &&
-                                    blocks.reverse().map((b, i) => (
+                                    blocks.map((b, i) => (
                                         <tr key={i}>
                                             <td><Card.Link href={`/block/${b.index}`}>{b.index}</Card.Link></td>
                                             <td>{formatTimestamp(b)}</td>

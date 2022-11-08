@@ -15,7 +15,7 @@ const Header = ({ navLinks }) => {
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>
                     <Nav className='ms-auto'>
-                        {navLinks.map((link, i) => {
+                        {navLinks !== undefined && navLinks.map((link, i) => {
                             return (
                                 <Nav.Item key={i.toString()}>
                                     <Nav.Link href={link.url}>

@@ -6,7 +6,7 @@ import Wallet from './pages/Wallet';
 import Faucet from './pages/Faucet';
 import Miner from './pages/Miner';
 import AllBlocks from './pages/explorer/AllBlocks';
-import AllTxs from './pages/explorer/AllTxs';
+import Transactions from './pages/explorer/Transactions';
 import Block from './pages/explorer/Block';
 import Transaction from './pages/explorer/Transaction';
 import Address from './pages/explorer/Address';
@@ -23,15 +23,13 @@ function App() {
     });
 
     useEffect(() => {
-        const data = new api();
-        const _blocks = data.getBlocks().reverse();
-        const _txs = data.getTxs().reverse();
+        const blockchain = new api();
+        const _blocks = blockchain.getAllBlocks().reverse();
 
         setBlockchain({
             blocks: _blocks,
-            txs: _txs,
             latestBlx: _blocks.slice(0, 5),
-            latestTxs: _txs.slice(0, 5),
+            latestTxs: blockchain.getAllTxs().slice(0, 5),
         });
     }, []);
 
@@ -67,16 +65,14 @@ function App() {
                 />
                 <Route
                     path='/transactions'
-                    element={<AllTxs
+                    element={<Transactions
                         navLinks={navLinks.explorer}
-                        txs={blockchain.txs}
                     />}
                 />
                 <Route
                     path='/block/:blockIndex'
                     element={<Block
                         navLinks={navLinks.explorer}
-                        blocks={blockchain.blocks}
                     />}
                 />
                 <Route

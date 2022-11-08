@@ -3,24 +3,22 @@ const blockchain = require('./blockchain.json');
 export default class api {
     constructor() {
         this.blockchain = blockchain;
-        this.blocks = [];
         this.txs = [];
         this.addressTxs = [];
     }
 
-    getBlocks() {
-        this.blocks = blockchain.chain;
-        return this.blocks;
+    getAllBlocks() {
+        return this.blockchain.chain;
     }
 
-    getTxs() {
-        this.getBlocks().forEach(b => this.txs.push(...b.txs.reverse()));
-        this.txs = this.txs.reverse();
+    getAllTxs() {
+        this.blockchain.chain.forEach(b => this.txs.push(...b.txs.reverse()));
+        this.blockchain.chain.push(...this.blockchain.pendingTransactions);
         return this.txs;
     }
 
     getAddressHist(address) {
-        this.getBlocks().forEach(b => {
+        this.blockchain.chain.forEach(b => {
             b.txs.forEach(tx => {
                 if (tx.recipient === address || tx.sender === address) {
                     this.addressTxs.push(tx);
@@ -38,5 +36,11 @@ export default class api {
         });
 
         return { txs: this.addressTxs, balance, address };
+    }
+
+    getBlock(index) {
+        const blocks = this.getAllBlocks().reverse();
+        const block = blocks.find(block => block.index == index);
+        return block;
     }
 }
