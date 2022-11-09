@@ -17,11 +17,24 @@ const LatestTxs = ({ latestTxs }) => {
                             <Container key={i}>
                                 <Row>
                                     <Col>
-                                        Tx <Card.Link href={`/tx/${tx.hash}`}>{tx.hash.substring(0, 12)}...</Card.Link>
+                                        Tx{' '}
+                                        <Card.Link href={`/tx/${tx.hash}`}>
+                                            {tx.hash.substring(0, 12)}...
+                                        </Card.Link>
                                     </Col>
                                     <Col>
-                                        From: {shortenAddress(tx.sender)}<br />
-                                        To: {shortenAddress(tx.recipient)}
+                                        From:{' '}
+                                        <Card.Link 
+                                            href={`/address/${tx.sender}`}
+                                        >
+                                            {shortenAddress(tx.sender)}...
+                                        </Card.Link><br />
+                                        To:{' '}
+                                        <Card.Link
+                                            href={`/address/${tx.recipient}`}
+                                        >
+                                            {shortenAddress(tx.recipient)}
+                                        </Card.Link>
                                     </Col>
                                     <Col>{tx.amount} coins</Col>
                                 </Row>

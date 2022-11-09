@@ -1,7 +1,7 @@
 import Header from '../../components/Header';
 import { Card, Container, Table } from 'react-bootstrap';
 import SearchBar from '../../components/explorer/SearchBar';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import formatTimestamp from '../../utils/formatTimestamp';
 // dummy data
@@ -32,25 +32,44 @@ const TxDetails = ({ navLinks }) => {
                                         <th>Hash</th>
                                         <td>{tx.hash}</td>
                                     </tr>
-                                    {/* <tr>
+                                    {<tr>
                                         <th>Status</th>
-                                        <td>{block.status}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Block</th>
-                                        <td>{tx.block}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Timestamp</th>
-                                        <td>{formatTimestamp(tx)}</td>
-                                    </tr> */}
+                                        <td>
+                                            {tx.minedInBlock !== 'pending' ?
+                                                'Confirmed' : 'Pending'}
+                                        </td>
+                                    </tr>}
+                                    {tx.minedInBlock !== 'pending' &&
+                                        <>
+                                            <tr>
+                                                <th>Block</th>
+                                                <td>
+                                                    <Link to={`/block/${tx.minedInBlock}`}>
+                                                        {tx.minedInBlock}
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <td>{formatTimestamp(tx)}</td>
+                                            </tr>
+                                        </>
+                                    }
                                     <tr>
                                         <th>From</th>
-                                        <td>{tx.sender}</td>
+                                        <td>
+                                            <Link to={`/address/${tx.sender}`}>
+                                                {tx.sender}
+                                            </Link>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>To</th>
-                                        <td>{tx.recipient}</td>
+                                        <td>
+                                            <Link to={`/address/${tx.recipient}`}>
+                                                {tx.recipient}
+                                            </Link>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Amount</th>

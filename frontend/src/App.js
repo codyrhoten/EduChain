@@ -17,21 +17,21 @@ import api from './dummyApi';
 function App() {
     const [blockchain, setBlockchain] = useState({
         blocks: [],
-        txs: [],
         latestBlx: [],
         latestTxs: []
     });
 
     useEffect(() => {
-        const blockchain = new api();
-        const _blocks = blockchain.getAllBlocks().reverse();
+        const _blockchain = new api();
+        const _blocks = _blockchain.getAllBlocks().reverse();
 
         setBlockchain({
             blocks: _blocks,
             latestBlx: _blocks.slice(0, 5),
-            latestTxs: blockchain.getAllTxs().slice(0, 5),
+            latestTxs: _blockchain.getAllTxs().slice(0, 5),
         });
     }, []);
+
 
     return (
         <div className='App'>

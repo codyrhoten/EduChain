@@ -3,9 +3,7 @@ import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const AllBlocks = ({ blocks, navLinks }) => {
-    console.log(blocks)
-    
+const AllBlocks = ({ blocks, navLinks }) => {    
     return (
         <>
             <Header navLinks={navLinks} />
