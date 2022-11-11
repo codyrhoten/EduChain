@@ -12,8 +12,9 @@ export default class api {
     }
 
     getAllTxs() {
-        this.blockchain.chain.forEach(b => this.txs.push(...b.txs.reverse()));
-        this.txs.unshift(...this.blockchain.pendingTransactions.reverse());
+        this.txs = [];
+        this.blockchain.chain.forEach(b => this.txs.push(...b.txs));
+        this.txs.unshift(...this.blockchain.pendingTransactions);
         return this.txs;
     }
 
@@ -40,7 +41,7 @@ export default class api {
 
     getBlock(index) {
         const blocks = this.getAllBlocks().reverse();
-        const block = blocks.find(block => block.index === index);
+        const block = blocks.find(block => block.index == index);
         return block;
     }
 }

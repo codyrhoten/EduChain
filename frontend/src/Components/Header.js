@@ -1,17 +1,20 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import mapImage from '../assets/scroll-with-map.png';
+import chainImage from '../assets/chain.webp';
 
 const Header = ({ navLinks }) => {
     return (
         <Navbar>
-            <Container style={{ backgroundColor: 'rgb(95,158,160)' }}>
+            <Container style={{
+                backgroundColor: 'rgb(95,158,160)',
+                borderRadius: '5px'
+            }}>
                 <Navbar.Brand href='/'>
                     <img
-                        src={mapImage}
-                        height='36'
-                        alt='map scroll unfurled'
+                        src={chainImage}
+                        height='40'
+                        alt='chain'
                     />
-                    <span>name of chain here</span>
+                    <span style={{ fontFamily: 'Fragment Mono' }}><b>Axiom</b></span>
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>
                     <Nav className='ms-auto'>

@@ -36,7 +36,7 @@ const TxDetails = ({ navLinks }) => {
                                         <th>Status</th>
                                         <td>
                                             {tx.minedInBlock !== 'pending' ?
-                                                'Confirmed' : 'Pending'}
+                                                <i>Confirmed</i> : <i>Pending</i>}
                                         </td>
                                     </tr>}
                                     {tx.minedInBlock !== 'pending' &&

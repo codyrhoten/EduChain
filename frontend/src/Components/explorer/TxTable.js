@@ -1,6 +1,7 @@
 import { Card, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-const TxTable = ({ txs, heading }) => {
+const TxTable = ({ txs }) => {
     const shortenAddress = address => {
         let start = address.substring(0, 6);
         let end = address.substring(address.length - 6);
@@ -26,24 +27,24 @@ const TxTable = ({ txs, heading }) => {
                             txs.reverse().map((t, i) => (
                                 <tr key={i}>
                                     <td>
-                                        <Card.Link href={`/tx/${t.hash}`}>
+                                        <Link to={`/tx/${t.hash}`}>
                                             {t.hash.substring(0, 20)}...
-                                        </Card.Link>
+                                        </Link>
                                     </td>
                                     {/* <td>{t.timestamp}</td> */}
                                     <td>
-                                        <Card.Link
-                                            href={`/address/${t.sender}`}
+                                        <Link
+                                            to={`/address/${t.sender}`}
                                         >
                                             {shortenAddress(t.sender)}
-                                        </Card.Link>
+                                        </Link>
                                     </td>
                                     <td>
-                                        <Card.Link
-                                            href={`/address/${t.recipient}`}
+                                        <Link
+                                            to={`/address/${t.recipient}`}
                                         >
                                             {shortenAddress(t.recipient)}
-                                        </Card.Link>
+                                        </Link>
                                     </td>
                                     <td>{t.amount}</td>
                                     {/* <td>{t.fee}</td> */}

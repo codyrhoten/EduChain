@@ -7,15 +7,17 @@ const explorer = search => {
     // Check if the search is empty
     const empty = /^$/.test(search);
 
+    console.log(search, address, search.length < 40, hash, empty)
+
     if (empty) return false;
 
-    if (address) return `/explorer/addresses/${search.toString()}`;
+    if (address) return `/address/${search.toString()}`;
     // block hash
-    if (search.startsWith("0000")) {
-        return `/explorer/blocks/${search.toString()}`;
+    if (search.length < 40) {
+        return `/block/${search.toString()}`;
     }
-    // transaction hash
-    if (hash) return `/explorer/transactions/${search.toString()}`;
+    // tx hash
+    if (hash) return `/tx/${search.toString()}`;
 };
 
-export default explorer;
+module.exports = explorer;

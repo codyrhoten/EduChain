@@ -27,7 +27,7 @@ const Transactions = ({ navLinks }) => {
                 </h4>
             )
         } else {
-            setTxs(blockchain.getAllTxs());
+            setTxs(blockchain.getAllTxs().reverse());
             setHeading(
                 <h4 align='center'>
                     All Transactions

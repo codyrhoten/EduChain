@@ -1,4 +1,5 @@
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const LatestTxs = ({ latestTxs }) => {
     const shortenAddress = address => {
@@ -18,23 +19,23 @@ const LatestTxs = ({ latestTxs }) => {
                                 <Row>
                                     <Col>
                                         Tx{' '}
-                                        <Card.Link href={`/tx/${tx.hash}`}>
+                                        <Link to={`/tx/${tx.hash}`}>
                                             {tx.hash.substring(0, 12)}...
-                                        </Card.Link>
+                                        </Link>
                                     </Col>
                                     <Col>
                                         From:{' '}
-                                        <Card.Link 
-                                            href={`/address/${tx.sender}`}
+                                        <Link
+                                            to={`/address/${tx.sender}`}
                                         >
-                                            {shortenAddress(tx.sender)}...
-                                        </Card.Link><br />
+                                            {shortenAddress(tx.sender)}
+                                        </Link><br />
                                         To:{' '}
-                                        <Card.Link
-                                            href={`/address/${tx.recipient}`}
+                                        <Link
+                                            to={`/address/${tx.recipient}`}
                                         >
                                             {shortenAddress(tx.recipient)}
-                                        </Card.Link>
+                                        </Link>
                                     </Col>
                                     <Col>{tx.amount} coins</Col>
                                 </Row>
@@ -42,9 +43,9 @@ const LatestTxs = ({ latestTxs }) => {
                             </Container>
                         );
                     })}
-                    <Card.Link href='transactions'>
+                    <Link to='transactions'>
                         See all transactions
-                    </Card.Link>
+                    </Link>
                 </Card.Body>
             </Card>
         </Col>

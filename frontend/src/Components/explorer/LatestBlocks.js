@@ -1,4 +1,5 @@
 import { Col, Row, Container, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const LatestBlocks = ({ latestBlx }) => {    
@@ -11,7 +12,7 @@ const LatestBlocks = ({ latestBlx }) => {
                         <Container key={i}>
                             <Row>
                                 <Col>
-                                    Block <Card.Link href={`/block/${block.index}`}># {block.index}</Card.Link>
+                                    Block <Link to={`/block/${block.index}`}># {block.index}</Link>
                                     <br />
                                     <i>{formatTimestamp(block)}</i>
                                 </Col>
@@ -21,7 +22,7 @@ const LatestBlocks = ({ latestBlx }) => {
                             <br />
                         </Container>
                     ))}
-                    <Card.Link href='/blocks'>See all blocks</Card.Link>
+                    <Link href='/blocks'>See all blocks</Link>
                 </Card.Body>
             </Card>
         </Col>

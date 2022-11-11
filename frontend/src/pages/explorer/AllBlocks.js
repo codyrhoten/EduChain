@@ -1,4 +1,5 @@
 import { Card, Container, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
@@ -27,11 +28,11 @@ const AllBlocks = ({ blocks, navLinks }) => {
                                     blocks.map((b, i) => (
                                         <tr key={i}>
                                             <td>
-                                                <Card.Link 
-                                                    href={`/block/${b.index}`}
+                                                <Link 
+                                                    to={`/block/${b.index}`}
                                                 >
                                                     {b.index}
-                                                </Card.Link>
+                                                </Link>
                                             </td>
                                             <td>{formatTimestamp(b)}</td>
                                             {/* <td>{b.minedBy}</td> */}
