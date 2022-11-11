@@ -41,7 +41,7 @@ export default class api {
 
     getBlock(index) {
         const blocks = this.getAllBlocks().reverse();
-        const block = blocks.find(block => block.index == index);
+        const block = blocks.find(block => block.index.toString() === index);
         return block;
     }
 }

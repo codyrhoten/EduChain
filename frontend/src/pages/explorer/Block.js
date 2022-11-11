@@ -23,7 +23,7 @@ const Block = ({ navLinks }) => {
             <Container>
                 <SearchBar />
                 <h4 align='center'>Block # {blockIndex}</h4>
-                {block !== undefined && Object.keys(block).length > 0 &&
+                {block !== undefined && Object.keys(block).length > 0 ?
                     <Card>
                         <Card.Body>
                             <Table responsive>
@@ -75,7 +75,8 @@ const Block = ({ navLinks }) => {
                                 </tbody>
                             </Table>
                         </Card.Body>
-                    </Card>
+                    </Card> : 
+                    <p align='center'><b>This block hasn't yet been mined...</b></p>
                 }
             </Container>
         </>

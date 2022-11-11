@@ -7,8 +7,6 @@ const explorer = search => {
     // Check if the search is empty
     const empty = /^$/.test(search);
 
-    console.log(search, address, search.length < 40, hash, empty)
-
     if (empty) return false;
 
     if (address) return `/address/${search.toString()}`;
@@ -18,6 +16,10 @@ const explorer = search => {
     }
     // tx hash
     if (hash) return `/tx/${search.toString()}`;
+
+    if (!empty && !address && !hash) {
+        throw Error('Query not found');
+    }
 };
 
 module.exports = explorer;
