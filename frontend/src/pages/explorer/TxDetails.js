@@ -25,7 +25,7 @@ const TxDetails = ({ navLinks }) => {
                 <h4 align='center'>Transaction Details</h4>
                 <Card>
                     <Card.Body>
-                        {tx !== undefined && Object.keys(tx).length > 0 &&
+                        {tx !== undefined && Object.keys(tx).length > 0 ?
                             <Table responsive>
                                 <tbody>
                                     <tr>
@@ -80,7 +80,8 @@ const TxDetails = ({ navLinks }) => {
                                         <td>{tx.fee} coins</td>
                                     </tr> */}
                                 </tbody>
-                            </Table>
+                            </Table> :
+                            <p align='center'><b>This transaction doesn't exist</b></p>
                         }
                     </Card.Body>
                 </Card>

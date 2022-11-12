@@ -23,9 +23,9 @@ const Block = ({ navLinks }) => {
             <Container>
                 <SearchBar />
                 <h4 align='center'>Block # {blockIndex}</h4>
-                {block !== undefined && Object.keys(block).length > 0 ?
-                    <Card>
-                        <Card.Body>
+                <Card>
+                    <Card.Body>
+                        {block !== undefined && Object.keys(block).length > 0 ?
                             <Table responsive>
                                 <tbody>
                                     {/* <tr>
@@ -73,11 +73,11 @@ const Block = ({ navLinks }) => {
                                         <td>{block.prevBlockHash}</td>
                                     </tr>
                                 </tbody>
-                            </Table>
-                        </Card.Body>
-                    </Card> : 
-                    <p align='center'><b>This block hasn't yet been mined...</b></p>
-                }
+                            </Table> :
+                            <p align='center'><b>This block hasn't yet been mined...</b></p>
+                        }
+                    </Card.Body>
+                </Card>
             </Container>
         </>
     );

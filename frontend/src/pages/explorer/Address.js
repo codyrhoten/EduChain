@@ -25,9 +25,14 @@ const Address = ({ navLinks }) => {
                     Address: {address}<br />
                     <i>Balance: {addressData.balance} coins</i>
                 </h4>
-                {addressData !== undefined &&
-                    Object.keys(addressData).length > 0 &&
-                    <TxTable txs={addressData.txs}/>}
+                {
+                    addressData !== undefined &&
+                        Object.keys(addressData).length > 0 ?
+                        <TxTable txs={addressData.txs} /> :
+                        <p align='center'><b>
+                            There are no matching entries
+                        </b></p>
+                }
             </Container>
         </>
     );
