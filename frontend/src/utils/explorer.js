@@ -16,10 +16,6 @@ const explorer = search => {
     }
     // tx hash
     if (hash) return `/tx/${search.toString()}`;
-
-    if (!empty && !address && !hash) {
-        throw Error('Query not found');
-    }
 };
 
 module.exports = explorer;

@@ -1,19 +1,20 @@
-import { withErrorBoundary, useErrorBoundary } from 'react-use-error-boundary';
+// import { withErrorBoundary, useErrorBoundary } from 'react-use-error-boundary';
 import explorer from '../../utils/explorer';
 import { useState } from 'react';
 import { Container, Form, InputGroup } from 'react-bootstrap';
 import searchImage from '../../assets/search.png';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBar = withErrorBoundary(() => {
+const SearchBar = /* withErrorBoundary( */() => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
-    
-    const [error, resetError] = useErrorBoundary((error, errorInfo) => {
+
+    /* const [error, resetError] = useErrorBoundary((error, errorInfo) => {
         console.error(error);
         console.error(errorInfo);
-    });
+    }); */
 
+    
     const query = () => {
         const result = explorer(search);
 
@@ -32,7 +33,7 @@ const SearchBar = withErrorBoundary(() => {
             <Form.Label htmlFor='destination'>
                 <i>Axiom PoW Testnet Explorer</i>
             </Form.Label>
-            {error && <p style={{ color: 'red' }}>{error.message}</p>}
+            {/* error && <p style={{ color: 'red' }}>{error.message}</p> */}
             <InputGroup className='mb-3' /* style={{ height: "25px" }} */>
                 <Form.Control
                     aria-label='Large'
@@ -67,6 +68,6 @@ const SearchBar = withErrorBoundary(() => {
             </InputGroup>
         </Container>
     );
-});
+}/* ) */;
 
 export default SearchBar;

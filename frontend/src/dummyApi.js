@@ -19,24 +19,30 @@ export default class api {
     }
 
     getAddressHist(address) {
-        this.blockchain.chain.forEach(b => {
-            b.txs.forEach(tx => {
-                if (tx.recipient === address || tx.sender === address) {
-                    this.addressTxs.push(tx);
+        const validAddress = /^[0-9a-f]{40}$/.test(address);
+        
+        if (validAddress) {
+            this.blockchain.chain.forEach(b => {
+                b.txs.forEach(tx => {
+                    if (tx.recipient === address || tx.sender === address) {
+                        this.addressTxs.push(tx);
+                    }
+                });
+            });
+    
+            let balance = 0;
+            this.addressTxs.forEach(tx => {
+                if (tx.recipient === address) {
+                    balance -= Number(tx.amount);
+                } else if (tx.sender === address) {
+                    balance += Number(tx.amount);
                 }
             });
-        });
-
-        let balance = 0;
-        this.addressTxs.forEach(tx => {
-            if (tx.recipient === address) {
-                balance -= Number(tx.amount);
-            } else if (tx.sender === address) {
-                balance += Number(tx.amount);
-            }
-        });
-
-        return { txs: this.addressTxs, balance, address };
+    
+            return { txs: this.addressTxs, balance, address };
+        } else {
+            throw Error('There are no matching entries');
+        }
     }
 
     getBlock(index) {
