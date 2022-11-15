@@ -17,7 +17,8 @@ const Transactions = ({ navLinks }) => {
 
         if (blockIndex) {
             const _block = blockchain.getBlock(blockIndex);
-            setTxs(_block.txs);
+            setTxs(_block.data);
+
             setHeading(
                 <h4 align='center'>
                     <Link to={`/block/${blockIndex}`}>
@@ -25,14 +26,15 @@ const Transactions = ({ navLinks }) => {
                     </Link>
                     {' '}Transactions
                 </h4>
-            )
+            );
         } else {
             setTxs(blockchain.getAllTxs().reverse());
+
             setHeading(
                 <h4 align='center'>
                     All Transactions
                 </h4>
-            )
+            );
         }
     }, [blockIndex]);
 
@@ -42,7 +44,7 @@ const Transactions = ({ navLinks }) => {
             <Container>
                 <SearchBar />
                 {heading}
-                {txs.length > 0 && <TxTable txs={txs}/>}
+                {txs.length > 0 && <TxTable txs={txs} />}
             </Container>
         </>
     );

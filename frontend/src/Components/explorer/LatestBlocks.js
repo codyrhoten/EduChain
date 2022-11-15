@@ -16,13 +16,13 @@ const LatestBlocks = ({ latestBlx }) => {
                                     <br />
                                     <i>{formatTimestamp(block)}</i>
                                 </Col>
-                                <Col>{block.txs.length} Txs</Col>
+                                <Col>{block.data.length} Txs</Col>
                                 {/* <Col>{block.minedBy}</Col> */}
                             </Row>
                             <br />
                         </Container>
                     ))}
-                    <Link href='/blocks'>See all blocks</Link>
+                    <Link to='/blocks'>See all blocks</Link>
                 </Card.Body>
             </Card>
         </Col>

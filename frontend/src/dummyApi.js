@@ -13,17 +13,18 @@ export default class api {
 
     getAllTxs() {
         this.txs = [];
-        this.blockchain.chain.forEach(b => this.txs.push(...b.txs));
+        this.blockchain.chain.forEach(b => this.txs.push(...b.data));
         this.txs.unshift(...this.blockchain.pendingTransactions);
         return this.txs;
     }
 
     getAddressHist(address) {
-        const validAddress = /^[0-9a-f]{40}$/.test(address);
+        //const validAddress = /^[0-9a-f]{40}$/.test(address);
         
-        if (validAddress) {
+        // if (validAddress) {
+            console.log(this.blockchain.chain)
             this.blockchain.chain.forEach(b => {
-                b.txs.forEach(tx => {
+                b.data.forEach(tx => {
                     if (tx.recipient === address || tx.sender === address) {
                         this.addressTxs.push(tx);
                     }
@@ -40,9 +41,9 @@ export default class api {
             });
     
             return { txs: this.addressTxs, balance, address };
-        } else {
+        /* } else {
             throw Error('There are no matching entries');
-        }
+        } */
     }
 
     getBlock(index) {

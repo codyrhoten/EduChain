@@ -47,7 +47,7 @@ const Block = ({ navLinks }) => {
                                                     bg='light'
                                                     style={{ color: 'rgb(95,158,160)' }}
                                                 >
-                                                    {block.txs.length}
+                                                    {block.data.length}
                                                 </Badge>
                                             </Link>
                                         </td>

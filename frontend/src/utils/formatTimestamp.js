@@ -1,5 +1,5 @@
 const formatTimestamp = obj => {
-    let timestamp = new Date(obj.timestamp);
+    let timestamp = new Date(obj.timeStamp);
     let tz = timestamp.toTimeString().match(/\((.+)\)/)[1];
     tz = tz.match(/[A-Z]/g).join('');
     timestamp = (timestamp.getMonth() + 1) +

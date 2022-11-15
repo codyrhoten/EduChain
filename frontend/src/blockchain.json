@@ -2,23 +2,23 @@
     "chain": [
         {
             "index": 1,
-            "timestamp": 1665105397672,
-            "txs": [],
+            "timeStamp": 1665105397672,
+            "data": [],
             "nonce": 0,
             "hash": "0",
             "prevBlockHash": "0"
         },
         {
             "index": 2,
-            "timestamp": 1665105644381,
-            "txs": [
+            "timeStamp": 1665105644381,
+            "data": [
                 {
                     "amount": 20,
                     "hash": "8093243a6a632b3a89c721552c4b7c57ac9c7453bd6b8de5c6e7d1d4788724d5",
                     "recipient": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "sender": "ee372cdd47beda97981b6b31bd698cfc6facfd87",
                     "minedInBlock": 2,
-                    "timestamp": 1665105644381
+                    "timeStamp": 1665105644381
                 },
                 {
                     "amount": 50,
@@ -26,7 +26,7 @@
                     "recipient": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 2,
-                    "timestamp": 1665105644381
+                    "timeStamp": 1665105644381
                 },
                 {
                     "amount": 10,
@@ -34,7 +34,7 @@
                     "recipient": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 2,
-                    "timestamp": 1665105644381
+                    "timeStamp": 1665105644381
                 },
                 {
                     "amount": 20,
@@ -42,7 +42,7 @@
                     "recipient": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "sender": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "minedInBlock": 2,
-                    "timestamp": 1665105644381
+                    "timeStamp": 1665105644381
                 },
                 {
                     "amount": 100,
@@ -50,7 +50,7 @@
                     "recipient": "siuawoiejfxoewrcm3049ru3q0r91ir3rcmoisr5",
                     "sender": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "minedInBlock": 2,
-                    "timestamp": 1665105644381
+                    "timeStamp": 1665105644381
                 }
             ],
             "nonce": 32835,
@@ -59,15 +59,15 @@
         },
         {
             "index": 3,
-            "timestamp": 1665105659881,
-            "txs": [
+            "timeStamp": 1665105659881,
+            "data": [
                 {
                     "amount": 20,
                     "hash": "0xsalfxjwoiu239ru2rmw0r92rdafmaw0d409ticwa0t9cimwa0t9imwc0waucm6",
                     "recipient": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "sender": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "minedInBlock": 3,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 50,
@@ -75,7 +75,7 @@
                     "recipient": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 3,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 10,
@@ -83,7 +83,7 @@
                     "recipient": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 3,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 20,
@@ -91,7 +91,7 @@
                     "recipient": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "sender": "wt98435u09wt0iuwtciwotu30t9u0r92iuf0aita",
                     "minedInBlock": 3,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 100,
@@ -99,7 +99,7 @@
                     "recipient": "siuawoiejfxoewrcm3049ru3q0r91ir3rcmoisr5",
                     "sender": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "minedInBlock": 3,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 }
             ],
             "nonce": 32835,
@@ -108,15 +108,15 @@
         },
         {
             "index": 4,
-            "timestamp": 1665105659881,
-            "txs": [
+            "timeStamp": 1665105659881,
+            "data": [
                 {
                     "amount": 10,
                     "hash": "0xsdfjcaw98u239ru2rmw0r92rdafmaw0dw4598u4t98tucwa0tfjua0fweoijfc",
                     "recipient": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "sender": "wt98435u09wt0iuwtciwotu30t9u0r92iuf0aita",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 5,
@@ -124,7 +124,7 @@
                     "recipient": "sejr029ruc0w9ruq9ruaw0ruaw0tmcwclej0943u",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 20,
@@ -132,7 +132,7 @@
                     "recipient": "wt98435u09wt0iuwtciwotu30t9u0r92iuf0aita",
                     "sender": "asdklfc3049txmw09tucmwa09teiu09xlf3984rx",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 50,
@@ -140,7 +140,7 @@
                     "recipient": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "sender": "wt98435u09wt0iuwtciwotu30t9u0r92iuf0aita",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 15,
@@ -148,7 +148,7 @@
                     "recipient": "siuawoiejfxoewrcm3049ru3q0r91ir3rcmoisr5",
                     "sender": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 2,
@@ -156,7 +156,7 @@
                     "recipient": "ewoiuft0943muft430muft0tuq8ujhse049uj094",
                     "sender": "lkaksjtn4c980wmut0wtcuwa0tmcert48uwmcs7t",
                     "minedInBlock": 4,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 }
             ],
             "nonce": 73735,
@@ -165,15 +165,15 @@
         },
         {
             "index": 5,
-            "timestamp": 1665105659881,
-            "txs": [
+            "timeStamp": 1665105659881,
+            "data": [
                 {
                     "amount": 20,
                     "hash": "0xslkdjcweiut09r0imwq3fm0wurdw0uroijc35u09tju09fwaliaj4our65hf4s",
                     "recipient": "almd43utmqutmoiwaur09mu333mds4wijt0439tw",
                     "sender": "slert094it309tme83ufm98wroxixkilesjr984w",
                     "minedInBlock": 5,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 50,
@@ -181,7 +181,7 @@
                     "recipient": "elkfxjwoir3948ut40u3t0w9citf0umthawt4j6g",
                     "sender": "almd43utmqutmoiwaur09mu333mds4wijt0439tw",
                     "minedInBlock": 5,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 10,
@@ -189,7 +189,7 @@
                     "recipient": "3894uotcm09wautmoi8cwaut02amu9",
                     "sender": "silufc09w4tmcwieuc0k9waujktxp9w",
                     "minedInBlock": 5,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 },
                 {
                     "amount": 20,
@@ -197,7 +197,7 @@
                     "recipient": "951ce93de35c8c61b01b4e4bf7b13982802925cc",
                     "sender": "alskmj943ut0943txmc09war8pwiw0selfij3049",
                     "minedInBlock": 5,
-                    "timestamp": 1665105659881
+                    "timeStamp": 1665105659881
                 }
             ],
             "nonce": 47332,
