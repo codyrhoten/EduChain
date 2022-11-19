@@ -9,11 +9,10 @@ const holderKeyPair = ec.genKeyPair();
 const SHA256 = (message) =>
     crypto.createHash("sha256").update(message).digest("hex");
 
-
-
 class Block {
     timeStamp = "";
     data = [];
+
     constructor(timeStamp, data) {
         this.timeStamp = timeStamp;
         this.data = data;
@@ -62,8 +61,9 @@ class Blockchain {
 
     getBalance(address) {
         let balance = 0;
-        this.chain.forEach((block) => {
-            block.data.forEach((transation) => {
+
+        this.chain.forEach(block => {
+            block.data.forEach(transation => {
                 if (transation.from === address) {
                     balance -= transation.amount;
                     balance -= transation.gas;
@@ -74,6 +74,7 @@ class Blockchain {
                 }
             });
         });
+
         return balance;
     }
 
@@ -122,14 +123,6 @@ class Blockchain {
         }
 
         this.transaction = [];
-
-        console.log({
-            gas,
-            rewardAddress,
-            rewardTransaction,
-            block,
-            tx: this.transaction,
-        });
     }
 
     isValid(blockchain = this) {
@@ -159,16 +152,11 @@ class Transaction {
     }
 
     sign(keyPair) {
-        let sig = '';
-
         if (keyPair.getPublic("hex") === this.from) {
-            sig = keyPair
+            this.signature = keyPair
                 .sign(SHA256(this.from + this.to + this.amount + this.gas), "base64")
                 .toDER("hex");
-                this.signature = sig;
         }
-
-        console.log(sig);
     }
 
     isValid(tx, chain) {
@@ -185,39 +173,41 @@ class Transaction {
     }
 }
 
-const Chain = new Blockchain();
+/* const Chain = new Blockchain();
 
-/* const girlfriendwallet = ec.genKeyPair();
+const girlfriendwallet = ec.genKeyPair();
+
 const transaction = new Transaction(
   holderKeyPair.getPublic("hex"),
   girlfriendwallet.getPublic("hex"),
   333,
   10
 );
+
 transaction.sign(holderKeyPair);
 Chain.addTransaction(transaction);
-Chain.miningTransaction(girlfriendwallet.getPublic("hex")); */
+Chain.miningTransaction(girlfriendwallet.getPublic("hex"));
+console.log("Your balance: ", Chain.getBalance(holderKeyPair.getPublic("hex")));
+console.log(
+  "Her balance: ",
+  Chain.getBalance(girlfriendwallet.getPublic("hex"))
+); */
 
-const faucetPrivKey = 
-    'c384ad080bcffb8bc4372b285835404b14d5d941723e8ad8a7e88d21410a3b19';
-const faucetPubKey = 
-    '03e9877575cd2ebf8240dbe0b4b0cda9a1cf86dd1201cb2966e2c32c3d15b3af98';
-const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
+const faucetKeyPair = ec.genKeyPair();
+const faucetPubKey = faucetKeyPair.getPublic('hex');
+
+const chain = new Blockchain();
 
 const genesisTx = new Transaction(
-    '000000000000000000000000000000000000000000000000000000000000000000',
-    faucetPubKey,
+    mint_key_pair.getPublic('hex'),
+    faucetKeyPair.getPublic('hex'),
     100000,
     0
 );
 
-genesisTx.sign(faucetKeyPair);
-Chain.addTransaction(genesisTx);
-Chain.miningTransaction(faucetPubKey);
-console.log(Chain.getBalance(faucetPubKey))
+genesisTx.sign(mint_key_pair);
+chain.addTransaction(genesisTx);
+chain.miningTransaction(faucetKeyPair.getPublic('hex'));
+console.log("Faucet Balance: ", chain.getBalance(faucetKeyPair.getPublic('hex')))
 
-/* let privKey = holderKeyPair.getPrivate('hex');
-let pubKey = holderKeyPair.getPublic();
-console.log(privKey);
-console.log(pubKey.encode('hex').substring(2));
-console.log(pubKey.encodeCompressed('hex')); */
+module.exports = { Blockchain, Transaction, mint_key_pair, mint_public_address };
