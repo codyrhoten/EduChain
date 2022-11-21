@@ -193,21 +193,4 @@ console.log(
   Chain.getBalance(girlfriendwallet.getPublic("hex"))
 ); */
 
-const faucetKeyPair = ec.genKeyPair();
-const faucetPubKey = faucetKeyPair.getPublic('hex');
-
-const chain = new Blockchain();
-
-const genesisTx = new Transaction(
-    mint_key_pair.getPublic('hex'),
-    faucetKeyPair.getPublic('hex'),
-    100000,
-    0
-);
-
-genesisTx.sign(mint_key_pair);
-chain.addTransaction(genesisTx);
-chain.miningTransaction(faucetKeyPair.getPublic('hex'));
-console.log("Faucet Balance: ", chain.getBalance(faucetKeyPair.getPublic('hex')))
-
-module.exports = { Blockchain, Transaction, mint_key_pair, mint_public_address };
+module.exports = { Block, Blockchain, Transaction, mint_key_pair, mint_public_address };
