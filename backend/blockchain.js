@@ -1,18 +1,19 @@
 const crypto = require("crypto");
 const elliptic = require("elliptic");
 const ec = new elliptic.ec("secp256k1");
-let sha3 = require('js-sha3');
+
 const mint_key_pair = ec.genKeyPair();
-const mint_public_address = mint_key_pair.getPublic("hex");
-const holderKeyPair = ec.genKeyPair();
-// const keyPair = ec.genKeyPair();
-const SHA256 = (message) =>
+const mint_pub_key = mint_key_pair.getPublic("hex");
+
+const faucetPrivKey = 'e0e34f0d30bdd3f13cf933e06eec2be0cd51a9f35a69c24672e86b928cef8c9f';
+const faucetPubKey = '04026e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53de84435e5dff17ec76571a76a10df159645b1745ca211c5ba19a044bb993fc0a4efca4';
+const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
+
+const SHA256 = message => {
     crypto.createHash("sha256").update(message).digest("hex");
+};
 
 class Block {
-    timeStamp = "";
-    data = [];
-
     constructor(timeStamp, data) {
         this.timeStamp = timeStamp;
         this.data = data;
@@ -23,7 +24,10 @@ class Block {
 
     getHash() {
         return SHA256(
-            JSON.stringify(this.data) + this.timeStamp + this.prevHash + this.nonce
+            JSON.stringify(this.data) +
+            this.timeStamp +
+            this.prevHash +
+            this.nonce
         );
     }
 
@@ -44,11 +48,17 @@ class Block {
 class Blockchain {
     constructor() {
         const initialCoinRelease = new Transaction(
-            mint_public_address,
-            holderKeyPair.getPublic("hex"),
+            mint_pub_key,
+            faucetPubKey,
             100000
         );
-        this.chain = [new Block(Date.now().toString(), [initialCoinRelease])];
+
+        const genesisBlock = new Block(
+            Date.now().toString(),
+            [initialCoinRelease]
+        );
+
+        this.chain = [genesisBlock];
         this.difficulty = 1;
         this.blockTime = 30000;
         this.transaction = [];
@@ -63,14 +73,14 @@ class Blockchain {
         let balance = 0;
 
         this.chain.forEach(block => {
-            block.data.forEach(transation => {
-                if (transation.from === address) {
-                    balance -= transation.amount;
-                    balance -= transation.gas;
+            block.data.forEach(transaction => {
+                if (transaction.to === address) {
+                    balance += transaction.amount;
                 }
 
-                if (transation.to === address) {
-                    balance += transation.amount;
+                if (transaction.from === address) {
+                    balance -= transaction.amount;
+                    balance -= transaction.gas;
                 }
             });
         });
@@ -79,14 +89,13 @@ class Blockchain {
     }
 
     addBlock(block) {
+        const lastBlockTimestamp = parseInt(this.getLastBlock().timeStamp);
         block.prevHash = this.getLastBlock().hash;
         block.hash = block.getHash();
         block.mine(this.difficulty);
         this.chain.push(block);
         this.difficulty +=
-            Date.now() - parseInt(this.getLastBlock().timeStamp) < this.blockTime
-                ? 1
-                : -1;
+            Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
     }
 
     addTransaction(transaction) {
@@ -106,7 +115,7 @@ class Blockchain {
         });
 
         const rewardTransaction = new Transaction(
-            mint_public_address,
+            mint_pub_key,
             rewardAddress,
             this.reward + gas
         );
@@ -114,10 +123,10 @@ class Blockchain {
         rewardTransaction.sign(mint_key_pair);
 
         if (this.transaction.length !== 0) {
-            block = new Block(Date.now().toString(), [
-                rewardTransaction,
-                ...this.transaction,
-            ])
+            block = new Block(
+                Date.now().toString(),
+                [rewardTransaction, ...this.transaction]
+            );
 
             this.addBlock(block);
         }
@@ -138,12 +147,13 @@ class Blockchain {
                 return false;
             }
         }
+
         return true;
     }
 }
 
 class Transaction {
-    //const transaction = new Transaction(holderKeyPair.getPublic("hex"), girlfriendwallet.getPublic("hex"), 333, 10)
+    //const transaction = new Transaction(faucetKeyPair.getPublic("hex"), girlfriendwallet.getPublic("hex"), 333, 10)
     constructor(from, to, amount, gas = 0) {
         this.from = from;
         this.to = to;
@@ -154,7 +164,12 @@ class Transaction {
     sign(keyPair) {
         if (keyPair.getPublic("hex") === this.from) {
             this.signature = keyPair
-                .sign(SHA256(this.from + this.to + this.amount + this.gas), "base64")
+                .sign(SHA256(
+                    this.from +
+                    this.to +
+                    this.amount +
+                    this.gas
+                ), "base64")
                 .toDER("hex");
         }
     }
@@ -165,10 +180,15 @@ class Transaction {
             tx.to &&
             tx.amount &&
             (chain.getBalance(tx.from) >= tx.amount + tx.gas ||
-                (tx.from === mint_public_address && tx.amount == this.reward)) &&
+                (tx.from === mint_pub_key && tx.amount == this.reward)) &&
             ec
                 .keyFromPublic(tx.from, "hex")
-                .verify(SHA256(tx.from + tx.to + tx.amount + tx.gas), tx.signature)
+                .verify(SHA256(
+                    tx.from +
+                    tx.to +
+                    tx.amount +
+                    tx.gas
+                ), tx.signature)
         );
     }
 }
@@ -178,19 +198,19 @@ class Transaction {
 const girlfriendwallet = ec.genKeyPair();
 
 const transaction = new Transaction(
-  holderKeyPair.getPublic("hex"),
+  faucetKeyPair.getPublic("hex"),
   girlfriendwallet.getPublic("hex"),
   333,
   10
 );
 
-transaction.sign(holderKeyPair);
+transaction.sign(faucetKeyPair);
 Chain.addTransaction(transaction);
 Chain.miningTransaction(girlfriendwallet.getPublic("hex"));
-console.log("Your balance: ", Chain.getBalance(holderKeyPair.getPublic("hex")));
+console.log("Your balance: ", Chain.getBalance(faucetKeyPair.getPublic("hex")));
 console.log(
   "Her balance: ",
   Chain.getBalance(girlfriendwallet.getPublic("hex"))
 ); */
 
-module.exports = { Block, Blockchain, Transaction, mint_key_pair, mint_public_address };
+module.exports = { Block, Blockchain, Transaction, mint_key_pair, mint_pub_key };
