@@ -4,21 +4,23 @@
     "description": "interaction with a blockchain with wallet and faucet capability",
     "main": "index.js",
     "scripts": {
-      "test": "test",
-      "type": "module"
+        "test": "test",
+        "type": "module"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/codyrhoten/Blockchain_Explorer.git"
+        "type": "git",
+        "url": "git+https://github.com/codyrhoten/Blockchain_Explorer.git"
     },
     "author": "JeanMarie McCormack and Cody Rhoten",
     "license": "ISC",
     "bugs": {
-      "url": "https://github.com/codyrhoten/Blockchain_Explorer/issues"
+        "url": "https://github.com/codyrhoten/Blockchain_Explorer/issues"
     },
     "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
     "dependencies": {
-      "elliptic": "^6.5.4",
-      "js-sha3": "^0.8.0"
+        "body-parser": "^1.20.1",
+        "elliptic": "^6.5.4",
+        "express": "^4.18.2",
+        "js-sha3": "^0.8.0"
     }
-  }
+}

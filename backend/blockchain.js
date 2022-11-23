@@ -1,17 +1,22 @@
 const crypto = require("crypto");
-const elliptic = require("elliptic");
-const ec = new elliptic.ec("secp256k1");
-
-const mint_key_pair = ec.genKeyPair();
-const mint_pub_key = mint_key_pair.getPublic("hex");
-
-const faucetPrivKey = 'e0e34f0d30bdd3f13cf933e06eec2be0cd51a9f35a69c24672e86b928cef8c9f';
-const faucetPubKey = '04026e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53de84435e5dff17ec76571a76a10df159645b1745ca211c5ba19a044bb993fc0a4efca4';
-const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
+const keccak256 = require('js-sha3').keccak256;
+const elliptic = require('elliptic');
+const ec = new elliptic.ec('secp256k1');
 
 const SHA256 = message => {
     crypto.createHash("sha256").update(message).digest("hex");
 };
+
+const mint_key_pair = ec.genKeyPair();
+const mint_priv_key = mint_key_pair.getPrivate('hex');
+const mint_pub_key = mint_key_pair.getPublic('hex');
+const hashOfMintPubKey = keccak256(Buffer.from(mint_pub_key, 'hex'));
+const mintAddress = hashOfMintPubKey.slice(-40).toString('hex');
+
+const faucetPrivKey = 'e0e34f0d30bdd3f13cf933e06eec2be0cd51a9f35a69c24672e86b928cef8c9f';
+const faucetPubKey = '04026e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53de84435e5dff17ec76571a76a10df159645b1745ca211c5ba19a044bb993fc0a4efca4';
+// const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
+const faucetAddress = 'd334371fe9555603d107b5e96c14ab5328661d97';
 
 class Block {
     constructor(timeStamp, data) {
@@ -48,8 +53,8 @@ class Block {
 class Blockchain {
     constructor() {
         const initialCoinRelease = new Transaction(
-            mint_pub_key,
-            faucetPubKey,
+            mintAddress,
+            faucetAddress,
             100000
         );
 
@@ -115,12 +120,12 @@ class Blockchain {
         });
 
         const rewardTransaction = new Transaction(
-            mint_pub_key,
+            mintAddress,
             rewardAddress,
             this.reward + gas
         );
 
-        rewardTransaction.sign(mint_key_pair);
+        rewardTransaction.sign(mint_priv_key);
 
         if (this.transaction.length !== 0) {
             block = new Block(
@@ -161,37 +166,40 @@ class Transaction {
         this.gas = gas;
     }
 
-    sign(keyPair) {
-        if (keyPair.getPublic("hex") === this.from) {
-            this.signature = keyPair
-                .sign(SHA256(
-                    this.from +
-                    this.to +
-                    this.amount +
-                    this.gas
-                ), "base64")
-                .toDER("hex");
+    sign(privKey) {
+        if (privKey.getPrivate("hex") === this.from) {
+            const txData = this.from + this.to + this.amount + this.gas;
+            const txDataHash = SHA256(txData, 'base64');
+
+            this.signature = ec.sign(
+                txDataHash, 
+                privKey, 
+                'hex', 
+                { canonical: true }
+            );
         }
     }
 
     isValid(tx, chain) {
+        const txData = tx.from + tx.to + tx.amount + tx.gas;
+
         return (
             tx.from &&
             tx.to &&
             tx.amount &&
-            (chain.getBalance(tx.from) >= tx.amount + tx.gas ||
-                (tx.from === mint_pub_key && tx.amount == this.reward)) &&
+            (
+                chain.getBalance(tx.from) >= tx.amount + tx.gas ||
+                tx.from === mintAddress && tx.amount == this.reward
+            ) &&
             ec
                 .keyFromPublic(tx.from, "hex")
-                .verify(SHA256(
-                    tx.from +
-                    tx.to +
-                    tx.amount +
-                    tx.gas
-                ), tx.signature)
+                .verify(SHA256(txData), tx.signature)
         );
     }
 }
+
+const chain = new Blockchain();
+console.log(chain.chain[0])
 
 /* const Chain = new Blockchain();
 
