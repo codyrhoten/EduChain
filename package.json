@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/codyrhoten/Blockchain_Explorer/issues"
   },
-  "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme"
+  "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
+  "dependencies": {}
 }
