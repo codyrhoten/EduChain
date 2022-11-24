@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const SearchBar = /* withErrorBoundary( */() => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
+    const [error, setError] = useState('');
 
     /* const [error, resetError] = useErrorBoundary((error, errorInfo) => {
         console.error(error);
@@ -24,6 +25,7 @@ const SearchBar = /* withErrorBoundary( */() => {
             setSearch('');
         } else {
             /* front-end error handler here */
+            setError('Query not found.');
             setSearch('');
         }
     };
@@ -33,7 +35,7 @@ const SearchBar = /* withErrorBoundary( */() => {
             <Form.Label htmlFor='destination'>
                 <i>Axiom PoW Testnet Explorer</i>
             </Form.Label>
-            {/* error && <p style={{ color: 'red' }}>{error.message}</p> */}
+            {error && <p><i>{error}</i></p>}
             <InputGroup className='mb-3' /* style={{ height: "25px" }} */>
                 <Form.Control
                     aria-label='Large'

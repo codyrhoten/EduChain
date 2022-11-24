@@ -1,10 +1,12 @@
 const crypto = require("crypto");
 const keccak256 = require('js-sha3').keccak256;
 const elliptic = require('elliptic');
+import faucet from './faucet.js';
+
 const ec = new elliptic.ec('secp256k1');
 
 const SHA256 = message => {
-    crypto.createHash("sha256").update(message).digest("hex");
+    return crypto.createHash("sha256").update(message).digest("hex");
 };
 
 const mint_key_pair = ec.genKeyPair();
@@ -12,11 +14,6 @@ const mint_priv_key = mint_key_pair.getPrivate('hex');
 const mint_pub_key = mint_key_pair.getPublic('hex');
 const hashOfMintPubKey = keccak256(Buffer.from(mint_pub_key, 'hex'));
 const mintAddress = hashOfMintPubKey.slice(-40).toString('hex');
-
-const faucetPrivKey = 'e0e34f0d30bdd3f13cf933e06eec2be0cd51a9f35a69c24672e86b928cef8c9f';
-const faucetPubKey = '04026e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53de84435e5dff17ec76571a76a10df159645b1745ca211c5ba19a044bb993fc0a4efca4';
-// const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
-const faucetAddress = 'd334371fe9555603d107b5e96c14ab5328661d97';
 
 class Block {
     constructor(timeStamp, data) {
@@ -54,7 +51,7 @@ class Blockchain {
     constructor() {
         const initialCoinRelease = new Transaction(
             mintAddress,
-            faucetAddress,
+            faucet.fAddress,
             100000
         );
 
@@ -166,17 +163,12 @@ class Transaction {
         this.gas = gas;
     }
 
-    sign(privKey) {
-        if (privKey.getPrivate("hex") === this.from) {
+    sign(keyPair) {
+        if (keyPair.getPrivate("hex") === this.from) {
             const txData = this.from + this.to + this.amount + this.gas;
             const txDataHash = SHA256(txData, 'base64');
 
-            this.signature = ec.sign(
-                txDataHash, 
-                privKey, 
-                'hex', 
-                { canonical: true }
-            );
+            this.signature = keyPair.sign(txDataHash, 'base64').toDER('hex');
         }
     }
 
@@ -197,9 +189,6 @@ class Transaction {
         );
     }
 }
-
-const chain = new Blockchain();
-console.log(chain.chain[0])
 
 /* const Chain = new Blockchain();
 
