@@ -19,7 +19,10 @@ const LatestTxs = ({ latestTxs }) => {
                                 <Row>
                                     <Col>
                                         Tx{' '}
-                                        <Link to={`/tx/${tx.hash}`}>
+                                        <Link 
+                                            to={`/tx/${tx.hash}`}
+                                            style={{ textDecoration: 'none' }}
+                                        >
                                             {tx.hash.substring(0, 12)}...
                                         </Link>
                                     </Col>
@@ -27,12 +30,14 @@ const LatestTxs = ({ latestTxs }) => {
                                         From:{' '}
                                         <Link
                                             to={`/address/${tx.sender}`}
+                                            style={{ textDecoration: 'none' }}
                                         >
                                             {shortenAddress(tx.sender)}
                                         </Link><br />
                                         To:{' '}
                                         <Link
                                             to={`/address/${tx.recipient}`}
+                                            style={{ textDecoration: 'none' }}
                                         >
                                             {shortenAddress(tx.recipient)}
                                         </Link>

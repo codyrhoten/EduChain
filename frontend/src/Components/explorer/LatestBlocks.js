@@ -12,7 +12,13 @@ const LatestBlocks = ({ latestBlx }) => {
                         <Container key={i}>
                             <Row>
                                 <Col>
-                                    Block <Link to={`/block/${block.index}`}># {block.index}</Link>
+                                    Block{' '}
+                                    <Link 
+                                        to={`/block/${block.index}`}
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        # {block.index}
+                                    </Link>
                                     <br />
                                     <i>{formatTimestamp(block)}</i>
                                 </Col>

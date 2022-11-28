@@ -15,7 +15,8 @@ function Faucet({ navLinks }) {
     const [show, setShow] = useState(false);
     const [txHash, setTxHash] = useState('');
     const [error, setError] = useState('');
-    const search = useRef();
+    const [search, setSearch] = useState('');
+    const searchInput = useRef();
     const handleShow = () => setShow(true);
 
     /* async  */function getBalance() {
@@ -24,6 +25,7 @@ function Faucet({ navLinks }) {
     }
 
     useEffect(() => {
+        searchInput.current.value = '';
         setFaucet(_faucet);
         setBalance(100000);
     }, []);
@@ -33,14 +35,15 @@ function Faucet({ navLinks }) {
         /* let [balances] = 'backend call';
         let balance = 'result of backend call'; */
 
-        search.current.value = '';
+        searchInput.current.value = '';
         getBalance();
         setShow(false);
         setTxHash('');
     }
 
     const signTx = () => {
-        const validAddress = /^[0-9a-f]{40}$/.test(search.current.value);
+        setSearch(searchInput.current.value);
+        const validAddress = /^[0-9a-f]{40}$/.test(searchInput.current.value);
 
         if (!validAddress) {
             setError('Please enter a valid address');
@@ -49,7 +52,7 @@ function Faucet({ navLinks }) {
 
         let transaction = {
             from: faucet.fAddress,
-            to: search.current.value,
+            to: searchInput.current.value,
             amount: 3,
             gas: 0
         };
@@ -81,13 +84,13 @@ function Faucet({ navLinks }) {
                         <p className='text-center fs-5 m-0'>
                             We sent 3 coins to address{' '}
                             <Link
-                                to={`/address/${search.current.value}`}
+                                to={`/address/${search}`}
                                 style={{
                                     fontSize: '16px',
                                     textDecoration: 'none'
                                 }}
                             >
-                                {search.current.value}
+                                {search}
                             </Link>
                         </p>
                         <p className='fs-5 text-center'>
@@ -122,7 +125,7 @@ function Faucet({ navLinks }) {
                         </Form.Label>
                         <InputGroup>
                             <Form.Control
-                                ref={search}
+                                ref={searchInput}
                                 aria-label='Large'
                                 id='basic-url'
                                 placeholder='your address here'

@@ -44,7 +44,10 @@ const TxDetails = ({ navLinks }) => {
                                             <tr>
                                                 <th>Block</th>
                                                 <td>
-                                                    <Link to={`/block/${tx.minedInBlock}`}>
+                                                    <Link 
+                                                        to={`/block/${tx.minedInBlock}`}
+                                                        style={{ textDecoration: 'none' }}
+                                                    >
                                                         {tx.minedInBlock}
                                                     </Link>
                                                 </td>
@@ -58,7 +61,10 @@ const TxDetails = ({ navLinks }) => {
                                     <tr>
                                         <th>From</th>
                                         <td>
-                                            <Link to={`/address/${tx.sender}`}>
+                                            <Link 
+                                                to={`/address/${tx.sender}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
                                                 {tx.sender}
                                             </Link>
                                         </td>
@@ -66,7 +72,10 @@ const TxDetails = ({ navLinks }) => {
                                     <tr>
                                         <th>To</th>
                                         <td>
-                                            <Link to={`/address/${tx.recipient}`}>
+                                            <Link 
+                                                to={`/address/${tx.recipient}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
                                                 {tx.recipient}
                                             </Link>
                                         </td>
