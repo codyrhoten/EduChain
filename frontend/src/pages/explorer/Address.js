@@ -11,6 +11,8 @@ const Address = ({ navLinks }) => {
     const { address } = useParams();
     const [addressData, setAddressData] = useState({});
 
+    console.log(addressData);
+
     useEffect(() => {
         const blockchain = new api();
         setAddressData(blockchain.getAddressHist(address));

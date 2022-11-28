@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
@@ -12,48 +12,44 @@ const SHA256 = message => {
 function Faucet({ navLinks }) {
     const [faucet, setFaucet] = useState({});
     const [balance, setBalance] = useState(0);
-    const [userAddress, setUserAddress] = useState('');
     const [show, setShow] = useState(false);
     const [txHash, setTxHash] = useState('');
-    const handleShow = () => setShow(true);
     const [error, setError] = useState('');
+    const search = useRef();
+    const handleShow = () => setShow(true);
 
     /* async  */function getBalance() {
         // make a call to server
-        setBalance(100000); // set balance to result of server call
-        return 'Services not set up yet'
+        setBalance(balance - 3); // set balance to result of server call
     }
 
     useEffect(() => {
         setFaucet(_faucet);
-        setUserAddress(sessionStorage.getItem('address'));
-        getBalance();
+        setBalance(100000);
     }, []);
 
-    const handleClose = async () => {
-        setUserAddress(sessionStorage.getItem('address'));
+    const handleClose = () => {
         // make a call to server
         /* let [balances] = 'backend call';
         let balance = 'result of backend call'; */
 
+        search.current.value = '';
         getBalance();
         setShow(false);
         setTxHash('');
-    };
+    }
 
     const signTx = () => {
-        const validAddress = /^[0-9a-f]{40}$/.test(userAddress);
+        const validAddress = /^[0-9a-f]{40}$/.test(search.current.value);
 
-        console.log(validAddress)
         if (!validAddress) {
             setError('Please enter a valid address');
             return;
         }
 
-
         let transaction = {
             from: faucet.fAddress,
-            to: userAddress,
+            to: search.current.value,
             amount: 3,
             gas: 0
         };
@@ -61,11 +57,14 @@ function Faucet({ navLinks }) {
         let txJson = JSON.stringify(transaction);
         transaction.hash = SHA256(txJson);
 
+
         transaction.signature = faucet.fKeyPair.sign(transaction.hash);
         sendTx(transaction);
+        setError('');
     };
 
     const sendTx = tx => {
+        setTxHash(tx.hash);
         handleShow();
         return `tx ${tx.hash} not sent because there's no node yet`;
     };
@@ -74,20 +73,34 @@ function Faucet({ navLinks }) {
         <>
             <Header navLinks={navLinks} />
             <Container className='postion-relative'>
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={show} onHide={handleClose} size='lg'>
                     <Modal.Header closeButton>
                         <Modal.Title>Transaction Details</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
-                        <p align='center'>We sent 3 coins to address</p>
-                        <p>
-                            <Link to={`/address/${userAddress}`}>
-                                {userAddress}
+                    <Modal.Body className='text-break'>
+                        <p className='text-center fs-5 m-0'>
+                            We sent 3 coins to address{' '}
+                            <Link
+                                to={`/address/${search.current.value}`}
+                                style={{
+                                    fontSize: '16px',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                {search.current.value}
                             </Link>
                         </p>
-                        <p>
+                        <p className='fs-5 text-center'>
                             tx:{' '}
-                            <Link to={`/tx/${txHash}`}>{txHash}</Link>
+                            <Link
+                                to={`/tx/${txHash}`}
+                                style={{
+                                    fontSize: '16px',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                {txHash}
+                            </Link>
                         </p>
                     </Modal.Body>
                 </Modal>
@@ -96,7 +109,7 @@ function Faucet({ navLinks }) {
                     <Col className='lead'>
                         This faucet allows you to receive Axiom coins for free.
                     </Col>
-                    <Col className='fs-4'>Available Balance: {balance} coins</Col>
+                    <Col className='fs-4'>available balance: {balance} coins</Col>
                 </Container>
                 <Card>
                     <Card.Body>
@@ -109,10 +122,10 @@ function Faucet({ navLinks }) {
                         </Form.Label>
                         <InputGroup>
                             <Form.Control
+                                ref={search}
                                 aria-label='Large'
                                 id='basic-url'
                                 placeholder='your address here'
-                                defaultValue={userAddress}
                             />
                         </InputGroup>
                         {

@@ -39,9 +39,7 @@ const SearchBar = /* withErrorBoundary( */() => {
             <InputGroup className='mb-3' /* style={{ height: "25px" }} */>
                 <Form.Control
                     aria-label='Large'
-                    onChange={e => {
-                        setSearch(e.target.value);
-                    }}
+                    onChange={e => setSearch(e.target.value)}
                     value={search}
                     style={{
                         borderTopLeftRadius: '10px',
