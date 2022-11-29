@@ -29,17 +29,17 @@ const LatestTxs = ({ latestTxs }) => {
                                     <Col>
                                         From:{' '}
                                         <Link
-                                            to={`/address/${tx.sender}`}
+                                            to={`/address/${tx.from}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(tx.sender)}
+                                            {shortenAddress(tx.from)}
                                         </Link><br />
                                         To:{' '}
                                         <Link
-                                            to={`/address/${tx.recipient}`}
+                                            to={`/address/${tx.to}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(tx.recipient)}
+                                            {shortenAddress(tx.to)}
                                         </Link>
                                     </Col>
                                     <Col>{tx.amount} coins</Col>

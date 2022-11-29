@@ -24,23 +24,23 @@ export default class api {
         // if (validAddress) {
             this.blockchain.chain.forEach(b => {
                 b.data.forEach(tx => {
-                    if (tx.recipient === address || tx.sender === address) {
+                    if (tx.to === address || tx.from === address) {
                         this.addressTxs.push(tx);
                     }
                 });
             });
 
             this.blockchain.pendingTransactions.forEach(t => {
-                if (t.recipient === address || t.sender === address) {
+                if (t.to === address || t.from === address) {
                     this.addressTxs.push(t);
                 }
             })
     
             let balance = 0;
             this.addressTxs.forEach(tx => {
-                if (tx.recipient === address) {
+                if (tx.to === address) {
                     balance += Number(tx.amount);
-                } else if (tx.sender === address) {
+                } else if (tx.from === address) {
                     balance -= Number(tx.amount);
                 }
             });

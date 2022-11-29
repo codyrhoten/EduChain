@@ -43,18 +43,18 @@ const TxTable = ({ txs }) => {
                                     </td>
                                     <td>
                                         <Link
-                                            to={`/address/${t.sender}`}
+                                            to={`/address/${t.from}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.sender)}
+                                            {shortenAddress(t.from)}
                                         </Link>
                                     </td>
                                     <td>
                                         <Link
-                                            to={`/address/${t.recipient}`}
+                                            to={`/address/${t.textDecoration}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.recipient)}
+                                            {shortenAddress(t.to)}
                                         </Link>
                                     </td>
                                     <td>{t.amount}</td>

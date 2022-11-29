@@ -62,10 +62,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>From</th>
                                         <td>
                                             <Link 
-                                                to={`/address/${tx.sender}`}
+                                                to={`/address/${tx.from}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                {tx.sender}
+                                                {tx.from}
                                             </Link>
                                         </td>
                                     </tr>
@@ -73,10 +73,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>To</th>
                                         <td>
                                             <Link 
-                                                to={`/address/${tx.recipient}`}
+                                                to={`/address/${tx.to}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                {tx.recipient}
+                                                {tx.to}
                                             </Link>
                                         </td>
                                     </tr>

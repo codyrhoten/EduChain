@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Container } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import SearchBar from "../../components/explorer/SearchBar";
 import TxTable from "../../components/explorer/TxTable";
 // dummy data
@@ -33,10 +33,9 @@ const Address = ({ navLinks }) => {
                 </h4>
                 {addressData.txs.length > 0 ?
                     <TxTable txs={addressData.txs} /> :
-                    <p align='center'><b>
+                    <Card align='center' className='p-5'><b>
                         There are no matching entries
-                    </b></p>
-                }
+                    </b></Card>}
             </Container>
         </>
     );
