@@ -16,6 +16,7 @@ const TxTable = ({ txs }) => {
                         <tr>
                             <th>Hash</th>
                             {/* <th>Time</th> */}
+                            <th>Status</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Amount</th>
@@ -35,6 +36,11 @@ const TxTable = ({ txs }) => {
                                         </Link>
                                     </td>
                                     {/* <td>{t.timestamp}</td> */}
+                                    <td>
+                                        {t.minedInBlock !== 'pending' ?
+                                                <i>Confirmed</i> : 
+                                                <i>Pending</i>}
+                                    </td>
                                     <td>
                                         <Link
                                             to={`/address/${t.sender}`}

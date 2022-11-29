@@ -29,13 +29,19 @@ export default class api {
                     }
                 });
             });
+
+            this.blockchain.pendingTransactions.forEach(t => {
+                if (t.recipient === address || t.sender === address) {
+                    this.addressTxs.push(t);
+                }
+            })
     
             let balance = 0;
             this.addressTxs.forEach(tx => {
                 if (tx.recipient === address) {
-                    balance -= Number(tx.amount);
-                } else if (tx.sender === address) {
                     balance += Number(tx.amount);
+                } else if (tx.sender === address) {
+                    balance -= Number(tx.amount);
                 }
             });
     
