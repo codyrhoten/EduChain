@@ -51,7 +51,7 @@ const TxTable = ({ txs }) => {
                                     </td>
                                     <td>
                                         <Link
-                                            to={`/address/${t.textDecoration}`}
+                                            to={`/address/${t.to}`}
                                             style={{ textDecoration: 'none' }}
                                         >
                                             {shortenAddress(t.to)}

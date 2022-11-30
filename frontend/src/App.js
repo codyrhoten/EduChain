@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Routes, Route } from 'react-router-dom';
 import navLinks from './utils/navLinks';
 import Home from './pages/explorer/Home';
@@ -22,14 +23,20 @@ function App() {
     });
 
     useEffect(() => {
-        const _blockchain = new api();
-        const _blocks = _blockchain.getAllBlocks().reverse();
+        (async function getAllBlocks() {
+            const _blockchain = new api();
+            const _blocks = _blockchain.getAllBlocks().reverse();
+            const blockchain = await axios.get('http://localhost:3333/blockchain');
+            const _latestBlx = blockchain.data.chain/* .reverse.slice(0, 5) */;
 
-        setBlockchain({
-            blocks: _blocks,
-            latestBlx: _blocks.slice(0, 5),
-            latestTxs: _blockchain.getAllTxs().slice(0, 5),
-        });
+            setBlockchain({
+                blocks: _blocks,
+                latestBlx: _latestBlx,
+                latestTxs: _blockchain.getAllTxs().slice(0, 5),
+            });
+        })();
+
+        console.log(blockchain.latestBlx);
     }, []);
 
 

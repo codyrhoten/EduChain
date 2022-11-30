@@ -18,7 +18,9 @@
     },
     "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
     "dependencies": {
+        "cors": "^2.8.5",
         "elliptic": "^6.5.4",
+        "express": "^4.18.2",
         "js-sha3": "^0.8.0"
     }
 }

@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const keccak256 = require('js-sha3').keccak256;
 const elliptic = require('elliptic');
-import faucet from './faucet.js';
+const faucet = require('./faucet.js');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -14,6 +14,7 @@ const mint_priv_key = mint_key_pair.getPrivate('hex');
 const mint_pub_key = mint_key_pair.getPublic('hex');
 const hashOfMintPubKey = keccak256(Buffer.from(mint_pub_key, 'hex'));
 const mintAddress = hashOfMintPubKey.slice(-40).toString('hex');
+const testAddress = '15MVCEQUSa1WRrQAGfv6sZfj1Ztkz2v9fQ';
 
 class Block {
     constructor(timeStamp, data) {
