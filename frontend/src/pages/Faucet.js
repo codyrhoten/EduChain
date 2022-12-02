@@ -69,7 +69,7 @@ function Faucet({ navLinks }) {
     const sendTx = tx => {
         setTxHash(tx.hash);
         handleShow();
-        return `tx ${tx.hash} not sent because there's no node yet`;
+        console.log(`tx ${tx.hash} not sent because there's no node yet`);
     };
 
     return (

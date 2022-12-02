@@ -54,7 +54,11 @@ const TxDetails = ({ navLinks }) => {
                                             </tr>
                                             <tr>
                                                 <th>Timestamp</th>
-                                                <td>{formatTimestamp(tx)}</td>
+                                                <td>
+                                                    {formatTimestamp(
+                                                        Number(tx.timeStamp)
+                                                    )}
+                                                </td>
                                             </tr>
                                         </>
                                     }

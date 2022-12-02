@@ -24,19 +24,20 @@ function App() {
 
     useEffect(() => {
         (async function getAllBlocks() {
-            const _blockchain = new api();
-            const _blocks = _blockchain.getAllBlocks().reverse();
+            //const _blockchain = new api();
+            // const _blocks = _blockchain.getAllBlocks().reverse();
             const blockchain = await axios.get('http://localhost:3333/blockchain');
-            const _latestBlx = blockchain.data.chain/* .reverse.slice(0, 5) */;
+            let _latestBlx = blockchain.data.chain;
+            _latestBlx = _latestBlx.reverse().slice(0, 5);
+            let _latestTxs = await axios.get('http://localhost:3333/allTxs');
+            _latestTxs = _latestTxs.data.slice(0, 5);
 
             setBlockchain({
-                blocks: _blocks,
+                blocks: blockchain.chain,
                 latestBlx: _latestBlx,
-                latestTxs: _blockchain.getAllTxs().slice(0, 5),
+                latestTxs: _latestTxs/* _blockchain.getAllTxs().slice(0, 5) */,
             });
         })();
-
-        console.log(blockchain.latestBlx);
     }, []);
 
 

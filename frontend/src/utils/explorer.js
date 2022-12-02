@@ -1,24 +1,24 @@
-const explorer = search => {
+import axios from 'axios';
+
+const explorer = async search => {
     search = search.trim();
-    // ** ADD BACKEND CALLS TO VALIDATE SEARCH AGAINST EXISTING ADDRESSES,
-    // BLOCK INDEXES AND TRANSACTION HASHES **
 
     // Check if the search is an address
     const address = /^[0-9a-f]{40}$/.test(search);
-    // Check if the search is a hash
-    const hash = /^[0-9a-f]{64}$/.test(search);
+    if (address) return `/address/${search.toString()}`;
+
     // Check if the search is empty
     const empty = /^$/.test(search);
-
     if (empty) return false;
 
-    if (address) return `/address/${search.toString()}`;
-    // block hash
-    // if (search.length < 40) {
-    //     return `/block/${search.toString()}`;
-    // }
-    // tx hash
+    // Check if the search is a tx by hash
+    const hash = /^[0-9a-f]{64}$/.test(search);
     if (hash) return `/tx/${search.toString()}`;
+
+    // Check if the search is a block by index
+    const blockchain = await axios.get('http://localhost:3333/blockchain');
+    const block = blockchain.data.chain[Number(search)];
+    if (block) return `/block/${search.toString()}`;
 };
 
 module.exports = explorer;

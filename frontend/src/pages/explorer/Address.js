@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from 'axios';
 import Header from "../../components/Header";
 import { Card, Container } from "react-bootstrap";
 import SearchBar from "../../components/explorer/SearchBar";
@@ -15,11 +16,16 @@ const Address = ({ navLinks }) => {
     });
 
     useEffect(() => {
-        const blockchain = new api();
-        setAddressData({
-            balance: blockchain.getAddressHist(address).balance,
-            txs: blockchain.getAddressHist(address).txs.reverse()
-        });
+        const _blockchain = new api();
+
+        (async function() {
+            const _addressData = await axios.get(`http://localhost:3333/address/${address}`);
+            setAddressData({
+                balance: _addressData.data.balance,
+                txs: _addressData.data.txs.reverse()
+            });
+        })();
+        
     }, [address]);
 
     return (

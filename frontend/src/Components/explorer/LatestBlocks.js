@@ -20,7 +20,11 @@ const LatestBlocks = ({ latestBlx }) => {
                                         # {block.index}
                                     </Link>
                                     <br />
-                                    <i>{formatTimestamp(block)}</i>
+                                    <i>
+                                        {formatTimestamp(
+                                            Number(block.timeStamp)
+                                        )}
+                                    </i>
                                 </Col>
                                 <Col>{block.data.length} Txs</Col>
                                 {/* <Col>{block.minedBy}</Col> */}
