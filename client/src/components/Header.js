@@ -14,7 +14,9 @@ const Header = ({ navLinks }) => {
                         height='40'
                         alt='chain'
                     />
-                    <span style={{ fontFamily: 'Fragment Mono' }}><b>Axiom</b></span>
+                    <span style={{ fontFamily: 'Fragment Mono' }}>
+                        <b>Axiom</b>
+                    </span>
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>
                     <Nav className='ms-auto'>

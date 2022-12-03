@@ -12,8 +12,6 @@ import Block from './pages/explorer/Block';
 import TxDetails from './pages/explorer/TxDetails';
 import Address from './pages/explorer/Address';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// dummy data
-import api from './dummyApi';
 
 function App() {
     const [blockchain, setBlockchain] = useState({
@@ -24,8 +22,6 @@ function App() {
 
     useEffect(() => {
         (async function getAllBlocks() {
-            //const _blockchain = new api();
-            // const _blocks = _blockchain.getAllBlocks().reverse();
             const blockchain = await axios.get('http://localhost:3333/blockchain');
             let _latestBlx = blockchain.data.chain;
             _latestBlx = _latestBlx.reverse().slice(0, 5);
@@ -35,11 +31,10 @@ function App() {
             setBlockchain({
                 blocks: blockchain.chain,
                 latestBlx: _latestBlx,
-                latestTxs: _latestTxs/* _blockchain.getAllTxs().slice(0, 5) */,
+                latestTxs: _latestTxs,
             });
         })();
     }, []);
-
 
     return (
         <div className='App'>

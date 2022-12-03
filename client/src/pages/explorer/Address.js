@@ -10,22 +10,18 @@ import api from '../../dummyApi';
 
 const Address = ({ navLinks }) => {
     const { address } = useParams();
-    const [addressData, setAddressData] = useState({
-        balance: 0,
-        txs: []
-    });
+    const [addressData, setAddressData] =
+        useState({ balance: 0, txs: [] });
 
     useEffect(() => {
-        const _blockchain = new api();
-
-        (async function() {
-            const _addressData = await axios.get(`http://localhost:3333/address/${address}`);
+        (async function () {
+            const _addressData =
+                await axios.get(`http://localhost:3333/address/${address}`);
             setAddressData({
                 balance: _addressData.data.balance,
                 txs: _addressData.data.txs.reverse()
             });
         })();
-        
     }, [address]);
 
     return (

@@ -20,7 +20,7 @@ const TxTable = ({ txs }) => {
                             <th>From</th>
                             <th>To</th>
                             <th>Amount</th>
-                            {/* {<th>Fee</th>} */}
+                            {<th>Fee</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -58,7 +58,7 @@ const TxTable = ({ txs }) => {
                                         </Link>
                                     </td>
                                     <td>{t.amount}</td>
-                                    {/* <td>{t.fee}</td> */}
+                                    <td>{t.gas}</td>
                                 </tr>
                             ))
                         }

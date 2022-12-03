@@ -14,12 +14,11 @@ const Transactions = ({ navLinks }) => {
     const [heading, setHeading] = useState('');
 
     useEffect(() => {
-        //const _blockchain = new api();
-
         (async function () {
             
             if (blockIndex) {
-                const blockchain = await axios.get('http://localhost:3333/blockchain');
+                const blockchain = 
+                    await axios.get('http://localhost:3333/blockchain');
                 const block = blockchain.data.chain[blockIndex];
                 setTxs(block.data);
 

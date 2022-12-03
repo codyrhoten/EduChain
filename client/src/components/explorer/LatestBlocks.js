@@ -2,7 +2,13 @@ import { Col, Row, Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const LatestBlocks = ({ latestBlx }) => {    
+const LatestBlocks = ({ latestBlx }) => {  
+    const shortenAddress = address => {
+        let start = address.substring(0, 4);
+        let end = address.substring(address.length - 4);
+        return start + '...' + end;
+    };
+
      return (
         <Col className='lg-6'>
             <Card className='text-center'>
@@ -27,7 +33,9 @@ const LatestBlocks = ({ latestBlx }) => {
                                     </i>
                                 </Col>
                                 <Col>{block.data.length} Txs</Col>
-                                {/* <Col>{block.minedBy}</Col> */}
+                                <Col>
+                                    Mined by {shortenAddress(block.minedBy)}
+                                </Col>
                             </Row>
                             <br />
                         </Container>
@@ -37,6 +45,6 @@ const LatestBlocks = ({ latestBlx }) => {
             </Card>
         </Col>
     )
-}
+};
 
 export default LatestBlocks;

@@ -88,10 +88,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>Amount</th>
                                         <td>{tx.amount} coins</td>
                                     </tr>
-                                    {/* <tr>
+                                    <tr>
                                         <th>Fee</th>
-                                        <td>{tx.fee} coins</td>
-                                    </tr> */}
+                                        <td>{tx.gas} coins</td>
+                                    </tr>
                                 </tbody>
                             </Table> :
                             <p align='center'><b>This transaction doesn't exist</b></p>

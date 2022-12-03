@@ -21,4 +21,4 @@ const explorer = async search => {
     if (block) return `/block/${search.toString()}`;
 };
 
-module.exports = explorer;
+export default explorer;
