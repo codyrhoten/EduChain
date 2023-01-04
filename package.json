@@ -16,5 +16,8 @@
     "url": "https://github.com/codyrhoten/Blockchain_Explorer/issues"
   },
   "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
-  "dependencies": {}
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "elliptic": "^6.5.4"
+  }
 }

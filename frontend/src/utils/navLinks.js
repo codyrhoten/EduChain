@@ -11,7 +11,7 @@ const navLinks = {
         { name: 'Open', url: '/open-wallet' },
     ],
     faucet: [
-        { name: 'Home', url: '/' },
+        { name: 'Explorer', url: '/' },
         { name: 'Wallet', url: '/wallet' },
         { name: 'Miner', url: '/miner' },
     ],

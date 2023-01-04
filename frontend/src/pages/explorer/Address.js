@@ -9,11 +9,17 @@ import api from '../../dummyApi';
 
 const Address = ({ navLinks }) => {
     const { address } = useParams();
-    const [addressData, setAddressData] = useState({});
+    const [addressData, setAddressData] = useState({
+        balance: 0,
+        txs: []
+    });
 
     useEffect(() => {
         const blockchain = new api();
-        setAddressData(blockchain.getAddressHist(address));
+        setAddressData({
+            balance: blockchain.getAddressHist(address).balance,
+            txs: blockchain.getAddressHist(address).txs.reverse()
+        });
     }, [address]);
 
     return (
@@ -25,13 +31,11 @@ const Address = ({ navLinks }) => {
                     Address: {address}<br />
                     <i>Balance: {addressData.balance} coins</i>
                 </h4>
-                {
-                    addressData !== undefined &&
-                        Object.keys(addressData).length > 0 ?
-                        <TxTable txs={addressData.txs} /> :
-                        <p align='center'><b>
-                            There are no matching entries
-                        </b></p>
+                {addressData.txs.length > 0 ?
+                    <TxTable txs={addressData.txs} /> :
+                    <p align='center'><b>
+                        There are no matching entries
+                    </b></p>
                 }
             </Container>
         </>

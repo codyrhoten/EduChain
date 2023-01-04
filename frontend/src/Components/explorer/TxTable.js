@@ -24,10 +24,13 @@ const TxTable = ({ txs }) => {
                     </thead>
                     <tbody>
                         {txs.length > 0 &&
-                            txs.reverse().map((t, i) => (
+                            txs.map((t, i) => (
                                 <tr key={i}>
                                     <td>
-                                        <Link to={`/tx/${t.hash}`}>
+                                        <Link 
+                                            to={`/tx/${t.hash}`}
+                                            style={{ textDecoration: 'none' }}
+                                        >
                                             {t.hash.substring(0, 20)}...
                                         </Link>
                                     </td>
@@ -35,6 +38,7 @@ const TxTable = ({ txs }) => {
                                     <td>
                                         <Link
                                             to={`/address/${t.sender}`}
+                                            style={{ textDecoration: 'none' }}
                                         >
                                             {shortenAddress(t.sender)}
                                         </Link>
@@ -42,6 +46,7 @@ const TxTable = ({ txs }) => {
                                     <td>
                                         <Link
                                             to={`/address/${t.recipient}`}
+                                            style={{ textDecoration: 'none' }}
                                         >
                                             {shortenAddress(t.recipient)}
                                         </Link>

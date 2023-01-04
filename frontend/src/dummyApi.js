@@ -22,7 +22,6 @@ export default class api {
         //const validAddress = /^[0-9a-f]{40}$/.test(address);
         
         // if (validAddress) {
-            console.log(this.blockchain.chain)
             this.blockchain.chain.forEach(b => {
                 b.data.forEach(tx => {
                     if (tx.recipient === address || tx.sender === address) {

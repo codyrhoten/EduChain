@@ -21,7 +21,10 @@ const Transactions = ({ navLinks }) => {
 
             setHeading(
                 <h4 align='center'>
-                    <Link to={`/block/${blockIndex}`}>
+                    <Link 
+                        to={`/block/${blockIndex}`} 
+                        style={{ textDecoration: 'none' }}
+                    >
                         Block {blockIndex}
                     </Link>
                     {' '}Transactions
