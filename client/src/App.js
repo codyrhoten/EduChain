@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Routes, Route } from 'react-router-dom';
 import navLinks from './utils/navLinks';
 import Home from './pages/explorer/Home';
@@ -11,8 +12,6 @@ import Block from './pages/explorer/Block';
 import TxDetails from './pages/explorer/TxDetails';
 import Address from './pages/explorer/Address';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// dummy data
-import api from './dummyApi';
 
 function App() {
     const [blockchain, setBlockchain] = useState({
@@ -22,16 +21,20 @@ function App() {
     });
 
     useEffect(() => {
-        const _blockchain = new api();
-        const _blocks = _blockchain.getAllBlocks().reverse();
+        (async function getAllBlocks() {
+            const blockchain = await axios.get('http://localhost:3333/blockchain');
+            let _latestBlx = blockchain.data.chain;
+            _latestBlx = _latestBlx.reverse().slice(0, 5);
+            let _latestTxs = await axios.get('http://localhost:3333/allTxs');
+            _latestTxs = _latestTxs.data.slice(0, 5);
 
-        setBlockchain({
-            blocks: _blocks,
-            latestBlx: _blocks.slice(0, 5),
-            latestTxs: _blockchain.getAllTxs().slice(0, 5),
-        });
+            setBlockchain({
+                blocks: blockchain.chain,
+                latestBlx: _latestBlx,
+                latestTxs: _latestTxs,
+            });
+        })();
     }, []);
-
 
     return (
         <div className='App'>

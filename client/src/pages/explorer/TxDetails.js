@@ -4,8 +4,6 @@ import SearchBar from '../../components/explorer/SearchBar';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import formatTimestamp from '../../utils/formatTimestamp';
-// dummy data
-import api from '../../dummyApi';
 
 const TxDetails = ({ navLinks }) => {
     const { txHash } = useParams();
@@ -54,7 +52,11 @@ const TxDetails = ({ navLinks }) => {
                                             </tr>
                                             <tr>
                                                 <th>Timestamp</th>
-                                                <td>{formatTimestamp(tx)}</td>
+                                                <td>
+                                                    {formatTimestamp(
+                                                        Number(tx.timeStamp)
+                                                    )}
+                                                </td>
                                             </tr>
                                         </>
                                     }
@@ -62,10 +64,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>From</th>
                                         <td>
                                             <Link 
-                                                to={`/address/${tx.sender}`}
+                                                to={`/address/${tx.from}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                {tx.sender}
+                                                {tx.from}
                                             </Link>
                                         </td>
                                     </tr>
@@ -73,10 +75,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>To</th>
                                         <td>
                                             <Link 
-                                                to={`/address/${tx.recipient}`}
+                                                to={`/address/${tx.to}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                {tx.recipient}
+                                                {tx.to}
                                             </Link>
                                         </td>
                                     </tr>
@@ -84,10 +86,10 @@ const TxDetails = ({ navLinks }) => {
                                         <th>Amount</th>
                                         <td>{tx.amount} coins</td>
                                     </tr>
-                                    {/* <tr>
+                                    <tr>
                                         <th>Fee</th>
-                                        <td>{tx.fee} coins</td>
-                                    </tr> */}
+                                        <td>{tx.gas} coins</td>
+                                    </tr>
                                 </tbody>
                             </Table> :
                             <p align='center'><b>This transaction doesn't exist</b></p>

@@ -16,10 +16,11 @@ const TxTable = ({ txs }) => {
                         <tr>
                             <th>Hash</th>
                             {/* <th>Time</th> */}
+                            <th>Status</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Amount</th>
-                            {/* {<th>Fee</th>} */}
+                            {<th>Fee</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -36,23 +37,28 @@ const TxTable = ({ txs }) => {
                                     </td>
                                     {/* <td>{t.timestamp}</td> */}
                                     <td>
+                                        {t.minedInBlock !== 'pending' ?
+                                                <i>Confirmed</i> : 
+                                                <i>Pending</i>}
+                                    </td>
+                                    <td>
                                         <Link
-                                            to={`/address/${t.sender}`}
+                                            to={`/address/${t.from}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.sender)}
+                                            {shortenAddress(t.from)}
                                         </Link>
                                     </td>
                                     <td>
                                         <Link
-                                            to={`/address/${t.recipient}`}
+                                            to={`/address/${t.to}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.recipient)}
+                                            {shortenAddress(t.to)}
                                         </Link>
                                     </td>
                                     <td>{t.amount}</td>
-                                    {/* <td>{t.fee}</td> */}
+                                    <td>{t.gas}</td>
                                 </tr>
                             ))
                         }

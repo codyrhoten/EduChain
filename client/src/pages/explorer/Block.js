@@ -1,21 +1,23 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Header from '../../components/Header';
 import { Badge, Card, Container, Table } from 'react-bootstrap';
 import SearchBar from '../../components/explorer/SearchBar';
 import { useParams, Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import formatTimestamp from '../../utils/formatTimestamp';
-// dummy data
-import api from '../../dummyApi';
 
 const Block = ({ navLinks }) => {
     const { blockIndex } = useParams();
     const [block, setBlock] = useState({});
 
     useEffect(() => {
-        const blockchain = new api();
-        setBlock(blockchain.getBlock(blockIndex));
-    }, [block, blockIndex]);
+        // const blockchain = new api();
 
+        (async function() {
+            const blockchain = await axios.get('http://localhost:3333/blockchain');
+            setBlock(blockchain.data.chain[blockIndex]);
+        })();
+    }, [block, blockIndex]);
 
     return (
         <>
@@ -47,7 +49,7 @@ const Block = ({ navLinks }) => {
                                                     bg='light'
                                                     style={{ color: 'rgb(95,158,160)' }}
                                                 >
-                                                    {block.data.length}
+                                                    {block.transactions.length}
                                                 </Badge>
                                             </Link>
                                         </td>
