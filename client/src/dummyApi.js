@@ -23,14 +23,14 @@ export default class api {
         
         // if (validAddress) {
             this.blockchain.chain.forEach(b => {
-                b.data.forEach(tx => {
+                b.transactions.forEach(tx => {
                     if (tx.to === address || tx.from === address) {
                         this.addressTxs.push(tx);
                     }
                 });
             });
 
-            this.blockchain.pendingTransactions.forEach(t => {
+            this.blockchain.pendingTxs.forEach(t => {
                 if (t.to === address || t.from === address) {
                     this.addressTxs.push(t);
                 }

@@ -13,8 +13,7 @@ const Address = ({ navLinks }) => {
 
     useEffect(() => {
         (async function () {
-            const _addressData =
-                await axios.get(`http://localhost:3333/address/${address}`);
+            const _addressData = await axios.get(`http://localhost:5555/address/${address}`);
             setAddressData({
                 balance: _addressData.data.balance,
                 txs: _addressData.data.txs.reverse()

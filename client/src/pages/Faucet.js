@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -19,31 +20,27 @@ function Faucet({ navLinks }) {
     const searchInput = useRef();
     const handleShow = () => setShow(true);
 
-    /* async  */function getBalance() {
-        // make a call to server
-        setBalance(balance - 3); // set balance to result of server call
+    async function getBalance() {
+        const balance = await axios.get(`http://localhost:5555/address/${_faucet.fAddress}`);
+        setBalance(balance.data.balance);
     }
 
     useEffect(() => {
         searchInput.current.value = '';
         setFaucet(_faucet);
-        setBalance(100000);
+        getBalance();
     }, []);
 
-    const handleClose = () => {
-        // make a call to server
-        /* let [balances] = 'backend call';
-        let balance = 'result of backend call'; */
-
-        searchInput.current.value = '';
-        getBalance();
-        setShow(false);
-        setTxHash('');
-    }
+    const sendTx = tx => {
+        setTxHash(tx.hash);
+        handleShow();
+        console.log(`tx ${tx.hash} not sent because there's no node yet`);
+    };
 
     const signTx = () => {
-        setSearch(searchInput.current.value);
-        const validAddress = /^[0-9a-f]{40}$/.test(searchInput.current.value);
+        const inputAddress = searchInput.current.value;
+        setSearch(inputAddress);
+        const validAddress = /^[0-9a-f]{40}$/.test(inputAddress);
 
         if (!validAddress) {
             setError('Please enter a valid address');
@@ -52,7 +49,7 @@ function Faucet({ navLinks }) {
 
         let transaction = {
             from: faucet.fAddress,
-            to: searchInput.current.value,
+            to: inputAddress,
             amount: 3,
             gas: 0
         };
@@ -66,11 +63,12 @@ function Faucet({ navLinks }) {
         setError('');
     };
 
-    const sendTx = tx => {
-        setTxHash(tx.hash);
-        handleShow();
-        console.log(`tx ${tx.hash} not sent because there's no node yet`);
-    };
+    const handleClose = () => {
+        searchInput.current.value = '';
+        getBalance();
+        setShow(false);
+        setTxHash('');
+    }
 
     return (
         <>
@@ -85,10 +83,7 @@ function Faucet({ navLinks }) {
                             We sent 3 coins to address{' '}
                             <Link
                                 to={`/address/${search}`}
-                                style={{
-                                    fontSize: '16px',
-                                    textDecoration: 'none'
-                                }}
+                                style={{ fontSize: '16px', textDecoration: 'none' }}
                             >
                                 {search}
                             </Link>
@@ -97,10 +92,7 @@ function Faucet({ navLinks }) {
                             tx:{' '}
                             <Link
                                 to={`/tx/${txHash}`}
-                                style={{
-                                    fontSize: '16px',
-                                    textDecoration: 'none'
-                                }}
+                                style={{ fontSize: '16px', textDecoration: 'none' }}
                             >
                                 {txHash}
                             </Link>
@@ -117,12 +109,7 @@ function Faucet({ navLinks }) {
                 <Card>
                     <Card.Body>
                         {error && <p><i>{error}</i></p>}
-                        <Form.Label
-                            htmlFor='basic-url'
-                            className='fs-5'
-                        >
-                            Recipient
-                        </Form.Label>
+                        <Form.Label htmlFor='basic-url' className='fs-5'>Recipient</Form.Label>
                         <InputGroup>
                             <Form.Control
                                 ref={searchInput}

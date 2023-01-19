@@ -48,7 +48,7 @@ const LatestTxs = ({ latestTxs }) => {
                             </Container>
                         );
                     })}
-                    <Link to='transactions'>
+                    <Link to='/transactions'>
                         See all transactions
                     </Link>
                 </Card.Body>
