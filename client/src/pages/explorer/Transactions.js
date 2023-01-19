@@ -14,9 +14,8 @@ const Transactions = ({ navLinks }) => {
     useEffect(() => {
         (async function () {
             if (blockIndex) {
-                const blockchain = await axios.get('http://localhost:5555/blockchain');
-                const block = blockchain.data.chain[blockIndex];
-                setTxs(block.transactions);
+                const _block = await axios.get(`http://localhost:5555/getBlock/${blockIndex}`);
+                setTxs(_block.data.transactions);
 
                 setHeading(
                     <h4 align='center'>

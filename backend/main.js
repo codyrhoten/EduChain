@@ -34,6 +34,12 @@ app.get('/allTxs', (req, res) => {
     res.json(txs);
 });
 
+app.get('/getBlock/:blockIndex', (req, res) => {
+    const blockIndex = req.params.blockIndex;
+    const block = blockchain.getBlock(blockIndex);
+    res.json({ block });
+})
+
 app.get('/address/:address', (req, res) => {
     const address = req.params.address;
     const addressData = blockchain.getBalance(address);

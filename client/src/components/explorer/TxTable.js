@@ -1,13 +1,8 @@
 import { Card, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import shortenAddress from '../../utils/shortenAddress';
 
 const TxTable = ({ txs }) => {
-    const shortenAddress = address => {
-        let start = address.substring(0, 6);
-        let end = address.substring(address.length - 6);
-        return start + '...' + end;
-    };
-
     return (
         <Card>
             <Card.Body>
@@ -46,7 +41,7 @@ const TxTable = ({ txs }) => {
                                             to={`/address/${t.from}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.from)}
+                                            {shortenAddress(t.from, 6)}
                                         </Link>
                                     </td>
                                     <td>
@@ -54,7 +49,7 @@ const TxTable = ({ txs }) => {
                                             to={`/address/${t.to}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(t.to)}
+                                            {shortenAddress(t.to, 6)}
                                         </Link>
                                     </td>
                                     <td>{t.amount}</td>

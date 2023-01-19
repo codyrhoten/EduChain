@@ -22,8 +22,9 @@ class Blockchain {
         );
 
         const genesisBlock = new Block(
-            Date.now().toString(),
-            [initialCoinRelease]
+            0,                     // index
+            Date.now().toString(), // timestamp
+            [initialCoinRelease]   // txs array
         );
 
         this.chain = [genesisBlock];
@@ -35,6 +36,10 @@ class Blockchain {
 
     getLastBlock() {
         return this.chain[this.chain.length - 1];
+    }
+
+    getBlock(index) {
+        this.chain.find(block => block.index)
     }
 
     getBalance(address) {
