@@ -5,8 +5,6 @@ import { Container } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SearchBar from '../../components/explorer/SearchBar';
 import TxTable from '../../components/explorer/TxTable';
-// dummy data
-import api from '../../dummyApi';
 
 const Transactions = ({ navLinks }) => {
     const blockIndex = useLocation().state;
@@ -20,7 +18,7 @@ const Transactions = ({ navLinks }) => {
                 const blockchain = 
                     await axios.get('http://localhost:3333/blockchain');
                 const block = blockchain.data.chain[blockIndex];
-                setTxs(block.data);
+                setTxs(block.transactions);
 
                 setHeading(
                     <h4 align='center'>
@@ -35,7 +33,7 @@ const Transactions = ({ navLinks }) => {
                 );
             } else {
                 const txs = await axios.get('http://localhost:3333/allTxs');
-                setTxs(txs.data);
+                setTxs(txs.transactions);
 
                 setHeading(
                     <h4 align='center'>

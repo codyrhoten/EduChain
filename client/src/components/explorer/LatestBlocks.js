@@ -32,7 +32,7 @@ const LatestBlocks = ({ latestBlx }) => {
                                         )}
                                     </i>
                                 </Col>
-                                <Col>{block.data.length} Txs</Col>
+                                <Col>{block.transactions.length} Txs</Col>
                                 <Col>
                                     Mined by {shortenAddress(block.minedBy)}
                                 </Col>

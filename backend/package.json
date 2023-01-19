@@ -11,7 +11,7 @@
         "type": "git",
         "url": "git+https://github.com/codyrhoten/Blockchain_Explorer.git"
     },
-    "author": "JeanMarie McCormack, Jared Drake and Cody Rhoten",
+    "author": "Cody Rhoten",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/codyrhoten/Blockchain_Explorer/issues"

@@ -5,8 +5,6 @@ import Header from "../../components/Header";
 import { Card, Container } from "react-bootstrap";
 import SearchBar from "../../components/explorer/SearchBar";
 import TxTable from "../../components/explorer/TxTable";
-// dummy data
-import api from '../../dummyApi';
 
 const Address = ({ navLinks }) => {
     const { address } = useParams();

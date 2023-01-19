@@ -4,8 +4,6 @@ import SearchBar from '../../components/explorer/SearchBar';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import formatTimestamp from '../../utils/formatTimestamp';
-// dummy data
-import api from '../../dummyApi';
 
 const TxDetails = ({ navLinks }) => {
     const { txHash } = useParams();

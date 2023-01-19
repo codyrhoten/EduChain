@@ -36,7 +36,7 @@ const AllBlocks = ({ blocks, navLinks }) => {
                                             </td>
                                             <td>{formatTimestamp(b)}</td>
                                             <td>{b.minedBy}</td>
-                                            <td>{b.data.length}</td>
+                                            <td>{b.transactions.length}</td>
                                             {/* <td>{b.reward}</td> */}
                                         </tr>
                                     ))

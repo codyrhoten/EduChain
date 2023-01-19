@@ -5,8 +5,6 @@ import { Badge, Card, Container, Table } from 'react-bootstrap';
 import SearchBar from '../../components/explorer/SearchBar';
 import { useParams, Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
-// dummy data
-import api from '../../dummyApi';
 
 const Block = ({ navLinks }) => {
     const { blockIndex } = useParams();
@@ -20,7 +18,6 @@ const Block = ({ navLinks }) => {
             setBlock(blockchain.data.chain[blockIndex]);
         })();
     }, [block, blockIndex]);
-
 
     return (
         <>
@@ -52,7 +49,7 @@ const Block = ({ navLinks }) => {
                                                     bg='light'
                                                     style={{ color: 'rgb(95,158,160)' }}
                                                 >
-                                                    {block.data.length}
+                                                    {block.transactions.length}
                                                 </Badge>
                                             </Link>
                                         </td>

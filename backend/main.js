@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Blockchain, Transaction, Block } = require('./blockchain');
 const port = 3333;
@@ -10,7 +9,7 @@ const confirmedTxs = () => {
     let txs = [];
     
     blockchain.chain.forEach(block => {
-        txs.push(...block.data);
+        txs.push(...block.transactions);
     });
     
     return txs;
