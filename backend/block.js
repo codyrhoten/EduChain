@@ -5,7 +5,8 @@ const SHA256 = message => {
 };
 
 export default class Block {
-    constructor(timeStamp, transactions) {
+    constructor(index, timeStamp, transactions) {
+        this.index = index;
         this.timeStamp = timeStamp;
         this.transactions = transactions;
         this.hash = this.getHash();

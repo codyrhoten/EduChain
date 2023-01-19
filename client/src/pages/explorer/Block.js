@@ -11,11 +11,9 @@ const Block = ({ navLinks }) => {
     const [block, setBlock] = useState({});
 
     useEffect(() => {
-        // const blockchain = new api();
-
         (async function() {
-            const blockchain = await axios.get('http://localhost:3333/blockchain');
-            setBlock(blockchain.data.chain[blockIndex]);
+            const _block = await axios.get(`http://localhost:5555/getBlock/${blockIndex}`);
+            setBlock(_block.data);
         })();
     }, [block, blockIndex]);
 

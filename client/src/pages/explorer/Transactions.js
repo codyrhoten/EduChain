@@ -9,37 +9,26 @@ import TxTable from '../../components/explorer/TxTable';
 const Transactions = ({ navLinks }) => {
     const blockIndex = useLocation().state;
     const [txs, setTxs] = useState([]);
-    const [heading, setHeading] = useState('');
+    const [heading, setHeading] = useState(null);
 
     useEffect(() => {
         (async function () {
-            
             if (blockIndex) {
-                const blockchain = 
-                    await axios.get('http://localhost:3333/blockchain');
-                const block = blockchain.data.chain[blockIndex];
-                setTxs(block.transactions);
+                const _block = await axios.get(`http://localhost:5555/getBlock/${blockIndex}`);
+                setTxs(_block.data.transactions);
 
                 setHeading(
                     <h4 align='center'>
-                        <Link
-                            to={`/block/${blockIndex}`}
-                            style={{ textDecoration: 'none' }}
-                        >
+                        <Link to={`/block/${blockIndex}`} style={{ textDecoration: 'none' }}>
                             Block {blockIndex}
                         </Link>
                         {' '}Transactions
                     </h4>
                 );
             } else {
-                const txs = await axios.get('http://localhost:3333/allTxs');
-                setTxs(txs.transactions);
-
-                setHeading(
-                    <h4 align='center'>
-                        All Transactions
-                    </h4>
-                );
+                const txs = await axios.get('http://localhost:5555/allTxs');
+                setTxs(txs.data);
+                setHeading(<h4 align='center'>All Transactions</h4>);
             }
         })();
     }, [blockIndex]);

@@ -10,9 +10,10 @@ const TxDetails = ({ navLinks }) => {
     const [tx, setTx] = useState({});
 
     useEffect(() => {
-        const blockchain = new api();
-        const txs = blockchain.getAllTxs();
-        setTx(txs.find(t => t.hash === txHash));
+        (async function () {
+            const txs = await axios.get('http://localhost:5555/allTxs');
+            setTx(txs.data.find(t => t.hash === txHash));
+        })();
     }, [tx, txHash]);
 
     return (
@@ -42,7 +43,7 @@ const TxDetails = ({ navLinks }) => {
                                             <tr>
                                                 <th>Block</th>
                                                 <td>
-                                                    <Link 
+                                                    <Link
                                                         to={`/block/${tx.minedInBlock}`}
                                                         style={{ textDecoration: 'none' }}
                                                     >
@@ -63,7 +64,7 @@ const TxDetails = ({ navLinks }) => {
                                     <tr>
                                         <th>From</th>
                                         <td>
-                                            <Link 
+                                            <Link
                                                 to={`/address/${tx.from}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
@@ -74,7 +75,7 @@ const TxDetails = ({ navLinks }) => {
                                     <tr>
                                         <th>To</th>
                                         <td>
-                                            <Link 
+                                            <Link
                                                 to={`/address/${tx.to}`}
                                                 style={{ textDecoration: 'none' }}
                                             >

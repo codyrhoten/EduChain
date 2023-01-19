@@ -1,17 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const { Blockchain, Transaction, Block } = require('./blockchain');
-const port = 3333;
+const port = 5555;
 
 const blockchain = new Blockchain();
 
 const confirmedTxs = () => {
     let txs = [];
-    
-    blockchain.chain.forEach(block => {
-        txs.push(...block.transactions);
-    });
-    
+    blockchain.chain.forEach(block => txs.push(...block.transactions));
     return txs;
 };
 
@@ -24,7 +20,7 @@ app.get('/info', (req, res) => {
     res.json({
         blocks: blockchain.chain.length,
         confirmedTxs: confirmedTxs(),
-        pendingTxs: blockchain.pendingTransactions
+        pendingTxs: blockchain.pendingTxs
     });
 });
 
@@ -34,13 +30,25 @@ app.get('/blockchain', (req, res) => {
 
 app.get('/allTxs', (req, res) => {
     let txs = confirmedTxs();
-    txs.push(...blockchain.transaction);
+    txs.push(...blockchain.pendingTxs);
     res.json(txs);
+});
+
+app.get('/getBlock/:blockIndex', (req, res) => {
+    const blockIndex = req.params.blockIndex;
+    const block = blockchain.getBlock(blockIndex);
+    res.json({ block });
+})
+
+app.get('/address/:address', (req, res) => {
+    const address = req.params.address;
+    const addressData = blockchain.getBalance(address);
+    res.json({ addressData });
 });
 
 app.post('/transaction', (req, res) => {
     const newTx = req.body;
-    blockchain.addTransaction(newTx);
+    blockchain.addPendingTx(newTx);
     res.json(newTx);
 });
 
@@ -53,6 +61,4 @@ app.post('/mine', (req, res) => {
     
 });
 
-app.listen(port, function() {
-    console.log(`Listening on port ${port}`);
-});
+app.listen(port, function() { console.log(`Listening on port ${port}`) });

@@ -1,13 +1,8 @@
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import shortenAddress from '../../utils/shortenAddress';
 
 const LatestTxs = ({ latestTxs }) => {
-    const shortenAddress = address => {
-        let start = address.substring(0, 4);
-        let end = address.substring(address.length - 4);
-        return start + '...' + end;
-    };
-
     return (
         <Col className='lg-6'>
             <Card className='text-center'>
@@ -32,14 +27,14 @@ const LatestTxs = ({ latestTxs }) => {
                                             to={`/address/${tx.from}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(tx.from)}
+                                            {shortenAddress(tx.from, 4)}
                                         </Link><br />
                                         To:{' '}
                                         <Link
                                             to={`/address/${tx.to}`}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {shortenAddress(tx.to)}
+                                            {shortenAddress(tx.to, 4)}
                                         </Link>
                                     </Col>
                                     <Col>{tx.amount} coins</Col>
@@ -48,7 +43,7 @@ const LatestTxs = ({ latestTxs }) => {
                             </Container>
                         );
                     })}
-                    <Link to='transactions'>
+                    <Link to='/transactions'>
                         See all transactions
                     </Link>
                 </Card.Body>

@@ -22,14 +22,15 @@ class Blockchain {
         );
 
         const genesisBlock = new Block(
-            Date.now().toString(),
-            [initialCoinRelease]
+            0,                     // index
+            Date.now().toString(), // timestamp
+            [initialCoinRelease]   // txs array
         );
 
         this.chain = [genesisBlock];
         this.difficulty = 1;
         this.blockTime = 30000;
-        this.transaction = [];
+        this.pendingTxs = [];
         this.reward = 500;
     }
 
@@ -37,23 +38,30 @@ class Blockchain {
         return this.chain[this.chain.length - 1];
     }
 
+    getBlock(index) {
+        this.chain.find(block => block.index)
+    }
+
     getBalance(address) {
-        let balance = 0;
+        let addressTxs = [];
 
-        this.chain.forEach(block => {
-            block.transactions.forEach(transaction => {
-                if (transaction.to === address) {
-                    balance += transaction.amount;
-                }
-
-                if (transaction.from === address) {
-                    balance -= transaction.amount;
-                    balance -= transaction.gas;
-                }
+        this.chain.forEach(b => {
+            b.transactions.forEach(tx => {
+                if (tx.to === address || tx.from === address) addressTxs.push(tx);
             });
         });
 
-        return balance;
+        let balance = 0;
+
+        addressTxs.forEach(tx => {
+            if (tx.to === address) {
+                balance += Number(tx.amount);
+            } else if (tx.from === address) {
+                balance -= Number(tx.amount);
+            }
+        });
+
+        return { txs: addressTxs, balance };
     }
 
     addBlock(block) {
@@ -62,25 +70,22 @@ class Blockchain {
         block.hash = block.getHash();
         block.mine(this.difficulty);
         this.chain.push(block);
-        this.difficulty +=
-            Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
+        this.difficulty += Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
     }
 
-    addTransaction(transaction) {
-        if (transaction.isValid(transaction, this)) {
-            this.transaction.push(transaction);
+    addPendingTx(tx) {
+        if (tx.isValid(tx, this)) {
+            this.pendingTxs.push(tx);
         }
 
-        console.log(transaction);
+        console.log(tx);
     }
 
     miningTransaction(rewardAddress) {
         let block = {};
         let gas = 0;
 
-        this.transaction.forEach((transaction) => {
-            gas += transaction.gas;
-        });
+        this.pendingTxs.forEach(tx => gas += tx.gas);
 
         const rewardTransaction = new Transaction(
             mintAddress,
@@ -90,16 +95,12 @@ class Blockchain {
 
         rewardTransaction.sign(mint_priv_key);
 
-        if (this.transaction.length !== 0) {
-            block = new Block(
-                Date.now().toString(),
-                [rewardTransaction, ...this.transaction]
-            );
-
+        if (this.pendingTxs.length !== 0) {
+            block = new Block(Date.now().toString(), [rewardTransaction, ...this.pendingTxs]);
             this.addBlock(block);
         }
 
-        this.transaction = [];
+        this.pendingTxs = [];
     }
 
     isValid(blockchain = this) {
