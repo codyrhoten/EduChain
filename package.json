@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
   "dependencies": {
+    "body-parser": "^1.20.1",
     "crypto": "^1.0.1",
-    "elliptic": "^6.5.4"
+    "elliptic": "^6.5.4",
+    "uuid": "^9.0.0"
   }
 }

@@ -28,6 +28,7 @@ class Blockchain {
         );
 
         this.chain = [genesisBlock];
+        this.nodes = [];
         this.difficulty = 1;
         this.blockTime = 30000;
         this.pendingTxs = [];
@@ -121,4 +122,4 @@ class Blockchain {
     }
 }
 
-module.exports = { Blockchain, mint_key_pair, mint_pub_key };
+export { Blockchain, mint_key_pair, mint_pub_key };

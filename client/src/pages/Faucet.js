@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-import _faucet from '../utils/faucetDetails.js';
+import { faucetAddress, faucetKeyPair } from '../utils/faucetDetails.js';
 const crypto = require("crypto");
 
 const SHA256 = message => {
@@ -27,7 +27,7 @@ function Faucet({ navLinks }) {
 
     useEffect(() => {
         searchInput.current.value = '';
-        setFaucet(_faucet);
+        setFaucet(faucetAddress);
         getBalance();
     }, []);
 
@@ -48,9 +48,9 @@ function Faucet({ navLinks }) {
         }
 
         let transaction = {
-            from: faucet.fAddress,
+            from: faucetAddress,
             to: inputAddress,
-            amount: 3,
+            amount: 1,
             gas: 0
         };
 
@@ -58,7 +58,7 @@ function Faucet({ navLinks }) {
         transaction.hash = SHA256(txJson);
 
 
-        transaction.signature = faucet.fKeyPair.sign(transaction.hash);
+        transaction.signature = faucetKeyPair.sign(transaction.hash);
         sendTx(transaction);
         setError('');
     };
