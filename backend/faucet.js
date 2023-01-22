@@ -6,4 +6,4 @@ const faucetPubKey = '26e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53d
 const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
 const faucetAddress = 'd334371fe9555603d107b5e96c14ab5328661d97';
 
-export { faucetAddress, faucetKeyPair };
+module.exports = { faucetAddress, faucetKeyPair };

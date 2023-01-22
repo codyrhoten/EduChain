@@ -4,11 +4,11 @@ const SHA256 = message => {
     return crypto.createHash("sha256").update(message).digest("hex");
 };
 
-export default class Block {
+class Block {
     constructor(index, timeStamp, transactions) {
         this.index = index;
         this.timeStamp = timeStamp;
-        this.transactions = transactions;
+        this.txs = transactions;
         this.hash = this.getHash();
         this.prevHash = "";
         this.nonce = 0;
@@ -16,7 +16,7 @@ export default class Block {
 
     getHash() {
         return SHA256(
-            JSON.stringify(this.transactions) +
+            JSON.stringify(this.txs) +
             this.timeStamp +
             this.prevHash +
             this.nonce
@@ -31,8 +31,10 @@ export default class Block {
     }
 
     hasValidTransactions(chain) {
-        return this.transactions.every((transaction) =>
+        return this.txs.every((transaction) =>
             transaction.isValid(transaction, chain)
         );
     }
 }
+
+module.exports = Block;

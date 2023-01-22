@@ -4,7 +4,7 @@ const SHA256 = message => {
     return crypto.createHash("sha256").update(message).digest("hex");
 };
 
-export default class Transaction {
+class Transaction {
     //const transaction = new Transaction(faucetKeyPair.getPublic("hex"), girlfriendwallet.getPublic("hex"), 333, 10)
     constructor(from, to, amount, gas = 0) {
         this.from = from;
@@ -39,3 +39,5 @@ export default class Transaction {
         );
     }
 }
+
+module.exports = Transaction;

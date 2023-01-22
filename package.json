@@ -4,7 +4,8 @@
   "description": "interaction with a blockchain with wallet and faucet capability",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node backend/endpoints.js 5555 http://localhost:5555"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
     "crypto": "^1.0.1",
     "elliptic": "^6.5.4",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

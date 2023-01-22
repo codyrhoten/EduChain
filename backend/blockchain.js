@@ -2,9 +2,9 @@ const keccak256 = require('js-sha3').keccak256;
 const elliptic = require('elliptic');
 const ec = new elliptic.ec('secp256k1');
 
-import Block from 'block.js';
-import Transaction from './transaction.js';
-import { fAddress } from './faucet.js';
+const Block = require('./block.js');
+const Transaction = require('./transaction.js');
+const { fAddress } = require('./faucet.js');
 
 const mint_key_pair = ec.genKeyPair();
 const mint_priv_key = mint_key_pair.getPrivate('hex');
@@ -27,12 +27,17 @@ class Blockchain {
             [initialCoinRelease]   // txs array
         );
 
-        this.chain = [genesisBlock];
-        this.nodes = [];
+        this.blocks = [genesisBlock];
         this.difficulty = 1;
         this.blockTime = 30000;
         this.pendingTxs = [];
-        this.reward = 500;
+        // this.reward = 500;
+    }
+
+    getConfirmedTxs() {
+        let txs = [];
+        this.blocks.forEach(block => txs.push(...block.txs));
+        return txs;
     }
 
     getLastBlock() {
@@ -122,4 +127,4 @@ class Blockchain {
     }
 }
 
-export { Blockchain, mint_key_pair, mint_pub_key };
+module.exports = Blockchain;
