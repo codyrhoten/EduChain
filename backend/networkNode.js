@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const accountsDetails = require('./accounts.js');
 
 class NetworkNode {
     constructor(url, chain) {
@@ -11,14 +12,20 @@ class NetworkNode {
     getInfo() {
         return {
             about: 'SchoolChain/v1',
-            nodeId: this.nodeId,
-            nodeURL: this.url,
+            id: this.nodeId,
+            chainId: this.schoolChain.blocks[0].hash, // genesis block hash
+            url: this.url,
             peers: this.peers.size,
             difficulty: 1,
             blocks: this.schoolChain.blocks.length,
             confirmedTxs: this.schoolChain.getConfirmedTxs().length,
             pendingTxs: this.schoolChain.pendingTxs.length
         };
+    }
+
+    debug() {
+        const confirmedBalances = this.schoolChain.getConfirmedBalances();
+        return ({ node, accountsDetails, confirmedBalances });
     }
 }
 
