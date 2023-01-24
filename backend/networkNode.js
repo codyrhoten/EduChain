@@ -25,7 +25,7 @@ class NetworkNode {
 
     debug() {
         const confirmedBalances = this.schoolChain.getConfirmedBalances();
-        return ({ node, accountsDetails, confirmedBalances });
+        return ({ node: this, importantAccounts: accountsDetails, confirmedBalances });
     }
 }
 

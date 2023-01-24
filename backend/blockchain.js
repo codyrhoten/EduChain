@@ -5,10 +5,10 @@ const ec = new elliptic.ec('secp256k1');
 const Block = require('./block.js');
 const Transaction = require('./transaction.js');
 const { 
-    mintAddress, 
     faucetAddress, 
     schoolChainPubKey, 
-    schoolChainPrivKey
+    schoolChainPrivKey,
+    schoolChainAddress
 } = require('./accounts.js');
 
 const mint_priv_key = 'a8e64da240619de60828750849c7c46d551bddcf1819a9b2d1d46bf7e6a0cbb6';
@@ -19,30 +19,34 @@ const mint_address = 'ba3fe981cda884e045e427a86f3f4975f9f698fc';
 
 class Blockchain {
     constructor() {
+        // genesis transaction
         const initialCoinRelease = new Transaction(
-            mintAddress,
-            faucetAddress,
-            100000,
-            0,
-            Date.now().toString(),
-            schoolChainPubKey,
-            undefined,
-            undefined,
-            0,
-            true
+            schoolChainAddress,            // from
+            faucetAddress,          // to
+            100000,                 // amount
+            0,                      // fee
+            Date.now(),             // timestamp
+            schoolChainPubKey,      // sender public key
+            undefined,              // hash
+            undefined,              // sender signature
+            0,                      // block this was mined in
+            true                    // success?
         );
 
         initialCoinRelease.sign(schoolChainPrivKey);
-
+        
         const genesisBlock = new Block(
             0,                     // index
-            Date.now().toString(), // timestamp
-            [initialCoinRelease]   // txs array
+            [initialCoinRelease],  // transactions array
+            undefined,             // previous block hash
+            schoolChainAddress,           // miner
+            undefined,             // block data hash
+            0,                     // nonce
+            Date.now(),            // timestamp
+            undefined              // block hash
         );
-
         this.blocks = [genesisBlock];
         this.difficulty = 1;
-        this.blockTime = 30000;
         this.pendingTxs = [];
         // this.reward = 500;
     }
@@ -55,18 +59,18 @@ class Blockchain {
 
     getConfirmedBalances() {
         const txs = this.getConfirmedTxs();
-        let balances = new Map();
+        let balances = {};
 
-        for (let tx of txs) {
-            balances.set(tx.from, (balances.get(tx.from) || 0));
-            balances.set(tx.to, (balances.get(tx.to) || 0));
-            balances.set(tx.from, (balances.get(tx.from) - tx.fee));
+        txs.forEach(tx => {
+            balances[tx.from] = balances[tx.from] || 0;
+            balances[tx.to] = balances[tx.to] || 0;
+            balances[tx.from] -= tx.fee;
 
             if (tx.success) {
-                balances.set(tx.from, (balances.get(tx.from) - tx.amount));
-                balances.set(tx.to, (balances.get(tx.to) + tx.amount));
+                balances[tx.from] -= tx.amount;
+                balances[tx.to] += tx.amount;
             }
-        }
+        });
 
         return balances;
     }

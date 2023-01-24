@@ -12,9 +12,9 @@ class Transaction {
         from,
         to,
         amount,
-        fee = 0,
+        fee = '0',
         timestamp,
-        // senderPubKey, FOR VERIFYING SIGNATURE
+        senderPubKey,
         hash,
         senderSig,
         minedInBlock,
@@ -25,7 +25,7 @@ class Transaction {
         this.amount = amount;
         this.fee = fee;
         this.timestamp = timestamp;
-        // this.senderPubKey = senderPubKey;
+        this.senderPubKey = senderPubKey;
         this.hash = hash;
         this.senderSig = senderSig;
         this.minedInBlock = minedInBlock
@@ -35,10 +35,19 @@ class Transaction {
     }
 
     getHash() {
-        const txData =  String(this.from + this.to + this.amount + this.fee + this.timestamp /* + this.senderPubKey */);
-        this.hash = SHA256(txData, 'base64');
+        this.hash = SHA256(
+            JSON.stringify({
+                from: this.from,
+                to: this.to,
+                amount: this.amount,
+                fee: this.fee,
+                timestamp: this.timestamp,
+                senderPubKey: this.senderPubKey
+            }), 
+            'base64'
+        );
     }
-    
+
     sign(signerPrivKey) {
         const signerKeyPair = ec.keyFromPrivate(signerPrivKey);
         const signature = signerKeyPair.sign(this.hash);

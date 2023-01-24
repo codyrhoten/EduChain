@@ -5,22 +5,31 @@ const SHA256 = message => {
 };
 
 class Block {
-    constructor(index, timeStamp, transactions) {
+    constructor(index, transactions, prevBlockHash, minedBy, dataHash, nonce, timeStamp, hash) {
         this.index = index;
-        this.timeStamp = timeStamp;
         this.txs = transactions;
-        this.hash = this.getHash();
-        this.prevHash = "";
-        this.nonce = 0;
+        this.prevBlockHash = prevBlockHash;
+        this.minedBy = minedBy;
+        this.dataHash = dataHash;
+        this.nonce = nonce;
+        this.timeStamp = timeStamp;
+        this.hash = hash;
+    }
+
+    getDataHash() {
+        return SHA256(
+            JSON.stringify({
+                index: this.index,
+                txs: this.txs,
+                prevBlockHash: this.prevBlockHash,
+                minedBy: this.minedBy
+            }),
+            'base64'
+        );
     }
 
     getHash() {
-        return SHA256(
-            JSON.stringify(this.txs) +
-            this.timeStamp +
-            this.prevHash +
-            this.nonce
-        );
+
     }
 
     mine(difficulty) {

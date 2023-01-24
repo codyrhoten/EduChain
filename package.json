@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon backend/api.js 5555 http://localhost:5555"
+    "dev": "nodemon backend/api.js 5555 http://localhost:5555"
   },
   "repository": {
     "type": "git",

@@ -1,30 +1,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const networkNode = require('./networkNode.js');
+const NetworkNode = require('./networkNode.js');
 const Blockchain = require('./blockchain.js');
 const port = process.argv[2];
 const nodeUrl = process.argv[3];
+
 const app = express();
 const schoolChain = new Blockchain();
-const node = new networkNode(nodeUrl, schoolChain);
+const node = new NetworkNode(nodeUrl, schoolChain);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(express.json());
 
+/* ---------------------API--------------------- */
+
 app.get('/info', (req, res) => {
-    const nodeInfo = node.getInfo();
-    res.json({ 'Node Info': nodeInfo });
+    res.json({ 'Node Info': node.getInfo() });
 });
 
 app.get('/debug', (req, res) => {
-
+    res.json({ info: node.debug() });
 });
 
-app.get('/debug/debug/reset-chain', (req, res) => {
-
+app.get('/debug/reset-chain', (req, res) => {
+    node.schoolChain = new Blockchain();
+    res.json({ message: 'The chain was reset to its genesis block' });
 });
 
 app.get('/debug/mine/:minerAddress', (req, res) => {

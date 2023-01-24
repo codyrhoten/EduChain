@@ -89,7 +89,7 @@ const TxDetails = ({ navLinks }) => {
                                     </tr>
                                     <tr>
                                         <th>Fee</th>
-                                        <td>{tx.gas} coins</td>
+                                        <td>{tx.fee} coins</td>
                                     </tr>
                                 </tbody>
                             </Table> :
