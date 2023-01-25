@@ -28,8 +28,10 @@ const Address = ({ navLinks }) => {
                 <SearchBar />
                 <h4 align='center'>
                     Address: {address}<br />
-                    <i>Balance: {addressData.balance} coins</i>
+                    <i>Confirmed Balance: {addressData.balance.confirmed} SCH</i>
                 </h4>
+                <p align='center'>Safe Balance: {addressData.balance.safe}</p>
+                <p align='center'><i>Pending Balance: {addressData.balance.pending}</i></p>
                 {addressData.txs.length > 0 ?
                     <TxTable txs={addressData.txs} /> :
                     <Card align='center' className='p-5'><b>

@@ -30,7 +30,7 @@ export default class api {
                 if (t.to === address || t.from === address) {
                     this.addressTxs.push(t);
                 }
-            })
+            });
     
             let balance = 0;
             this.addressTxs.forEach(tx => {

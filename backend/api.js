@@ -44,7 +44,7 @@ app.get('/blocks/:index', (req, res) => {
     if (block) {
         res.json(block);
     } else {
-        res.json({ err: 'Invalid block index' });
+        res.json({ error: 'Invalid block index' });
     }
 });
 
@@ -53,19 +53,27 @@ app.get('/all-txs', (req, res) => {
 });
 
 app.get('/txs/:hash', (req, res) => {
-
+    const txHash = req.params.hash;
+    const allTxs = node.getAllTxs();
+    const tx = allTxs.find(t => t.hash === txHash);
+    res.json(tx);
 });
 
+// not sure what this is for yet
 app.get('/balances', (req, res) => {
-
+    res.json(node.schoolChain.getConfirmedBalances())
 });
 
-app.get('/address/:address/txs', (req, res) => {
+app.get('/address-data/:address', (req, res) => {
     const address = req.params.address;
-});
 
-app.get('/address/:address/balance', (req, res) => {
-    const address = req.params.address;
+    if (typeof (address) !== 'string' || !(/^[0-9a-f]{40}$/.test(address))) {
+        res.json({ error: "Invalid address" });
+    }
+
+    const txHistory = node.getTxHistory(address);
+    const balance = node.getBalance(address);
+    res.json({ balance, txs: txHistory });
 });
 
 app.post('/txs/send', (req, res) => {
@@ -73,8 +81,8 @@ app.post('/txs/send', (req, res) => {
 });
 
 
-app.post('/peers', (req, res) => {
-
+app.get('/peers', (req, res) => {
+    res.json(node.peers.entries());
 });
 
 app.post('/peers/connect', (req, res) => {

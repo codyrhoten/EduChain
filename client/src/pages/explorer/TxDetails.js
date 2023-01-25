@@ -11,8 +11,8 @@ const TxDetails = ({ navLinks }) => {
 
     useEffect(() => {
         (async function () {
-            const txs = await axios.get('http://localhost:5555/allTxs');
-            setTx(txs.data.find(t => t.hash === txHash));
+            const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
+            setTx(tx);
         })();
     }, [tx, txHash]);
 
