@@ -27,6 +27,12 @@ class NetworkNode {
         const confirmedBalances = this.schoolChain.getConfirmedBalances();
         return ({ node: this, importantAccounts: accountsDetails, confirmedBalances });
     }
+
+    getAllTxs() {
+        const txs = this.schoolChain.getConfirmedTxs();
+        txs.push(...this.schoolChain.pendingTxs);
+        return txs;
+    }
 }
 
 module.exports = NetworkNode;

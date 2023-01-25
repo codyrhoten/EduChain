@@ -14,8 +14,8 @@ const Transactions = ({ navLinks }) => {
     useEffect(() => {
         (async function () {
             if (blockIndex) {
-                const _block = await axios.get(`http://localhost:5555/getBlock/${blockIndex}`);
-                setTxs(_block.data.transactions);
+                const _block = await axios.get(`http://localhost:5555/blocks/${blockIndex}`);
+                setTxs(_block.data.txs);
 
                 setHeading(
                     <h4 align='center'>
@@ -26,7 +26,7 @@ const Transactions = ({ navLinks }) => {
                     </h4>
                 );
             } else {
-                const txs = await axios.get('http://localhost:5555/allTxs');
+                const txs = await axios.get('http://localhost:5555/all-txs');
                 setTxs(txs.data);
                 setHeading(<h4 align='center'>All Transactions</h4>);
             }

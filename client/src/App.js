@@ -22,10 +22,9 @@ function App() {
 
     useEffect(() => {
         (async function getAllBlocks() {
-            const blockchain = await axios.get('http://localhost:5555/blockchain');
-            let _latestBlx = blockchain.data.chain;
-            _latestBlx = _latestBlx.reverse().slice(0, 5);
-            let _latestTxs = await axios.get('http://localhost:5555/allTxs');
+            const blocks = await axios.get('http://localhost:5555/blocks');
+            let _latestBlx = blocks.reverse().slice(0, 5);
+            let _latestTxs = await axios.get('http://localhost:5555/all-txs');
             _latestTxs = _latestTxs.data.slice(0, 5);
 
             setBlockchain({

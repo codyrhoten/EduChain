@@ -34,8 +34,7 @@ const TxDetails = ({ navLinks }) => {
                                     {<tr>
                                         <th>Status</th>
                                         <td>
-                                            {tx.minedInBlock !== 'pending' ?
-                                                <i>Confirmed</i> : <i>Pending</i>}
+                                            {tx.minedInBlock ? <i>Confirmed</i> : <i>Pending</i>}
                                         </td>
                                     </tr>}
                                     {tx.minedInBlock !== 'pending' &&
@@ -85,11 +84,11 @@ const TxDetails = ({ navLinks }) => {
                                     </tr>
                                     <tr>
                                         <th>Amount</th>
-                                        <td>{tx.amount} coins</td>
+                                        <td>{tx.amount} SCH</td>
                                     </tr>
                                     <tr>
                                         <th>Fee</th>
-                                        <td>{tx.fee} coins</td>
+                                        <td>{tx.fee} SCH</td>
                                     </tr>
                                 </tbody>
                             </Table> :

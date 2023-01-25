@@ -18,11 +18,11 @@ app.use(express.json());
 /* ---------------------API--------------------- */
 
 app.get('/info', (req, res) => {
-    res.json({ 'Node Info': node.getInfo() });
+    res.json(node.getInfo());
 });
 
 app.get('/debug', (req, res) => {
-    res.json({ info: node.debug() });
+    res.json(node.debug());
 });
 
 app.get('/debug/reset-chain', (req, res) => {
@@ -35,21 +35,21 @@ app.get('/debug/mine/:minerAddress', (req, res) => {
 });
 
 app.get('/blocks', (req, res) => {
-
+    res.json(node.schoolChain.blocks);
 });
 
 app.get('/blocks/:index', (req, res) => {
     const blockIndex = req.params.index;
-    const block = schoolChain.getBlock(blockIndex);
-    res.json({ block });
+    const block = node.schoolChain.blocks.find(b => blockIndex == b.index);
+    if (block) {
+        res.json(block);
+    } else {
+        res.json({ err: 'Invalid block index' });
+    }
 });
 
-app.get('/txs/pending', (req, res) => {
-
-});
-
-app.get('/txs/confirmed', (req, res) => {
-
+app.get('/all-txs', (req, res) => {
+    res.json(node.getAllTxs());
 });
 
 app.get('/txs/:hash', (req, res) => {

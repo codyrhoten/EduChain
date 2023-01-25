@@ -35,17 +35,14 @@ class Transaction {
     }
 
     getHash() {
-        this.hash = SHA256(
-            JSON.stringify({
-                from: this.from,
-                to: this.to,
-                amount: this.amount,
-                fee: this.fee,
-                timestamp: this.timestamp,
-                senderPubKey: this.senderPubKey
-            }), 
-            'base64'
-        );
+        const txData = 
+            this.from + 
+            this.to + 
+            String(this.amount) + 
+            String(this.fee) + 
+            String(this.timestamp) + 
+            this.senderPubKey;
+        this.hash = SHA256(txData, 'base64');
     }
 
     sign(signerPrivKey) {

@@ -7,10 +7,6 @@ export default class api {
         this.addressTxs = [];
     }
 
-    getAllBlocks() {
-        return this.blockchain.chain;
-    }
-
     getAllTxs() {
         this.txs = [];
         this.blockchain.chain.forEach(b => this.txs.push(...b.data));

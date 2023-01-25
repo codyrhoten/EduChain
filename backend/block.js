@@ -11,25 +11,25 @@ class Block {
         this.prevBlockHash = prevBlockHash;
         this.minedBy = minedBy;
         this.dataHash = dataHash;
+
+        if (this.dataHash === undefined) this.getDataHash();
+
         this.nonce = nonce;
         this.timeStamp = timeStamp;
         this.hash = hash;
+
+        if (this.hash === undefined) this.getHash();
     }
 
     getDataHash() {
-        return SHA256(
-            JSON.stringify({
-                index: this.index,
-                txs: this.txs,
-                prevBlockHash: this.prevBlockHash,
-                minedBy: this.minedBy
-            }),
-            'base64'
-        );
+        const txs = JSON.stringify(this.txs);
+        const dataString = String(this.index) + txs + this.prevBlockHash + this.minedBy;
+        this.dataHash = SHA256(dataString, 'base64');
     }
 
     getHash() {
-
+        const dataString = this.dataHash + String(this.nonce) + String(this.timestamp);
+        this.hash = SHA256(dataString, 'base64');
     }
 
     mine(difficulty) {

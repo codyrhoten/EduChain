@@ -21,30 +21,33 @@ class Blockchain {
     constructor() {
         // genesis transaction
         const initialCoinRelease = new Transaction(
-            schoolChainAddress,            // from
-            faucetAddress,          // to
-            100000,                 // amount
-            0,                      // fee
-            Date.now(),             // timestamp
-            schoolChainPubKey,      // sender public key
-            undefined,              // hash
-            undefined,              // sender signature
-            0,                      // block this was mined in
-            true                    // success?
+            schoolChainAddress,                         // from
+            faucetAddress,                              // to
+            100000,                                     // amount
+            0,                                          // fee
+            1674613252417,                              // timestamp
+            schoolChainPubKey,                          // sender public key
+            undefined,                                  // hash
+            undefined,                                  // sender signature
+            0,                                          // block this was mined in
+            true                                        // success?
         );
 
         initialCoinRelease.sign(schoolChainPrivKey);
         
         const genesisBlock = new Block(
-            0,                     // index
-            [initialCoinRelease],  // transactions array
-            undefined,             // previous block hash
-            schoolChainAddress,           // miner
-            undefined,             // block data hash
-            0,                     // nonce
-            Date.now(),            // timestamp
-            undefined              // block hash
+            0,                                          // index
+            [initialCoinRelease],                       // transactions array
+            undefined,                                  // previous block hash
+            '0000000000000000000000000000000000000000', // miner
+            undefined,                                  // block data hash
+            0,                                          // nonce
+            1674613252417,                              // timestamp
+            undefined                                   // block hash
         );
+
+        genesisBlock.getDataHash();
+
         this.blocks = [genesisBlock];
         this.difficulty = 1;
         this.pendingTxs = [];
@@ -77,10 +80,6 @@ class Blockchain {
 
     getLastBlock() {
         return this.chain[this.chain.length - 1];
-    }
-
-    getBlock(index) {
-        this.chain.find(block => block.index)
     }
 
     getBalance(address) {

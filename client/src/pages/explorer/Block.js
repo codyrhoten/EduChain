@@ -12,10 +12,10 @@ const Block = ({ navLinks }) => {
 
     useEffect(() => {
         (async function() {
-            const _block = await axios.get(`http://localhost:5555/getBlock/${blockIndex}`);
+            const _block = await axios.get(`http://localhost:5555/blocks/${blockIndex}`);
             setBlock(_block.data);
         })();
-    }, [block, blockIndex]);
+    }, [blockIndex]);
 
     return (
         <>
