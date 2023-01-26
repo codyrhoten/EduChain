@@ -1,7 +1,5 @@
 const keccak256 = require('js-sha3').keccak256;
-const elliptic = require('elliptic');
-const ec = new elliptic.ec('secp256k1');
-
+const crypto = require("crypto");
 const Block = require('./block.js');
 const Transaction = require('./transaction.js');
 const { 
@@ -12,16 +10,20 @@ const {
     schoolChainSignature
 } = require('./accounts.js');
 
-const mint_priv_key = 'a8e64da240619de60828750849c7c46d551bddcf1819a9b2d1d46bf7e6a0cbb6';
-const mint_pub_key = 'fc1d7175e8dcf20106c54a05b30dc9447e9fda2b098730bc4db44df3f1ed925e1';
-const mint_address = 'ba3fe981cda884e045e427a86f3f4975f9f698fc';
-
-// const testAddress = '15MVCEQUSa1WRrQAGfv6sZfj1Ztkz2v9fQ';
+function SHA256(message) {
+    return crypto.createHash("sha256").update(message).digest("hex");
+};
 
 class Blockchain {
     constructor() {
-        // genesis transaction
-        const initialCoinRelease = new Transaction(
+        this.blocks = [getGenesisBlock()];
+        this.difficulty = 1;
+        this.pendingTxs = [];
+        // this.reward = 500;
+    }
+
+    getGenesisBlock() {
+        const genesisTx = new Transaction(
             schoolChainAddress,         // from
             faucetAddress,              // to
             100000,                     // amount
@@ -33,10 +35,10 @@ class Blockchain {
             0,                          // block this was mined in
             true                        // success?
         );
-        
-        const genesisBlock = new Block(
+
+        return new Block(
             0,                          // index
-            [initialCoinRelease],       // transactions array
+            [genesisTx],                // transactions array
             undefined,                  // previous block hash
             schoolChainAddress,         // miner
             undefined,                  // block data hash
@@ -44,11 +46,6 @@ class Blockchain {
             1674613252417,              // timestamp
             undefined                   // block hash
         );
-
-        this.blocks = [genesisBlock];
-        this.difficulty = 1;
-        this.pendingTxs = [];
-        // this.reward = 500;
     }
 
     getConfirmedTxs() {
@@ -140,16 +137,51 @@ class Blockchain {
         this.pendingTxs = [];
     }
 
-    isValid(blockchain = this) {
-        for (let i = 1; i < blockchain.chain.length; i++) {
-            const currentBlock = blockchain.chain[i];
-            const prevBlock = blockchain.chain[i - 1];
+    isValidTx(txData) {
+        
+    }
 
-            if (
-                currentBlock.hash !== currentBlock.getHash() ||
-                currentBlock.prevHash !== prevBlock.hash ||
-                currentBlock.hasValidTransactions(blockchain)
-            ) {
+    isValidBlock(newBlock, previousBlock) {
+        // check block content
+        if (
+            typeof newBlock.index !== 'number' ||
+            !Array.isArray(newBlock.txs) ||
+            typeof newBlock.prevBlockHash !== 'string' ||
+            typeof newBlock.minedBy !== 'string' ||
+            typeof newBlock.dataHash !== 'string' ||
+            typeof newBlock.nonce !== 'number' ||
+            typeof newBlock.timeStamp !== 'number' ||
+            typeof newBlock.hash !== 'string'
+        ) {
+            console.log('Invalid data type in block');
+            return false;
+        }
+
+        // check block hash against result of block hashing algorithms
+        const txs = JSON.stringify(newBlock.txs);   // array of transactions
+        const newBlockDataString = String(newBlock.index) + txs + newBlock.prevBlockHash + newBlock.minedBy;
+        const newBlockDataHash = SHA256(newBlockDataString, 'base64');
+        const newBlockDataString2 = newBlockDataHash + String(newBlock.nonce) + String(newBlock.timestamp);
+        const newBlockHash = SHA256(newBlockDataString2, 'base64');
+
+        if (
+            previousBlock.index + 1 !== newBlock.index ||
+            previousBlock.hash !== newBlock.prevBlockHash ||
+            newBlockHash !== newBlock.hash
+        ) {
+            console.log('Invalid hashes or index');
+            return false;   
+        }
+
+        return true;
+    }
+
+    isValidChain(chain) {
+        if (JSON.stringify(chain[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
+
+        for (let i = 1; i < chain.length; i++) {
+            if (!this.isValidBlock(chain[i], chain[i -1])) {
+                console.log('Invalid block being added to chain');
                 return false;
             }
         }

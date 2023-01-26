@@ -78,6 +78,33 @@ class NetworkNode {
 
         return balance;
     }
+
+    async notifyPeersOfBlock() {
+        const notification = {
+            blocks: this.schoolChain.blocks.length,
+            URL: this.url
+        };
+
+        this.peers.forEach(url => {
+            axios.post(`${url}/peers/new-block`, notification);
+        });
+    }
+
+    async syncChain(peerInfo) {
+        if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
+            res.json({ error: 'Peers should have the same chain ID' });
+        }
+
+        const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
+        
+        if (
+            this.schoolChain.isValidChain(peerBlocks) && 
+            peerBlocks.length > this.schoolChain.blocks.length
+        ) {
+            this.schoolChain.blocks = peerBlocks;
+            this.notifyPeersOfBlock();
+        }
+    }
 }
 
 module.exports = NetworkNode;

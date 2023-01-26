@@ -54,6 +54,11 @@ app.get('/all-txs', (req, res) => {
 
 app.get('/txs/:hash', (req, res) => {
     const txHash = req.params.hash;
+
+    if (typeof txHash !== 'string' || /^[0-9a-f]{64}$/.test(txHash)) {
+        res.json({ error: 'Invalid transaction hash'})
+    }
+
     const allTxs = node.getAllTxs();
     const tx = allTxs.find(t => t.hash === txHash);
     res.json(tx);
@@ -67,8 +72,8 @@ app.get('/balances', (req, res) => {
 app.get('/address-data/:address', (req, res) => {
     const address = req.params.address;
 
-    if (typeof (address) !== 'string' || !(/^[0-9a-f]{40}$/.test(address))) {
-        res.json({ error: "Invalid address" });
+    if (typeof address !== 'string' || !(/^[0-9a-f]{40}$/.test(address))) {
+        res.json({ error: 'Invalid address' });
     }
 
     const txHistory = node.getTxHistory(address);
@@ -85,11 +90,31 @@ app.get('/peers', (req, res) => {
     res.json(node.peers.entries());
 });
 
-app.post('/peers/connect', (req, res) => {
+app.post('/peers/connect', async (req, res) => {
+    const peer = req.body.peer;
+    if (peer === undefined) res.json({ error: 'Missing "peer" in the form' });
+
+    try {
+        const peerInfo = await axios.get(peer + '/info');
+
+        // Check whether connecting node is also the user's node
+        if (node.nodeId === peerInfo.data.nodeId) {
+            res.json({ error: 'Can\'t connect to self' });
+            // Check whether connecting node is already connected
+        } else if (node.peers.get(peerInfo.data.nodeId)) {
+            res.json({ error: `This node is already connected to peer: ${peer}` });
+        } else {
+            node.peers.set(peerInfo.data.nodeId, peer);
+            node.syncChain(peerInfo.data);
+            node.syncPendingTxs(peerInfo.data);
+        }
+    } catch (err) {
+        res.json({ error: `Could not connect to peer: ${peer}` });
+    }
 
 });
 
-app.post('/peers/notify-new-block', (req, res) => {
+app.post('/peers/new-block', (req, res) => {
 
 });
 
