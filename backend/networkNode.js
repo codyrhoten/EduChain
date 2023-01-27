@@ -93,13 +93,15 @@ class NetworkNode {
     async syncChain(peerInfo) {
         try {
             if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
-                res.json({ error: 'Peers should have the same chain ID' });
+                const error = new Error('Peers should have the same chain ID');
+                error.statusCode = 400;
+                throw error;
             }
 
             const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
 
             if (
-                this.schoolChain.isValidChain(peerBlocks) &&
+                this.schoolChain.isValid(peerBlocks) &&
                 peerBlocks.length > this.schoolChain.blocks.length
             ) {
                 this.schoolChain.blocks = peerBlocks;
@@ -107,6 +109,7 @@ class NetworkNode {
             }
         } catch (err) {
             console.log('Could not load chain: ' + err);
+            next(err);
         }
     }
 
@@ -116,7 +119,7 @@ class NetworkNode {
                 const txs = await axios.get(`${peerInfo.url}/all-txs`);
                 const pendingTxs = txs.data.filter(tx => !tx.success);
                 pendingTxs.forEach(pt => {
-                    
+
                 });
             }
         } catch (err) {

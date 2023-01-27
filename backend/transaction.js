@@ -1,4 +1,4 @@
-const  { sha256, sign } = require('./cryptography.js');
+const { sha256, sign } = require('./cryptography.js');
 
 class Transaction {
     constructor(
@@ -28,12 +28,12 @@ class Transaction {
     }
 
     getHash() {
-        const txData = 
-            this.from + 
-            this.to + 
-            String(this.amount) + 
-            String(this.fee) + 
-            String(this.timestamp) + 
+        const txData =
+            this.from +
+            this.to +
+            String(this.amount) +
+            String(this.fee) +
+            String(this.timestamp) +
             this.senderPubKey;
         this.hash = sha256(txData, 'base64');
     }
@@ -42,21 +42,57 @@ class Transaction {
         this.senderSig = sign(signerPrivKey, this.hash);
     }
 
-    isValid(tx, chain) {
-        const txData = tx.from + tx.to + tx.amount + tx.fee;
+    isValid() {
+        // check tx content
+        if (
+            typeof this.from !== 'string' ||
+            typeof this.to !== 'string' ||
+            typeof this.amount !== 'number' ||
+            typeof this.fee !== 'number' ||
+            typeof this.timeStamp !== 'number' ||
+            typeof this.senderPubKey !== 'string' ||
+            typeof this.hash !== 'string' ||
+            !Array.isArray(this.senderSig) ||
+            typeof this.senderSig[0] !== 'string' ||
+            typeof this.senderSig[1] !== 'string' ||
+            typeof this.minedInBlock !== 'number' ||
+            typeof this.success !== 'boolean'
+        ) {
+            console.log('Invalid data type in tx');
+            return false;
+        }
 
-        return (
-            tx.from &&
-            tx.to &&
-            tx.amount &&
-            (
-                chain.getBalance(tx.from) >= tx.amount + tx.fee ||
-                tx.from === mintAddress && tx.amount == this.reward
-            ) &&
-            ec
-                .keyFromPublic(tx.from, "hex")
-                .verify(sha256(txData), tx.signature)
-        );
+        try {
+            // check tx hash against result of tx hashing algorithm
+            const txDataString =
+                this.from +
+                this.to +
+                String(this.amount) +
+                String(this.fee) +
+                String(this.timestamp) +
+                this.senderPubKey;
+            const txHash = sha256(txDataString, 'base64');
+
+            // RE-EXECUTE ALL TXS, RE-CALCULATE MINEDINBLOCK & SUCCESS
+
+            if (txHash !== this.hash) {
+                const error = new Error(`tx ${this.hash} has invalid hash`);
+                error.statusCode = 400;
+                throw error;
+            }
+
+            // check signature validity
+            if (!verify(this.hash, this.senderPubKey, this.senderSig)) {
+                const error = new Error(`tx ${this.hash} has invalid signature`);
+                error.statusCode = 400;
+                throw error;
+            }
+        } catch (err) {
+            if (!err.statusCode) err.statusCode = 500;
+            next(err);
+        }
+
+        return true;
     }
 }
 
