@@ -1,18 +1,13 @@
-const keccak256 = require('js-sha3').keccak256;
-const crypto = require("crypto");
+const { sha256, verify } = require('./cryptography.js');
 const Block = require('./block.js');
 const Transaction = require('./transaction.js');
-const { 
-    faucetAddress, 
-    schoolChainPubKey, 
+const {
+    faucetAddress,
+    schoolChainPubKey,
     schoolChainPrivKey,
     schoolChainAddress,
     schoolChainSignature
 } = require('./accounts.js');
-
-function SHA256(message) {
-    return crypto.createHash("sha256").update(message).digest("hex");
-};
 
 class Blockchain {
     constructor() {
@@ -138,7 +133,45 @@ class Blockchain {
     }
 
     isValidTx(txData) {
-        
+        // check tx content
+        if (
+            typeof txData.from !== 'string' ||
+            typeof txData.to !== 'string' ||
+            typeof txData.amount !== 'number' ||
+            typeof txData.fee !== 'number' ||
+            typeof txData.timeStamp !== 'number' ||
+            typeof txData.senderPubKey !== 'string' ||
+            typeof txData.hash !== 'string' ||
+            !Array.isArray(txData.senderSig) ||
+            typeof txData.senderSig[0] !== 'string' ||
+            typeof txData.senderSig[1] !== 'string' ||
+            typeof txData.minedInBlock !== 'number' ||
+            typeof txData.success !== 'boolean'
+        ) {
+            console.log('Invalid data type in tx');
+            return false;
+        }
+
+        // check tx hash against result of tx hashing algorithm
+        const txDataString = 
+            txData.from + 
+            txData.to + 
+            String(txData.amount) + 
+            String(txData.fee) + 
+            String(txData.timestamp) + 
+            txData.senderPubKey;
+        const txHash = sha256(txDataString, 'base64');
+
+        // verify signature
+        const sigIsValid = verify(txData.hash, txData.senderPubKey, txData.senderSig);
+        // RE-EXECUTE ALL TXS, RE-CALCULATE MINEDINBLOCK & SUCCESS
+
+        if (txHash !== txData.hash && !sigIsValid) {
+            console.log('Transaction hash does not match or signature is invalid.');
+            return false;
+        }
+
+        return true;
     }
 
     isValidBlock(newBlock, previousBlock) {
@@ -157,12 +190,15 @@ class Blockchain {
             return false;
         }
 
+        // validate each transaction
+        newBlock.txs.forEach(tx => this.isValidTx(tx));
+
         // check block hash against result of block hashing algorithms
         const txs = JSON.stringify(newBlock.txs);   // array of transactions
         const newBlockDataString = String(newBlock.index) + txs + newBlock.prevBlockHash + newBlock.minedBy;
-        const newBlockDataHash = SHA256(newBlockDataString, 'base64');
+        const newBlockDataHash = sha256(newBlockDataString, 'base64');
         const newBlockDataString2 = newBlockDataHash + String(newBlock.nonce) + String(newBlock.timestamp);
-        const newBlockHash = SHA256(newBlockDataString2, 'base64');
+        const newBlockHash = sha256(newBlockDataString2, 'base64');
 
         if (
             previousBlock.index + 1 !== newBlock.index ||
@@ -170,7 +206,7 @@ class Blockchain {
             newBlockHash !== newBlock.hash
         ) {
             console.log('Invalid hashes or index');
-            return false;   
+            return false;
         }
 
         return true;
@@ -180,7 +216,7 @@ class Blockchain {
         if (JSON.stringify(chain[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
 
         for (let i = 1; i < chain.length; i++) {
-            if (!this.isValidBlock(chain[i], chain[i -1])) {
+            if (!this.isValidBlock(chain[i], chain[i - 1])) {
                 console.log('Invalid block being added to chain');
                 return false;
             }

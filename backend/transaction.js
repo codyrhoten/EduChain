@@ -1,13 +1,6 @@
-const crypto = require("crypto");
-const elliptic = require('elliptic');
-const ec = new elliptic.ec('secp256k1');
-
-const SHA256 = message => {
-    return crypto.createHash("sha256").update(message).digest("hex");
-};
+const  { sha256, sign } = require('./cryptography.js');
 
 class Transaction {
-    //const transaction = new Transaction(faucetKeyPair.getPublic("hex"), girlfriendwallet.getPublic("hex"), 333, 10)
     constructor(
         from,
         to,
@@ -42,13 +35,11 @@ class Transaction {
             String(this.fee) + 
             String(this.timestamp) + 
             this.senderPubKey;
-        this.hash = SHA256(txData, 'base64');
+        this.hash = sha256(txData, 'base64');
     }
 
     sign(signerPrivKey) {
-        const signerKeyPair = ec.keyFromPrivate(signerPrivKey);
-        const signature = signerKeyPair.sign(this.hash);
-        this.signature = [signature.r.toString(16), signature.s.toString(16)];
+        this.senderSig = sign(signerPrivKey, this.hash);
     }
 
     isValid(tx, chain) {
@@ -64,7 +55,7 @@ class Transaction {
             ) &&
             ec
                 .keyFromPublic(tx.from, "hex")
-                .verify(SHA256(txData), tx.signature)
+                .verify(sha256(txData), tx.signature)
         );
     }
 }

@@ -91,18 +91,36 @@ class NetworkNode {
     }
 
     async syncChain(peerInfo) {
-        if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
-            res.json({ error: 'Peers should have the same chain ID' });
-        }
+        try {
+            if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
+                res.json({ error: 'Peers should have the same chain ID' });
+            }
 
-        const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
-        
-        if (
-            this.schoolChain.isValidChain(peerBlocks) && 
-            peerBlocks.length > this.schoolChain.blocks.length
-        ) {
-            this.schoolChain.blocks = peerBlocks;
-            this.notifyPeersOfBlock();
+            const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
+
+            if (
+                this.schoolChain.isValidChain(peerBlocks) &&
+                peerBlocks.length > this.schoolChain.blocks.length
+            ) {
+                this.schoolChain.blocks = peerBlocks;
+                this.notifyPeersOfBlock();
+            }
+        } catch (err) {
+            console.log('Could not load chain: ' + err);
+        }
+    }
+
+    async syncPendingTxs(peerInfo) {
+        try {
+            if (peerInfo.pendingTxs > 0) {
+                const txs = await axios.get(`${peerInfo.url}/all-txs`);
+                const pendingTxs = txs.data.filter(tx => !tx.success);
+                pendingTxs.forEach(pt => {
+                    
+                });
+            }
+        } catch (err) {
+            console.log('Could not load pending transactions: ' + err);
         }
     }
 }

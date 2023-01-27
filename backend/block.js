@@ -1,8 +1,4 @@
-const crypto = require("crypto");
-
-const SHA256 = message => {
-    return crypto.createHash("sha256").update(message).digest("hex");
-};
+const { sha256 } = require('./cryptography.js');
 
 class Block {
     constructor(index, transactions, prevBlockHash, minedBy, dataHash, nonce, timeStamp, hash) {
@@ -24,12 +20,12 @@ class Block {
     getDataHash() {
         const txs = JSON.stringify(this.txs);
         const dataString = String(this.index) + txs + this.prevBlockHash + this.minedBy;
-        this.dataHash = SHA256(dataString, 'base64');
+        this.dataHash = sha256(dataString, 'base64');
     }
 
     getHash() {
         const dataString = this.dataHash + String(this.nonce) + String(this.timestamp);
-        this.hash = SHA256(dataString, 'base64');
+        this.hash = sha256(dataString, 'base64');
     }
 
     mine(difficulty) {
