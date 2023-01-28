@@ -1,4 +1,6 @@
 const { sha256, sign } = require('./cryptography.js');
+const valid = require('./validation.js');
+const { error } = require('./error.js');
 
 class Transaction {
     constructor(
@@ -42,27 +44,17 @@ class Transaction {
         this.senderSig = sign(signerPrivKey, this.hash);
     }
 
-    isValid() {
-        // check tx content
-        if (
-            typeof this.from !== 'string' ||
-            typeof this.to !== 'string' ||
-            typeof this.amount !== 'number' ||
-            typeof this.fee !== 'number' ||
-            typeof this.timeStamp !== 'number' ||
-            typeof this.senderPubKey !== 'string' ||
-            typeof this.hash !== 'string' ||
-            !Array.isArray(this.senderSig) ||
-            typeof this.senderSig[0] !== 'string' ||
-            typeof this.senderSig[1] !== 'string' ||
-            typeof this.minedInBlock !== 'number' ||
-            typeof this.success !== 'boolean'
-        ) {
-            console.log('Invalid data type in tx');
-            return false;
-        }
-
+    isValid(block) {
         try {
+            if (!valid.address(this.from)) error(`Tx ${this.hash} has invalid sender address`);
+            if (!valid.address(this.to)) error(`Tx ${this.hash} has invalid receiver address`);
+            if (!valid.amount(this.amount)) error(`Tx ${this.hash} has invalid amount transfer`);
+            if (!valid.fee(this.fee)) error(`Tx ${this.hash} has invalid fee`);
+            if (!valid.timestamp(this.timestamp)) error(`Tx ${this.hash} has invalid timestamp`);
+            if (!valid.signature(this.senderSig)) error(`Tx ${this.hash} has invalid signature`);
+            if (!valid.publicKey(this.senderPubKey))
+                error(`Tx ${this.hash} has invalid sender public key`);
+
             // check tx hash against result of tx hashing algorithm
             const txDataString =
                 this.from +
@@ -73,19 +65,24 @@ class Transaction {
                 this.senderPubKey;
             const txHash = sha256(txDataString, 'base64');
 
-            // RE-EXECUTE ALL TXS, RE-CALCULATE MINEDINBLOCK & SUCCESS
+            // RE-CALCULATE MINEDINBLOCK & SUCCESS
 
-            if (txHash !== this.hash) {
-                const error = new Error(`tx ${this.hash} has invalid hash`);
-                error.statusCode = 400;
-                throw error;
+
+            if (block && (!this.minedInBlock || !this.success)) {
+                error(`Tx ${this.hash} is not confirmed as mined`);
+            }
+
+            if (block) {
+                // MATCH MINEDINBLOCK & SUCCESS WITH RECALCULATIONS
+            }
+
+            if (typeof (this.hash) !== 'string' || txHash !== this.hash) {
+                error(`tx ${this.hash} has invalid hash`);
             }
 
             // check signature validity
             if (!verify(this.hash, this.senderPubKey, this.senderSig)) {
-                const error = new Error(`tx ${this.hash} has invalid signature`);
-                error.statusCode = 400;
-                throw error;
+                error(`tx ${this.hash} has invalid signature`);
             }
         } catch (err) {
             if (!err.statusCode) err.statusCode = 500;

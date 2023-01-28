@@ -1,4 +1,6 @@
 const { sha256 } = require('./cryptography.js');
+const { error } = require('./error.js');
+const valid = require('./validation.js');
 
 class Block {
     constructor(index, transactions, prevBlockHash, minedBy, dataHash, nonce, timeStamp, hash) {
@@ -30,24 +32,25 @@ class Block {
 
     isValid(newBlock, previousBlock) {
         // check block content
-        if (
-            typeof newBlock.index !== 'number' ||
-            !Array.isArray(newBlock.txs) ||
-            typeof newBlock.prevBlockHash !== 'string' ||
-            typeof newBlock.minedBy !== 'string' ||
-            typeof newBlock.dataHash !== 'string' ||
-            typeof newBlock.nonce !== 'number' ||
-            typeof newBlock.timeStamp !== 'number' ||
-            typeof newBlock.hash !== 'string'
-        ) {
-            console.log('Invalid data type in block');
-            return false;
-        }
+        if (typeof newBlock.index || typeof newBlock.nonce !== 'number')
+            error(`Block ${newBlock.index} has invalid index or nonce data type in block`);
+        if (!Array.isArray(newBlock.txs)) 
+            error(`Block ${newBlock.index} txs are incorrect data type`);
+        if (!valid.hash(newBlock.prevBlockHash)) 
+            error(`Block ${newBlock.index} has invalid previous block hash format`);
+        if (!valid.address(this.minedBy)) 
+            error(`Block ${newBlock.index}'s miner address is invalid`);
+        if (!valid.hash(newBlock.dataHash)) 
+            error(`Block ${newBlock.index} has invalid data hash format`);
+        if (!valid.hash(newBlock.hash))
+            error(`Block ${newBlock.index} has invalid block hash format`);
+        if (!valid.timestamp(newBlock.timeStamp)) 
+            error(`Block ${newBlock.index} has invalid timestamp`);
 
         try {
             // validate each transaction
-            newBlock.txs.forEach(tx => tx.isValid());
-            
+            newBlock.txs.forEach(tx => tx.isValid(newBlock));
+
             // check block hash against result of block hashing algorithms
             const newBlockDataString = (
                 String(newBlock.index) +
@@ -64,21 +67,17 @@ class Block {
             const newBlockHash = sha256(newBlockDataString2, 'base64');
 
             if (previousBlock.index + 1 !== newBlock.index) {
-                const error = new Error(`block ${newBlock.index} has invalid index`);
-                error.statusCode = 400;
-                throw error;
+                error(`block ${newBlock.index} has invalid index`);
             }
 
             if (previousBlock.hash !== newBlock.prevBlockHash) {
-                const error = new Error(`block ${newBlock.index} has invalid previous block hash`);
-                error.statusCode = 400;
-                throw error;
+                error(
+                    `block ${newBlock.index}'s previous hash doesn\'t match previous block's hash`
+                );
             }
 
             if (newBlockHash !== newBlock.hash) {
-                const error = new Error(`block ${newBlock.index} has invalid hash`);
-                error.statusCode = 400;
-                throw error;
+                error(`block ${newBlock.index} has invalid hash`);
             }
         } catch (err) {
             if (!err.statusCode) err.statusCode = 500;
@@ -94,12 +93,6 @@ class Block {
             this.nonce++;
             this.hash = this.getHash();
         }
-    }
-
-    hasValidTransactions(chain) {
-        return this.txs.every((transaction) =>
-            transaction.isValid(transaction, chain)
-        );
     }
 }
 

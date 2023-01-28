@@ -5,6 +5,7 @@ const NetworkNode = require('./networkNode.js');
 const Blockchain = require('./blockchain.js');
 const port = process.argv[2];
 const nodeUrl = process.argv[3];
+const valid = require('./validation.js');
 
 const app = express();
 const schoolChain = new Blockchain();
@@ -88,11 +89,15 @@ app.get('/all-txs', (req, res) => {
     }
 });
 
+app.get('/pending-txs', (req, res) => {
+
+});
+
 app.get('/txs/:hash', (req, res) => {
     try {
         const txHash = req.params.hash;
 
-        if (typeof txHash !== 'string' || /^[0-9a-f]{64}$/.test(txHash)) {
+        if (!valid.hash(txHash)) {
             res.json({ error: 'Invalid transaction hash' });
         }
 
@@ -160,19 +165,16 @@ app.post('/peers/connect', async (req, res) => {
 
         // Check whether connecting node is also the user's node
         if (node.nodeId === peerInfo.data.nodeId) {
-            res.json({ error: 'Cannot connect to self' });
+            res.status(409).json({ error: 'Cannot connect to self' });
         // Check whether connecting node is already connected
         } else if (node.peers.get(peerInfo.data.nodeId)) {
-            res.json({ error: `This node is already connected to peer: ${peer}` });
+            res.status(409).json({ error: `This node is already connected to peer: ${peer}` });
         } else {
             node.peers.set(peerInfo.data.nodeId, peer);
             node.syncChain(peerInfo.data);
             node.syncPendingTxs(peerInfo.data);
         }
-
-        // res.json({ error: `Could not connect to peer: ${peer}` });
     } catch (err) {
-        if (!err.statusCode) err.statusCode = 500;
         next(err);
     }
 });

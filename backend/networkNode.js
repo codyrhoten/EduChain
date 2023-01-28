@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 const accountsDetails = require('./accounts.js');
+const { error } = require('./error.js');
 
 class NetworkNode {
     constructor(url, chain) {
@@ -93,19 +94,24 @@ class NetworkNode {
     async syncChain(peerInfo) {
         try {
             if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
-                const error = new Error('Peers should have the same chain ID');
-                error.statusCode = 400;
-                throw error;
+                error('Peers should have the same chain ID');
             }
 
             const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
 
-            if (
-                this.schoolChain.isValid(peerBlocks) &&
-                peerBlocks.length > this.schoolChain.blocks.length
-            ) {
-                this.schoolChain.blocks = peerBlocks;
-                this.notifyPeersOfBlock();
+            if (this.schoolChain.isValid(peerBlocks)) {
+                // INVALIDATE ALL MINING JOBS
+
+                let confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
+
+                peerInfo.pendingTxs = peerInfo.pendingTxs.filter(t => {
+                    t.hash !== confirmedTxHashes.includes(t.hash)
+                });
+
+                if (peerBlocks.length > this.schoolChain.blocks.length) {
+                    this.schoolChain.blocks = peerBlocks;
+                    this.notifyPeersOfBlock();
+                }
             }
         } catch (err) {
             console.log('Could not load chain: ' + err);
