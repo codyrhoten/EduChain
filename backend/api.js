@@ -72,7 +72,7 @@ app.get('/blocks/:index', (req, res, next) => {
         if (block) {
             res.json(block);
         } else {
-            res.json({ error: 'Invalid block index' });
+            res.json({ errorMsg: 'Invalid block index' });
         }
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
@@ -101,7 +101,7 @@ app.get('/pending-txs', (req, res, next) => {
 app.get('/txs/:hash', (req, res, next) => {
     try {
         const txHash = req.params.hash;
-        if (!valid.hash(txHash)) res.json({ error: 'Invalid transaction hash' });
+        if (!valid.hash(txHash)) res.json({ errorMsg: 'Invalid transaction hash' });
 
         const allTxs = node.schoolChain.getAllTxs();
         const tx = allTxs.find(t => t.hash === txHash);
@@ -137,9 +137,11 @@ app.get('/address-data/:address', (req, res, next) => {
 
 app.post('/txs/send', (req, res, next) => {
     try {
-        const tx = node.schoolChain.addPendingTx(req.body, next);
+        const tx = node.schoolChain.addPendingTx(req.body);
 
-        if (tx.hash) {
+        if (tx.errorMsg) {
+            res.status(400).json(tx);
+        } else {
             //node.notifyPeersOfTx(tx);
             res.status(201).json({ txHash: tx.hash });
         }
@@ -167,16 +169,17 @@ app.post('/peers/connect', async (req, res, next) => {
 
         // Check whether connecting node is also the user's node
         if (node.nodeId === peerInfo.data.nodeId) {
-            res.status(409).json({ error: 'Cannot connect to self' });
+            res.status(409).json({ errorMsg: 'Cannot connect to self' });
         // Check whether connecting node is already connected
         } else if (node.peers.get(peerInfo.data.nodeId)) {
-            res.status(409).json({ error: `This node is already connected to peer: ${peer}` });
+            res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
         } else {
             node.peers.set(peerInfo.data.nodeId, peer);
-            node.syncChain(peerInfo.data, next);
-            node.syncPendingTxs(peerInfo.data, next);
+            node.syncChain(peerInfo.data);
+            node.syncPendingTxs(peerInfo.data);
         }
     } catch (err) {
+        if (!err.statusCode) err.statusCode = 500;
         next(err);
     }
 });

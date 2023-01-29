@@ -16,16 +16,10 @@ function pubKeyToAddress(pubKey) {
     return crypto.RIPEMD160(pubKey).toString();
 }
 
-function decompressPublicKey(compressedPubKey) {
-    let pubKeyX = compressedPubKey.substring(0, 63);
-    let pubKeyYOdd = parseInt(compressedPubKey.substring(63));
-    let pubKeyPoint = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
-    return pubKeyPoint;
-}
-
 function verify(txHash, senderPubKey, sig) {
-    console.log(txHash)
-    const decompressedPubKey = decompressPublicKey(senderPubKey);
+    let pubKeyX = senderPubKey.substring(0, 63);
+    let pubKeyYOdd = parseInt(senderPubKey.substring(63));
+    const decompressedPubKey = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
     const keyPair = ec.keyPair({ pub: decompressedPubKey });
     const valid = keyPair.verify(txHash, { r: sig[0], s: sig[1] });
     return valid;

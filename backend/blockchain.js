@@ -3,7 +3,6 @@ const Transaction = require('./transaction.js');
 const {
     faucetAddress,
     schoolChainPubKey,
-    schoolChainPrivKey,
     schoolChainAddress,
     schoolChainSignature
 } = require('./accounts.js');
@@ -58,6 +57,24 @@ class Blockchain {
         return txs;
     }
 
+    getConfirmedBalances() {
+        const txs = this.getConfirmedTxs();
+        let balances = {};
+
+        txs.forEach(tx => {
+            balances[tx.from] = balances[tx.from] || 0;
+            balances[tx.to] = balances[tx.to] || 0;
+            balances[tx.from] -= tx.fee;
+
+            if (tx.success) {
+                balances[tx.from] -= tx.amount;
+                balances[tx.to] += tx.amount;
+            }
+        });
+
+        return balances;
+    }
+
     getTxHistory(address) {
         const txs = this.getAllTxs();
         let addressTxs = [];
@@ -81,7 +98,7 @@ class Blockchain {
                     balance.confirmed -= tx.fee;
                     if (tx.success) balance.confirmed -= tx.amount;
                 }
-                
+
                 // safe confirmation amount is 6 blocks
                 if (confirmations >= 6 && tx.success) {
                     balance.safe -= tx.fee;
@@ -103,68 +120,134 @@ class Blockchain {
         return balance;
     }
 
-    getConfirmedBalances() {
-        const txs = this.getConfirmedTxs();
-        let balances = {};
+    addPendingTx(txData) {
+        const allTxs = this.getAllTxs();
+        const balance = this.getBalance(txData.from);
+        const tx = new Transaction(
+            txData.from,
+            txData.to,
+            txData.amount,
+            txData.fee,
+            txData.timestamp,
+            txData.senderPubKey,
+            undefined,
+            txData.senderSig
+        );
 
-        txs.forEach(tx => {
-            balances[tx.from] = balances[tx.from] || 0;
-            balances[tx.to] = balances[tx.to] || 0;
-            balances[tx.from] -= tx.fee;
+        const invalidTx = valid.txContent(tx);
+        if (invalidTx) return invalidTx;
 
-            if (tx.success) {
-                balances[tx.from] -= tx.amount;
-                balances[tx.to] += tx.amount;
-            }
-        });
-
-        return balances;
-    }
-
-    addPendingTx(txData, next) {
-        try {
-            const allTxs = this.getAllTxs();
-            const balance = this.getBalance(txData.from);
-            const tx = new Transaction(
-                txData.from,
-                txData.to,
-                txData.amount,
-                txData.fee,
-                txData.timestamp,
-                txData.senderPubKey,
-                undefined,
-                txData.senderSig
-            );
-
-            valid.txContent(tx);
-
-            if (allTxs.find(t => t.hash === tx.hash)) {
-                const error = new Error(`Tx ${txData.hash} already exists`);
-                error.statusCode = 409;
-                throw error;
-            }
-
-            if (!verify(tx.hash, tx.senderPubKey, tx.senderSig))
-                error(`Signature of tx ${tx.hash} could not be verified`);
-
-            if (balance.confirmed < tx.amount + tx.fee)
-                error(`Insufficient funds in sender's account at address: ${tx.from}`);
-
-            this.pendingTxs.push(tx);
-            return tx;
-        } catch (err) {
-            if (!err.statusCode) err.statusCode = 500;
-            next(err);
+        if (allTxs.find(t => t.hash === tx.hash)) {
+            return { errorMsg: `Tx ${txData.hash} already exists` };
         }
+
+        if (!verify(tx.hash, tx.senderPubKey, tx.senderSig))
+            return { errorMsg: `Signature of tx ${tx.hash} could not be verified` };
+
+        if (balance.confirmed < tx.amount + tx.fee)
+            return { errorMsg: `Insufficient funds in sender's account at address: ${tx.from}`};
+
+        this.pendingTxs.push(tx);
+        return tx;
     }
 
-    isValid() {
+    isValidTx(tx, block) {
+        // invalidTx will be undefined if tx is valid
+        const invalidTx = valid.txContent(tx);
+        if (invalidTx) return invalidTx;
+
+        // check tx hash against result of tx hashing algorithm
+        const txData = {
+            from: tx.from,
+            to: tx.to,
+            amount: tx.amount,
+            fee: tx.fee,
+            timestamp: tx.timestamp,
+            senderPubKey: tx.senderPubKey
+        };
+        const txDataJson = JSON.stringify(txData);
+        txHash = sha256(txDataJson, 'base64');
+
+        // RE-CALCULATE MINEDINBLOCK & SUCCESS
+
+
+        if (block && (!tx.minedInBlock || !tx.success)) {
+            return { errorMsg: `Tx ${tx.hash} is not confirmed as mined` };
+        }
+
+        if (block) {
+            // MATCH MINEDINBLOCK & SUCCESS WITH RECALCULATIONS
+        }
+
+        if (typeof (tx.hash) !== 'string' || txHash !== tx.hash) {
+            return { errorMsg: `Tx ${tx.hash} not hashed with school chain algorithm` };
+        }
+
+        // check signature validity
+        if (!verify(tx.hash, tx.senderPubKey, tx.senderSig)) {
+            return { errorMsg: `Signature in tx ${tx.hash} could not be verified` };
+        }
+
+        return true;
+    }
+
+    isValidBlock(newBlock, previousBlock) {
+        // invalidBlock will be undefined if block is valid
+        const invalidBlock = valid.blockContent(newBlock);
+        if (invalidBlock) return invalidBlock;
+
+        // validate each transaction
+        for (const tx of newBlock.txs) {
+            // tx will return error msg only if a validation returns false
+            const errorMsg = this.isValidTx(tx, newBlock);
+            if (errorMsg) return errorMsg;
+        }
+
+        // check block hash against result of block hashing algorithms
+        const blockData = {
+            index: newBlock.index,
+            txs: newBlock.txs.map(t => Object({
+                from: t.from,
+                to: t.to,
+                amount: t.amount,
+                fee: t.fee,
+                timestamp: t.timestamp,
+                senderPubKey: t.senderPubKey,
+                hash: t.hash,
+                senderSig: t.senderSig,
+                minedInBlock: t.minedInBlock,
+                success: t.success
+            })),
+            prevBlockHash: newBlock.prevBlockHash,
+            minedBy: newBlock.minedBy
+        };
+        const blockDataJson = JSON.stringify(blockData);
+        newBlockDataHash = sha256(blockDataJson, 'base64');
+
+        if (previousBlock.index + 1 !== newBlock.index) {
+            return { errorMsg: `block ${newBlock.index} has invalid index` };
+        }
+
+        if (previousBlock.hash !== newBlock.prevBlockHash) {
+            return {
+                errorMsg:
+                    `Previous hash in block ${newBlock.index} doesn\'t match previous block's hash`
+            };
+        }
+
+        if (newBlockHash !== newBlock.hash) {
+            return { errorMsg: `block ${newBlock.index} has invalid hash` };
+        }
+
+        return true;
+    }
+
+    isValidChain() {
         if (JSON.stringify(chain[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
 
         for (let i = 1; i < chain.length; i++) {
             if (!this.isValidBlock(chain[i], chain[i - 1])) {
-                console.log('Invalid block being added to chain');
-                return false;
+                return { errorMsg: `Invalid block #${chain[i].index} being added to chain`};
             }
         }
 

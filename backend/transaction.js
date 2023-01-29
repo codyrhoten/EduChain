@@ -30,60 +30,20 @@ class Transaction {
     }
 
     getHash() {
-        const txData =
-            this.from +
-            this.to +
-            String(this.amount) +
-            String(this.fee) +
-            String(this.timestamp) +
-            this.senderPubKey;
-        this.hash = sha256(txData, 'base64');
+        const txData = {
+            from: this.from,
+            to: this.to,
+            amount: this.amount,
+            fee: this.fee,
+            timestamp: this.timestamp,
+            senderPubKey: this.senderPubKey
+        };
+        const txDataJson = JSON.stringify(txData);
+        this.hash = sha256(txDataJson, 'base64');
     }
 
     sign(signerPrivKey) {
         this.senderSig = sign(signerPrivKey, this.hash);
-    }
-
-    isValid(block) {
-        try {
-            // check whether any transaction content is invalid
-            valid.txContent(this);
-
-            // check tx hash against result of tx hashing algorithm
-            const txDataString =
-                this.from +
-                this.to +
-                String(this.amount) +
-                String(this.fee) +
-                String(this.timestamp) +
-                this.senderPubKey;
-            const txHash = sha256(txDataString, 'base64');
-
-            // RE-CALCULATE MINEDINBLOCK & SUCCESS
-
-
-            if (block && (!this.minedInBlock || !this.success)) {
-                error(`Tx ${this.hash} is not confirmed as mined`);
-            }
-
-            if (block) {
-                // MATCH MINEDINBLOCK & SUCCESS WITH RECALCULATIONS
-            }
-
-            if (typeof (this.hash) !== 'string' || txHash !== this.hash) {
-                error(`tx ${this.hash} has invalid hash`);
-            }
-
-            // check signature validity
-            if (!verify(this.hash, this.senderPubKey, this.senderSig)) {
-                error(`tx ${this.hash} has invalid signature`);
-            }
-        } catch (err) {
-            if (!err.statusCode) err.statusCode = 500;
-            next(err);
-        }
-
-        return true;
     }
 }
 

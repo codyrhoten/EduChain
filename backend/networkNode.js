@@ -40,7 +40,7 @@ class NetworkNode {
         });
     }
 
-    async syncChain(peerInfo, next) {
+    async syncChain(peerInfo) {
         try {
             if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
                 error('Peers should have the same chain ID');
@@ -48,7 +48,12 @@ class NetworkNode {
 
             const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
 
-            if (this.schoolChain.isValid(peerBlocks)) {
+            // invalidSchoolChain will be undefined if chain is valid
+            const invalidSchoolChain = this.schoolChain.isValidChain(peerBlocks);
+
+            if (invalidSchoolChain) {
+                return invalidSchoolChain;
+            } else {
                 // INVALIDATE ALL MINING JOBS
 
                 let confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
@@ -64,11 +69,10 @@ class NetworkNode {
             }
         } catch (err) {
             console.log('Could not load chain: ' + err);
-            next(err);
         }
     }
 
-    async syncPendingTxs(peerInfo, next) {
+    async syncPendingTxs(peerInfo) {
         try {
             if (peerInfo.pendingTxs > 0) {
                 const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`);
