@@ -18,7 +18,7 @@ app.use(express.json());
 
 /* ---------------------API--------------------- */
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
     try {
         res.json(node.getInfo());
     } catch (err) {
@@ -27,7 +27,7 @@ app.get('/info', (req, res) => {
     }
 });
 
-app.get('/debug', (req, res) => {
+app.get('/debug', (req, res, next) => {
     try {
         res.json(node.debug());
     } catch (err) {
@@ -36,7 +36,7 @@ app.get('/debug', (req, res) => {
     }
 });
 
-app.get('/debug/reset-chain', (req, res) => {
+app.get('/debug/reset-chain', (req, res, next) => {
     try {
         node.schoolChain = new Blockchain();
         res.json({ message: 'The chain was reset to its genesis block' });
@@ -46,7 +46,7 @@ app.get('/debug/reset-chain', (req, res) => {
     }
 });
 
-app.get('/debug/mine/:minerAddress', (req, res) => {
+app.get('/debug/mine/:minerAddress', (req, res, next) => {
     try {
 
     } catch (err) {
@@ -55,7 +55,7 @@ app.get('/debug/mine/:minerAddress', (req, res) => {
     }
 });
 
-app.get('/blocks', (req, res) => {
+app.get('/blocks', (req, res, next) => {
     try {
         res.json(node.schoolChain.blocks);
     } catch (err) {
@@ -80,28 +80,30 @@ app.get('/blocks/:index', (req, res, next) => {
     }
 });
 
-app.get('/all-txs', (req, res) => {
+app.get('/all-txs', (req, res, next) => {
     try {
-        res.json(node.getAllTxs());
+        res.json(node.schoolChain.getAllTxs());
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
     }
 });
 
-app.get('/pending-txs', (req, res) => {
-
+app.get('/pending-txs', (req, res, next) => {
+    try {
+        res.json(node.schoolChain.pendingTxs);
+    } catch (err) {
+        if (!err.statusCode) err.statusCode = 500;
+        next(err);
+    }
 });
 
-app.get('/txs/:hash', (req, res) => {
+app.get('/txs/:hash', (req, res, next) => {
     try {
         const txHash = req.params.hash;
+        if (!valid.hash(txHash)) res.json({ error: 'Invalid transaction hash' });
 
-        if (!valid.hash(txHash)) {
-            res.json({ error: 'Invalid transaction hash' });
-        }
-
-        const allTxs = node.getAllTxs();
+        const allTxs = node.schoolChain.getAllTxs();
         const tx = allTxs.find(t => t.hash === txHash);
         res.json(tx);
     } catch (err) {
@@ -111,7 +113,7 @@ app.get('/txs/:hash', (req, res) => {
 });
 
 // not sure what this is for yet
-app.get('/balances', (req, res) => {
+app.get('/balances', (req, res, next) => {
     try {
         res.json(node.schoolChain.getConfirmedBalances());
     } catch (err) {
@@ -120,17 +122,12 @@ app.get('/balances', (req, res) => {
     }
 });
 
-app.get('/address-data/:address', (req, res) => {
+app.get('/address-data/:address', (req, res, next) => {
     try {
         const address = req.params.address;
-
-        // USE VALIDATION FILE FOR THIS
-        if (typeof address !== 'string' || !(/^[0-9a-f]{40}$/.test(address))) {
-            res.json({ error: 'Invalid address' });
-        }
-
-        const txHistory = node.getTxHistory(address);
-        const balance = node.getBalance(address);
+        if (!valid.address(address)) error('Invalid address');
+        const txHistory = node.schoolChain.getTxHistory(address);
+        const balance = node.schoolChain.getBalance(address);
         res.json({ balance, txs: txHistory });
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
@@ -138,9 +135,15 @@ app.get('/address-data/:address', (req, res) => {
     }
 });
 
-app.post('/txs/send', (req, res) => {
+app.post('/txs/send', (req, res, next) => {
     try {
+        console.log(req.body)
+        const tx = node.schoolChain.addPendingTx(req.body, next);
 
+        if (tx.hash) {
+            node.notifyPeersOfTx(tx);
+            res.status(201).json({ txHash: tx.hash });
+        }
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
@@ -148,7 +151,7 @@ app.post('/txs/send', (req, res) => {
 });
 
 
-app.get('/peers', (req, res) => {
+app.get('/peers', (req, res, next) => {
     try {
         res.json(node.peers.entries());
     } catch (err) {
@@ -157,10 +160,10 @@ app.get('/peers', (req, res) => {
     }
 });
 
-app.post('/peers/connect', async (req, res) => {
+app.post('/peers/connect', async (req, res, next) => {
     try {
         const peer = req.body.peer;
-        if (peer === undefined) res.json({ error: 'Missing "peer" in the form' });
+        if (peer === '') res.json({ error: 'Missing peer URL in the form' });
         const peerInfo = await axios.get(peer + '/info');
 
         // Check whether connecting node is also the user's node
@@ -171,15 +174,15 @@ app.post('/peers/connect', async (req, res) => {
             res.status(409).json({ error: `This node is already connected to peer: ${peer}` });
         } else {
             node.peers.set(peerInfo.data.nodeId, peer);
-            node.syncChain(peerInfo.data);
-            node.syncPendingTxs(peerInfo.data);
+            node.syncChain(peerInfo.data, next);
+            node.syncPendingTxs(peerInfo.data, next);
         }
     } catch (err) {
         next(err);
     }
 });
 
-app.post('/peers/new-block', (req, res) => {
+app.post('/peers/new-block', (req, res, next) => {
     try {
 
     } catch (err) {
@@ -188,7 +191,7 @@ app.post('/peers/new-block', (req, res) => {
     }
 });
 
-app.post('/mining/get-mining-job/:address', (req, res) => {
+app.post('/mining/get-mining-job/:address', (req, res, next) => {
     try {
 
     } catch (err) {
@@ -197,7 +200,7 @@ app.post('/mining/get-mining-job/:address', (req, res) => {
     }
 });
 
-app.post('/mining/submit-mined-block', (req, res) => {
+app.post('/mining/submit-mined-block', (req, res, next) => {
     try {
 
     } catch (err) {
@@ -206,7 +209,7 @@ app.post('/mining/submit-mined-block', (req, res) => {
     }
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
     console.log(error);
     const message = error.message;
     res.status(error.statusCode || 500).json({ message });

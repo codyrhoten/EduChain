@@ -33,19 +33,25 @@ class Block {
     isValid(newBlock, previousBlock) {
         // check block content
         if (typeof newBlock.index || typeof newBlock.nonce !== 'number')
-            error(`Block ${newBlock.index} has invalid index or nonce data type in block`);
+            error(`Block #${newBlock.index} has invalid index or nonce data type in block`);
+
         if (!Array.isArray(newBlock.txs)) 
-            error(`Block ${newBlock.index} txs are incorrect data type`);
+            error(`Block #${newBlock.index} txs are incorrect data type`);
+
         if (!valid.hash(newBlock.prevBlockHash)) 
-            error(`Block ${newBlock.index} has invalid previous block hash format`);
+            error(`Block #${newBlock.index} has invalid previous block hash format`);
+
         if (!valid.address(this.minedBy)) 
-            error(`Block ${newBlock.index}'s miner address is invalid`);
+            error(`Block #${newBlock.index}'s miner address is invalid`);
+
         if (!valid.hash(newBlock.dataHash)) 
-            error(`Block ${newBlock.index} has invalid data hash format`);
+            error(`Block #${newBlock.index} has invalid data hash format`);
+
         if (!valid.hash(newBlock.hash))
-            error(`Block ${newBlock.index} has invalid block hash format`);
+            error(`Block #${newBlock.index} has invalid block hash format`);
+            
         if (!valid.timestamp(newBlock.timeStamp)) 
-            error(`Block ${newBlock.index} has invalid timestamp`);
+            error(`Block #${newBlock.index} has invalid timestamp`);
 
         try {
             // validate each transaction

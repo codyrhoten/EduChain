@@ -1,4 +1,3 @@
-const { sha256, verify } = require('./cryptography.js');
 const Block = require('./block.js');
 const Transaction = require('./transaction.js');
 const {
@@ -8,10 +7,12 @@ const {
     schoolChainAddress,
     schoolChainSignature
 } = require('./accounts.js');
+const { verify } = require('./cryptography.js');
+const valid = require('./validation.js');
 
 class Blockchain {
     constructor() {
-        this.blocks = [getGenesisBlock()];
+        this.blocks = [this.getGenesisBlock()];
         this.difficulty = 1;
         this.pendingTxs = [];
         // this.reward = 500;
@@ -43,10 +44,62 @@ class Blockchain {
         );
     }
 
+
     getConfirmedTxs() {
         let txs = [];
         this.blocks.forEach(block => txs.push(...block.txs));
         return txs;
+    }
+
+    getAllTxs() {
+        const txs = this.getConfirmedTxs();
+        txs.push(...this.pendingTxs);
+        return txs;
+    }
+
+    getTxHistory(address) {
+        const txs = this.getAllTxs();
+        let addressTxs = [];
+        txs.forEach(tx => { if (tx.to === address || tx.from === address) addressTxs.push(tx) });
+        return addressTxs;
+    }
+
+    getBalance(address) {
+        const txs = this.getTxHistory(address);
+        let balance = { safe: 0, confirmed: 0, pending: 0 };
+
+        txs.forEach(tx => {
+            let confirmations = 0;
+
+            if (typeof (tx.minedInBlock) === 'number') {
+                confirmations = this.blocks.length - tx.minedInBlock + 1;
+            }
+
+            if (tx.from === address) {
+                balance.pending -= tx.fee;
+                if (confirmations === 0 && !tx.success) balance.pending -= tx.amount;
+
+                if (confirmations > 0 && tx.success) {
+                    balance.confirmed -= tx.fee;
+                    if (tx.success) balance.confirmed -= tx.amount;
+                }
+
+                // safe confirmation amount is 6 blocks
+                if (confirmations >= 6 && tx.success) {
+                    balance.safe -= tx.fee;
+                    if (tx.success) balance.safe -= tx.amount;
+                }
+            }
+
+            if (tx.to === address) {
+                if (confirmations === 0 && !tx.success) balance.pending += tx.amount;
+                if (confirmations > 0 && tx.success) balance.confirmed += tx.amount;
+                // safe confirmation amount is 6 blocks
+                if (confirmations >= 6 && tx.success) balance.safe += tx.amount;
+            }
+        });
+
+        return balance;
     }
 
     getConfirmedBalances() {
@@ -67,30 +120,41 @@ class Blockchain {
         return balances;
     }
 
-    getLastBlock() {
-        return this.chain[this.chain.length - 1];
-    }
+    addPendingTx(txData, next) {
+        try {
+            const allTxs = this.getAllTxs();
+            const balance = this.getBalance(txData.from);
+            const tx = new Transaction(
+                txData.from,
+                txData.to,
+                txData.amount,
+                txData.fee,
+                txData.timestamp,
+                txData.senderPubKey,
+                undefined,
+                txData.senderSig
+            );
 
-    getBalance(address) {
-        let addressTxs = [];
+            valid.txContent(tx);
 
-        this.chain.forEach(b => {
-            b.transactions.forEach(tx => {
-                if (tx.to === address || tx.from === address) addressTxs.push(tx);
-            });
-        });
-
-        let balance = 0;
-
-        addressTxs.forEach(tx => {
-            if (tx.to === address) {
-                balance += Number(tx.amount);
-            } else if (tx.from === address) {
-                balance -= Number(tx.amount);
+            if (allTxs.find(t => t.hash === tx.hash)) {
+                const error = new Error(`Tx ${txData.hash} already exists`);
+                error.statusCode = 409;
+                throw error;
             }
-        });
 
-        return { txs: addressTxs, balance };
+            if (!verify(tx.hash, tx.senderPubKey, tx.senderSig))
+                error(`tx ${tx.hash} has invalid signature`);
+
+            if (balance.confirmed < tx.amount + tx.fee)
+                error(`Insufficient funds in sender's account at address: ${tx.from}`);
+
+            this.pendingTxs.push(tx);
+            return tx;
+        } catch (err) {
+            if (!err.statusCode) err.statusCode = 500;
+            next(err);
+        }
     }
 
     isValid() {
@@ -105,7 +169,11 @@ class Blockchain {
 
         return true;
     }
-    
+
+
+    /* getLastBlock() {
+        return this.chain[this.chain.length - 1];
+    }
 
     addBlock(block) {
         const lastBlockTimestamp = parseInt(this.getLastBlock().timeStamp);
@@ -114,14 +182,6 @@ class Blockchain {
         block.mine(this.difficulty);
         this.chain.push(block);
         this.difficulty += Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
-    }
-
-    addPendingTx(tx) {
-        if (tx.isValid(tx, this)) {
-            this.pendingTxs.push(tx);
-        }
-
-        console.log(tx);
     }
 
     miningTransaction(rewardAddress) {
@@ -144,7 +204,7 @@ class Blockchain {
         }
 
         this.pendingTxs = [];
-    }
+    } */
 }
 
 module.exports = Blockchain;

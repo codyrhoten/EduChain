@@ -29,57 +29,6 @@ class NetworkNode {
         return ({ node: this, importantAccounts: accountsDetails, confirmedBalances });
     }
 
-    getAllTxs() {
-        const txs = this.schoolChain.getConfirmedTxs();
-        txs.push(...this.schoolChain.pendingTxs);
-        return txs;
-    }
-
-    getTxHistory(address) {
-        const txs = this.getAllTxs();
-        let addressTxs = [];
-        txs.forEach(tx => { if (tx.to === address || tx.from === address) addressTxs.push(tx) });
-        return addressTxs;
-    }
-
-    getBalance(address) {
-        const txs = this.getTxHistory(address);
-        let balance = { safe: 0, confirmed: 0, pending: 0 };
-
-        txs.forEach(tx => {
-            let confirmations = 0;
-
-            if (typeof (tx.minedInBlock) === 'number') {
-                confirmations = this.schoolChain.blocks.length - tx.minedInBlock + 1;
-            }
-
-            if (tx.from === address) {
-                balance.pending -= tx.fee;
-                if (confirmations === 0 && !tx.success) balance.pending -= tx.amount;
-
-                if (confirmations > 0 && tx.success) {
-                    balance.confirmed -= tx.fee;
-                    if (tx.success) balance.confirmed -= tx.amount;
-                }
-
-                // safe confirmation amount is 6 blocks
-                if (confirmations >= 6 && tx.success) {
-                    balance.safe -= tx.fee;
-                    if (tx.success) balance.safe -= tx.amount;
-                }
-            }
-
-            if (tx.to === address) {
-                if (confirmations === 0 && !tx.success) balance.pending += tx.amount;
-                if (confirmations > 0 && tx.success) balance.confirmed += tx.amount;
-                // safe confirmation amount is 6 blocks
-                if (confirmations >= 6 && tx.success) balance.safe += tx.amount;
-            }
-        });
-
-        return balance;
-    }
-
     async notifyPeersOfBlock() {
         const notification = {
             blocks: this.schoolChain.blocks.length,
@@ -91,7 +40,7 @@ class NetworkNode {
         });
     }
 
-    async syncChain(peerInfo) {
+    async syncChain(peerInfo, next) {
         try {
             if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
                 error('Peers should have the same chain ID');
@@ -119,13 +68,12 @@ class NetworkNode {
         }
     }
 
-    async syncPendingTxs(peerInfo) {
+    async syncPendingTxs(peerInfo, next) {
         try {
             if (peerInfo.pendingTxs > 0) {
-                const txs = await axios.get(`${peerInfo.url}/all-txs`);
-                const pendingTxs = txs.data.filter(tx => !tx.success);
-                pendingTxs.forEach(pt => {
-
+                const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`);
+                pendingTxs.data.forEach(pt => {
+                    const validTx = '';
                 });
             }
         } catch (err) {
