@@ -7,7 +7,8 @@ function sha256(message) {
 }
 
 function sign(signerPrivKey, txHash) {
-    const signature = ec.sign(txHash, signerPrivKey, 'hex', { canonical: true });
+    const keyPair = ec.keyFromPrivate(signerPrivKey);
+    const signature = keyPair.sign(txHash);
     return [signature.r.toString(16), signature.s.toString(16)];
 }
 
@@ -15,13 +16,19 @@ function pubKeyToAddress(pubKey) {
     return crypto.RIPEMD160(pubKey).toString();
 }
 
+function decompressPublicKey(compressedPubKey) {
+    let pubKeyX = compressedPubKey.substring(0, 63);
+    let pubKeyYOdd = parseInt(compressedPubKey.substring(63));
+    let pubKeyPoint = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
+    return pubKeyPoint;
+}
+
 function verify(txHash, senderPubKey, sig) {
-    // const pubKeyX = senderPubKey.substring(0, 64);
-    // const pubKeyYOdd = parseInt(senderPubKey.substring(64));
-    // const pubKeyPoint = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
-    // const keyPair = ec.keyPair({ pub: pubKeyPoint });
-    // return keyPair.verify(txHash, { r: sig[0], s: sig[1] });
-    return ec.verify(txHash, { r: sig[0], s: sig[1] }, senderPubKey);
+    console.log(txHash)
+    const decompressedPubKey = decompressPublicKey(senderPubKey);
+    const keyPair = ec.keyPair({ pub: decompressedPubKey });
+    const valid = keyPair.verify(txHash, { r: sig[0], s: sig[1] });
+    return valid;
 }
 
 module.exports = { sha256, sign, pubKeyToAddress, verify };

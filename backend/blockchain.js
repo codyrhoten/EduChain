@@ -7,6 +7,7 @@ const {
     schoolChainAddress,
     schoolChainSignature
 } = require('./accounts.js');
+const { error } = require('./error.js');
 const { verify } = require('./cryptography.js');
 const valid = require('./validation.js');
 
@@ -76,23 +77,23 @@ class Blockchain {
             }
 
             if (tx.from === address) {
-                balance.pending -= tx.fee;
-                if (confirmations === 0 && !tx.success) balance.pending -= tx.amount;
-
                 if (confirmations > 0 && tx.success) {
                     balance.confirmed -= tx.fee;
                     if (tx.success) balance.confirmed -= tx.amount;
                 }
-
+                
                 // safe confirmation amount is 6 blocks
                 if (confirmations >= 6 && tx.success) {
                     balance.safe -= tx.fee;
                     if (tx.success) balance.safe -= tx.amount;
                 }
+
+                balance.pending = balance.safe - tx.fee;
+                if (confirmations === 0 && !tx.success) balance.pending -= tx.amount;
             }
 
             if (tx.to === address) {
-                if (confirmations === 0 && !tx.success) balance.pending += tx.amount;
+                if (confirmations === 0 && !tx.success) balance.pending = balance.safe + tx.amount;
                 if (confirmations > 0 && tx.success) balance.confirmed += tx.amount;
                 // safe confirmation amount is 6 blocks
                 if (confirmations >= 6 && tx.success) balance.safe += tx.amount;
@@ -144,7 +145,7 @@ class Blockchain {
             }
 
             if (!verify(tx.hash, tx.senderPubKey, tx.senderSig))
-                error(`tx ${tx.hash} has invalid signature`);
+                error(`Signature of tx ${tx.hash} could not be verified`);
 
             if (balance.confirmed < tx.amount + tx.fee)
                 error(`Insufficient funds in sender's account at address: ${tx.from}`);

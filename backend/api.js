@@ -137,11 +137,10 @@ app.get('/address-data/:address', (req, res, next) => {
 
 app.post('/txs/send', (req, res, next) => {
     try {
-        console.log(req.body)
         const tx = node.schoolChain.addPendingTx(req.body, next);
 
         if (tx.hash) {
-            node.notifyPeersOfTx(tx);
+            //node.notifyPeersOfTx(tx);
             res.status(201).json({ txHash: tx.hash });
         }
     } catch (err) {
