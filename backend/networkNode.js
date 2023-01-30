@@ -1,22 +1,23 @@
 const uuid = require('uuid');
 const accountsDetails = require('./accounts.js');
+const axios = require('axios');
 const { error } = require('./error.js');
 
 class NetworkNode {
     constructor(url, chain) {
-        this.nodeId = uuid.v4().split('-').join('');
+        this.id = uuid.v4().split('-').join('');
         this.url = url;
-        this.peers = new Map();
+        this.peers = {};
         this.schoolChain = chain;
     }
 
     getInfo() {
         return {
             about: 'SchoolChain/v1',
-            id: this.nodeId,
+            id: this.id,
             chainId: this.schoolChain.blocks[0].hash, // genesis block hash
             url: this.url,
-            peers: this.peers.size,
+            peers: Object.keys(this.peers).length,
             difficulty: 1,
             blocks: this.schoolChain.blocks.length,
             confirmedTxs: this.schoolChain.getConfirmedTxs().length,
@@ -35,53 +36,48 @@ class NetworkNode {
             URL: this.url
         };
 
-        this.peers.forEach(url => {
+        for (const url in peers) {
             axios.post(`${url}/peers/new-block`, notification);
-        });
+        }
     }
 
     async syncChain(peerInfo) {
-        try {
-            if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
-                error('Peers should have the same chain ID');
+        if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
+            return { errorMsg: 'Peers should have the same chain ID' };
+        }
+
+        const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
+
+        // invalidSchoolChain will be undefined if chain is valid
+        const invalidSchoolChain = this.schoolChain.isValidChain(peerBlocks);
+
+        if (invalidSchoolChain) {
+            return invalidSchoolChain;
+        } else {
+            this.miningJobs = this.miningJobs.clear();
+
+            const confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
+
+            peerInfo.pendingTxs = peerInfo.pendingTxs.filter(t => {
+                t.hash !== confirmedTxHashes.includes(t.hash);
+            });
+
+            if (peerBlocks.length > this.schoolChain.blocks.length) {
+                this.schoolChain.blocks = peerBlocks;
+                this.notifyPeersOfBlock();
             }
-
-            const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
-
-            // invalidSchoolChain will be undefined if chain is valid
-            const invalidSchoolChain = this.schoolChain.isValidChain(peerBlocks);
-
-            if (invalidSchoolChain) {
-                return invalidSchoolChain;
-            } else {
-                // INVALIDATE ALL MINING JOBS
-
-                let confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
-
-                peerInfo.pendingTxs = peerInfo.pendingTxs.filter(t => {
-                    t.hash !== confirmedTxHashes.includes(t.hash)
-                });
-
-                if (peerBlocks.length > this.schoolChain.blocks.length) {
-                    this.schoolChain.blocks = peerBlocks;
-                    this.notifyPeersOfBlock();
-                }
-            }
-        } catch (err) {
-            console.log('Could not load chain: ' + err);
         }
     }
 
     async syncPendingTxs(peerInfo) {
-        try {
-            if (peerInfo.pendingTxs > 0) {
-                const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`);
-                pendingTxs.data.forEach(pt => {
-                    const validTx = '';
-                });
+        if (peerInfo.pendingTxs > 0) {
+            const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`);
+
+            for (const pt of pendingTxs.data) {
+                const newTx = this.schoolChain.addPendingTx(pt);
+                if (newTx.errorMsg) return newTx;
+                if (newTx.hash) this.notifyPeersOfTx(newTx);
             }
-        } catch (err) {
-            console.log('Could not load pending transactions: ' + err);
         }
     }
 }

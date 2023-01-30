@@ -14,9 +14,6 @@ const schoolChainSignature = [
 ];
 
 module.exports = { 
-    faucetPrivKey, 
-    faucetKeyPair,
-    faucetPubKey,
     faucetAddress, 
     schoolChainSignature, 
     schoolChainPubKey, 

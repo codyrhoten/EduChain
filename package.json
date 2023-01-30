@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "dev": "nodemon backend/api.js 5555 http://localhost:5555"
+    "dev": "concurrently \"npm run primary_node\" \"npm run second_node\" \"npm run third_node\"",
+    "primary_node": "nodemon backend/api.js 5555 http://localhost:5555",
+    "second_node": "nodemon backend/api.js 5556 http://localhost:5556",
+    "third_node": "nodemon backend/api.js 5557 http://localhost:5557",
+    "fourth_node": "nodemon backend/api.js 5558 http://localhost:5558",
+    "fifth_node": "nodemon backend/api.js 5559 http://localhost:5559"
   },
   "repository": {
     "type": "git",
@@ -20,6 +25,7 @@
   "dependencies": {
     "axios": "^1.2.4",
     "body-parser": "^1.20.1",
+    "concurrently": "^7.6.0",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "elliptic": "^6.5.4",

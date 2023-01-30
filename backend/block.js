@@ -1,6 +1,4 @@
 const { sha256 } = require('./cryptography.js');
-const { error } = require('./error.js');
-const valid = require('./validation.js');
 
 class Block {
     constructor(index, transactions, prevBlockHash, minedBy, dataHash, nonce, timeStamp, hash) {
@@ -15,8 +13,6 @@ class Block {
         this.nonce = nonce;
         this.timeStamp = timeStamp;
         this.hash = hash;
-
-        if (this.hash === undefined) this.getHash();
     }
 
     getDataHash() {
@@ -42,7 +38,7 @@ class Block {
     }
 
     getHash() {
-        const dataString = this.dataHash + String(this.nonce) + String(this.timestamp);
+        const dataString = `${this.dataHash}|${String(this.timestamp)}|${String(this.nonce)}`;
         this.hash = sha256(dataString, 'base64');
     }
 

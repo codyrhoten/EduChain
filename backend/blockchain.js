@@ -6,16 +6,16 @@ const {
     schoolChainAddress,
     schoolChainSignature
 } = require('./accounts.js');
-const { error } = require('./error.js');
 const { verify } = require('./cryptography.js');
 const valid = require('./validation.js');
 
 class Blockchain {
     constructor() {
         this.blocks = [this.getGenesisBlock()];
-        this.difficulty = 1;
+        this.difficulty = 3;
         this.pendingTxs = [];
-        // this.reward = 500;
+        this.miningJobs = new Map();
+        this.reward = 500;
     }
 
     getGenesisBlock() {
@@ -32,7 +32,7 @@ class Blockchain {
             true                        // success?
         );
 
-        return new Block(
+        const genesisBlock = new Block(
             0,                          // index
             [genesisTx],                // transactions array
             undefined,                  // previous block hash
@@ -40,8 +40,10 @@ class Blockchain {
             undefined,                  // block data hash
             0,                          // nonce
             1674613252417,              // timestamp
-            undefined                   // block hash
         );
+
+        genesisBlock.getHash();
+        return genesisBlock;
     }
 
 
@@ -151,6 +153,107 @@ class Blockchain {
         return tx;
     }
 
+    getMiningJob(minerAddress) {
+        const nextBlockIndex = this.blocks.length;
+
+        let pendingTxs = this.pendingTxs;
+        pendingTxs = txs.sort((a, b) => b.fee - a.fee);
+
+        // create transaction for mining this block
+        let rewardTx = new Transaction(
+            schoolChainAddress,         // from
+            minerAddress,               // to
+            this.reward,    // amount
+            0,                          // fee
+            new Date(),                 // timestamp
+            schoolChainPubKey,          // sender public key
+            undefined,                  // hash
+            schoolChainSignature,       // sender signature
+            nextBlockIndex,             // block this was mined in
+            true                        // success?
+        );
+
+        let balances = this.getConfirmedBalances();
+
+        pendingTxs.forEach(tx => {
+            balances[tx.from] = balances[tx.from] || 0;
+            balances[tx.to] = balances[tx.to] || 0;
+
+            if (balances[tx.from] >= tx.fee) {
+                tx.minedInBlock = nextBlockIndex;
+                balances[tx.from] -= tx.fee;
+                rewardTx.amount += tx.fee;
+
+                if (balances[tx.from] >= tx.amount) {
+                    balances[tx.from] -= tx.amount;
+                    balances[tx.to] += tx.amount;
+                    tx.success = true;
+                } else {
+                    tx.success = false;
+                }
+            } else {
+                const confirmedTxHashes = this.getConfirmedTxs().map(tx => tx.hash);
+
+                this.pendingTxs = this.pendingTxs.filter(t => {
+                    t.hash !== confirmedTxHashes.includes(t.hash);
+                });
+
+                pendingTxs = pendingTxs.filter(t => t !== tx);
+            }
+        });
+
+        rewardTx.getHash();
+        pendingTxs.unshift(rewardTx);
+        const prevBlockHash = this.blocks[this.blocks.length - 1].hash;
+
+        const nextBlockCandidate = new Block(
+            nextBlockIndex,            // index
+            pendingTxs,                // txs
+            prevBlockHash,             // previous block's hash
+            minerAddress               // miner of this block
+        );
+
+        this.miningJobs.set(nextBlockCandidate.dataHash) = nextBlockCandidate;
+        return nextBlockCandidate;
+    }
+
+    mineBlock(blockDataHash, blockHash) {
+        let newBlock = this.miningJobs.get(blockDataHash);
+        const prevBlock = this.blocks[this.blocks.length - 1];
+        const confirmedTxHashes = this.getConfirmedTxs().map(tx => tx.hash);
+
+        newBlock.nonce = 0;
+        
+        while (!newBlock.hash.startsWith(Array(this.difficulty).join("0"))) {
+            newBlock.nonce++;
+            newBlock.timestamp = new Date();
+            newBlock.getHash();
+        }
+
+        if (newBlock === undefined) return { errorMsg: 'Block not found or already mined' };
+
+        if (newBlock.hash !== blockHash)
+            return { errorMsg: 'Block hash wasn\'t calculated correctly' };
+
+        if (!newBlock.hash.startsWith(Array(this.difficulty).join("0")))
+            return { errorMsg: 'Block hash does not correspond to blockchain difficulty' };
+
+        if (newBlock.index !== this.blocks.length)
+            return { errorMsg: 'Submitted block was already mined by someone else' };
+
+        if (prevBlock.hash !== newBlock.prevBlockHash)
+            return { errorMsg: 'Incorrect previous block hash' };
+
+        this.blocks.push(newBlock);
+        this.miningJobs = this.miningJobs.clear();
+
+        this.pendingTxs = this.pendingTxs.filter(t => {
+            t.hash !== confirmedTxHashes.includes(t.hash);
+        });
+
+        return newBlock;
+    }
+
     isValidTx(tx, block) {
         // invalidTx will be undefined if tx is valid
         const invalidTx = valid.txContent(tx);
@@ -243,10 +346,10 @@ class Blockchain {
     }
 
     isValidChain() {
-        if (JSON.stringify(chain[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
+        if (JSON.stringify(this.blocks[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
 
-        for (let i = 1; i < chain.length; i++) {
-            if (!this.isValidBlock(chain[i], chain[i - 1])) {
+        for (let i = 1; i < this.blocks.length; i++) {
+            if (!this.isValidBlock(this.blocks[i], this.blocks[i - 1])) {
                 return { errorMsg: `Invalid block #${chain[i].index} being added to chain`};
             }
         }
@@ -266,28 +369,6 @@ class Blockchain {
         block.mine(this.difficulty);
         this.chain.push(block);
         this.difficulty += Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
-    }
-
-    miningTransaction(rewardAddress) {
-        let block = {};
-        let fee = 0;
-
-        this.pendingTxs.forEach(tx => fee += tx.fee);
-
-        const rewardTransaction = new Transaction(
-            mintAddress,
-            rewardAddress,
-            this.reward + fee
-        );
-
-        rewardTransaction.sign(schoolChainPrivKey);
-
-        if (this.pendingTxs.length !== 0) {
-            block = new Block(Date.now().toString(), [rewardTransaction, ...this.pendingTxs]);
-            this.addBlock(block);
-        }
-
-        this.pendingTxs = [];
     } */
 }
 
