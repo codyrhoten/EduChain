@@ -1,23 +1,32 @@
 const navLinks = {
     explorer: [
         { name: 'Home', url: '/' },
-        { name: 'Wallet', url: '/wallet' },
+        { name: 'Wallet', url: '/wallet-home' },
         { name: 'Faucet', url: '/faucet' },
         { name: 'Miner', url: '/miner' },
     ],
-    wallet: [
-        { name: 'Home', url: '/' },
-        { name: 'Create', url: '/create-wallet' },
-        { name: 'Open', url: '/open-wallet' },
-    ],
+    wallet: {
+        locked: [
+            { name: 'Explorer', url: '/' },
+            { name: 'Home', url: '/wallet/home' },
+            { name: 'Create', url: '/wallet/create' },
+            { name: 'Open', url: '/wallet/open' }
+        ],
+        unlocked: [
+            { name: 'Explorer', url: '/' },
+            { name: 'Balance', url: '/wallet/balance' },
+            { name: 'Send Transaction', url: '/wallet/send-tx' },
+            { name: 'Log Out', url: '/wallet/home' },
+        ]
+    },
     faucet: [
         { name: 'Explorer', url: '/' },
-        { name: 'Wallet', url: '/wallet' },
+        { name: 'Wallet', url: '/wallet-home' },
         { name: 'Miner', url: '/miner' },
     ],
     miner: [
         { name: 'Home', url: '/' },
-        { name: 'Wallet', url: '/wallet' },
+        { name: 'Wallet', url: '/wallet-home' },
         { name: 'Faucet', url: '/faucet' },
     ],
 };

@@ -1,8 +1,9 @@
-import Header from '../../components/Header';
-import { Card, Container, Table } from 'react-bootstrap';
-import SearchBar from '../../components/explorer/SearchBar';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import SearchBar from '../../components/explorer/SearchBar';
+import Header from '../../components/Header';
+import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const TxDetails = ({ navLinks }) => {

@@ -43,7 +43,7 @@ class NetworkNode {
             URL: this.url
         };
 
-        for (const url in peers) {
+        for (const url in this.peers) {
             axios.post(`${url}/peers/new-block`, notification);
         }
     }
@@ -61,7 +61,7 @@ class NetworkNode {
         if (invalidSchoolChain) {
             return invalidSchoolChain;
         } else {
-            this.miningJobs = this.miningJobs.clear();
+            this.miningJobs = {};
 
             const confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
 
@@ -81,9 +81,11 @@ class NetworkNode {
             const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`);
 
             for (const pt of pendingTxs.data) {
-                const newTx = this.schoolChain.addPendingTx(pt);
-                if (newTx.errorMsg) return newTx;
-                if (newTx.hash) this.notifyPeersOfTx(newTx);
+                if (!(this.schoolChain.pendingTxs.find(tx => tx.hash === pt.hash))) {
+                    const newTx = this.schoolChain.addPendingTx(pt);
+                    if (newTx.errorMsg) return newTx;
+                    if (newTx.hash) this.notifyPeersOfTx(newTx);
+                }
             }
         }
     }

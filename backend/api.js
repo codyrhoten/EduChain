@@ -201,6 +201,13 @@ app.post('/peers/complete-connection', async (req, res, next) => {
             res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
         } else {
             node.peers[peerInfo.data.id] = peer;
+            
+            const chainSync = node.syncChain(peerInfo.data);
+            if (chainSync.errorMsg) res.status(400).json(chainSync);
+
+            const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
+            if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
+
             res.json({ msg: `Also connected to peer: ${peer}`});
         }
     } catch (err) {
@@ -219,26 +226,25 @@ app.post('/peers/new-block', (req, res, next) => {
     }
 });
 
-app.post('/mining/get-mining-job/:address', (req, res, next) => {
+app.post('/mine/:address', (req, res, next) => {
     try {
         const address = req.params.address;
         if (!valid.address(address)) return { errorMsg: 'Invalid address' };
-        const blockCandidate = node.schoolChain.getMiningJob(address);
+        const newBlock = node.schoolChain.mineBlock(address);
 
-        res.json({
-            index: blockCandidate.index,
-            txsIncluded: blockCandidate.txs,
-            expectedReward: blockCandidate.txs[0].amount,
-            rewardAddress: address,
-            blockDataHash: blockCandidate.dataHash
-        });
+        if (newBlock.errorMsg) {
+            res.status(400).json(newBlock);
+        } else {
+            res.json({ msg: `Block accepted. Reward paid: ${newBlock.txs[0].amount} microcoins`});
+            node.notifyPeersOfBlock();
+        }
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
     }
 });
 
-app.post('/mine', (req, res, next) => {
+/* app.post('/mine', (req, res, next) => {
     try {
         const { blockDataHash, blockHash } = req.body;
         const newBlock = node.schoolChain.mineBlock(blockDataHash, blockHash);
@@ -253,7 +259,7 @@ app.post('/mine', (req, res, next) => {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
     }
-});
+}); */
 
 app.use((error, req, res, next) => {
     console.log(error);

@@ -21,7 +21,7 @@ function Faucet({ navLinks }) {
     const handleShow = () => setShow(true);
 
     async function getBalance() {
-        const balance = await axios.get(`http://localhost:5555/address/${_faucet.fAddress}`);
+        const balance = await axios.get(`http://localhost:5555/address/${faucetAddress}`);
         setBalance(balance.data.balance);
     }
 

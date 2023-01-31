@@ -2,15 +2,19 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route } from 'react-router-dom';
 import navLinks from './utils/navLinks';
-import Home from './pages/explorer/Home';
-import Wallet from './pages/Wallet';
-import Faucet from './pages/Faucet';
-import Miner from './pages/Miner';
+import ExplorerHome from './pages/explorer/ExplorerHome';
 import AllBlocks from './pages/explorer/AllBlocks';
 import Transactions from './pages/explorer/Transactions';
-import Block from './pages/explorer/Block';
 import TxDetails from './pages/explorer/TxDetails';
 import Address from './pages/explorer/Address';
+import Block from './pages/explorer/Block';
+import WalletHome from './pages/Wallet/WalletHome';
+import Create from './pages/Wallet/Create';
+import Open from './pages/Wallet/Open';
+import Balance from './pages/Wallet/Balance';
+import SendTx from './pages/Wallet/SendTx';
+import Faucet from './pages/Faucet';
+import Miner from './pages/Miner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -22,41 +26,31 @@ function App() {
 
     useEffect(() => {
         (async function getAllBlocks() {
-            const blocks = await axios.get('http://localhost:5555/blocks');
-            let _latestBlx = blocks.reverse().slice(0, 5);
+            const _blocks = await axios.get('http://localhost:5555/blocks');
+            let _latestBlx = _blocks.data.reverse().slice(0, 5);
             let _latestTxs = await axios.get('http://localhost:5555/all-txs');
             _latestTxs = _latestTxs.data.slice(0, 5);
 
             setBlockchain({
-                blocks: blockchain.chain,
+                blocks: _blocks,
                 latestBlx: _latestBlx,
                 latestTxs: _latestTxs,
             });
+
         })();
     }, []);
 
     return (
         <div className='App'>
             <Routes>
+                {/* <-------------Explorer-------------> */}
                 <Route
                     path='/'
-                    element={<Home
+                    element={<ExplorerHome
                         navLinks={navLinks.explorer}
                         latestBlx={blockchain.latestBlx}
                         latestTxs={blockchain.latestTxs}
                     />}
-                />
-                <Route
-                    path='/wallet'
-                    element={<Wallet navLinks={navLinks.wallet} />}
-                />
-                <Route
-                    path='/faucet'
-                    element={<Faucet navLinks={navLinks.faucet} />}
-                />
-                <Route
-                    path='/miner'
-                    element={<Miner navLinks={navLinks.miner} />}
                 />
                 <Route
                     path='/blocks'
@@ -84,6 +78,37 @@ function App() {
                 <Route
                     path='/address/:address'
                     element={<Address navLinks={navLinks.explorer} />}
+                />
+                {/* <----------------Wallet----------------> */}
+                <Route
+                    path='/wallet/home'
+                    element={<WalletHome navLinks={navLinks.wallet} />}
+                />
+                <Route
+                    path='/wallet/create'
+                    element={<Create navLinks={navLinks.wallet} />}
+                />
+                <Route
+                    path='/wallet/open'
+                    element={<Open navLinks={navLinks.wallet} />}
+                />
+                <Route
+                    path='/wallet/balance'
+                    element={<Balance navLinks={navLinks.wallet} />}
+                />
+                <Route
+                    path='/wallet/send-tx'
+                    element={<SendTx navLinks={navLinks.wallet} />}
+                />
+                {/* <---------------Faucet---------------> */}
+                <Route
+                    path='/faucet'
+                    element={<Faucet navLinks={navLinks.faucet} />}
+                />
+                {/* <----------------Miner----------------> */}
+                <Route
+                    path='/miner'
+                    element={<Miner navLinks={navLinks.miner} />}
                 />
             </Routes>
         </div>

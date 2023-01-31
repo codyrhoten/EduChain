@@ -14,7 +14,7 @@ class Blockchain {
         this.blocks = [this.getGenesisBlock()];
         this.difficulty = 3;
         this.pendingTxs = [];
-        this.miningJobs = new Map();
+        this.miningJobs = {};
         this.reward = 500;
     }
 
@@ -157,7 +157,7 @@ class Blockchain {
         const nextBlockIndex = this.blocks.length;
 
         let pendingTxs = this.pendingTxs;
-        pendingTxs = txs.sort((a, b) => b.fee - a.fee);
+        pendingTxs = pendingTxs.sort((a, b) => b.fee - a.fee);
 
         // create transaction for mining this block
         let rewardTx = new Transaction(
@@ -165,7 +165,7 @@ class Blockchain {
             minerAddress,               // to
             this.reward,    // amount
             0,                          // fee
-            new Date(),                 // timestamp
+            Date.now(),                 // timestamp
             schoolChainPubKey,          // sender public key
             undefined,                  // hash
             schoolChainSignature,       // sender signature
@@ -213,27 +213,25 @@ class Blockchain {
             minerAddress               // miner of this block
         );
 
-        this.miningJobs.set(nextBlockCandidate.dataHash) = nextBlockCandidate;
+        this.miningJobs[nextBlockCandidate.dataHash] = nextBlockCandidate;
         return nextBlockCandidate;
     }
 
-    mineBlock(blockDataHash, blockHash) {
-        let newBlock = this.miningJobs.get(blockDataHash);
+    mineBlock(minerAddress) {
+        let newBlock = this.getMiningJob(minerAddress);
         const prevBlock = this.blocks[this.blocks.length - 1];
         const confirmedTxHashes = this.getConfirmedTxs().map(tx => tx.hash);
 
         newBlock.nonce = 0;
+        newBlock.getHash();
         
-        while (!newBlock.hash.startsWith(Array(this.difficulty).join("0"))) {
+        while (!newBlock.hash.startsWith(Array(this.difficulty + 1).join("0"))) {
             newBlock.nonce++;
-            newBlock.timestamp = new Date();
+            newBlock.timestamp = Date.now();
             newBlock.getHash();
         }
 
         if (newBlock === undefined) return { errorMsg: 'Block not found or already mined' };
-
-        if (newBlock.hash !== blockHash)
-            return { errorMsg: 'Block hash wasn\'t calculated correctly' };
 
         if (!newBlock.hash.startsWith(Array(this.difficulty).join("0")))
             return { errorMsg: 'Block hash does not correspond to blockchain difficulty' };
@@ -245,7 +243,7 @@ class Blockchain {
             return { errorMsg: 'Incorrect previous block hash' };
 
         this.blocks.push(newBlock);
-        this.miningJobs = this.miningJobs.clear();
+        this.miningJobs = {};
 
         this.pendingTxs = this.pendingTxs.filter(t => {
             t.hash !== confirmedTxHashes.includes(t.hash);
@@ -271,15 +269,8 @@ class Blockchain {
         const txDataJson = JSON.stringify(txData);
         txHash = sha256(txDataJson, 'base64');
 
-        // RE-CALCULATE MINEDINBLOCK & SUCCESS
-
-
         if (block && (!tx.minedInBlock || !tx.success)) {
             return { errorMsg: `Tx ${tx.hash} is not confirmed as mined` };
-        }
-
-        if (block) {
-            // MATCH MINEDINBLOCK & SUCCESS WITH RECALCULATIONS
         }
 
         if (typeof (tx.hash) !== 'string' || txHash !== tx.hash) {
@@ -346,11 +337,14 @@ class Blockchain {
     }
 
     isValidChain() {
-        if (JSON.stringify(this.blocks[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
+        if (JSON.stringify(this.blocks[0]) !== JSON.stringify(this.getGenesisBlock())) 
+            return { errorMsg: 'Genesis blocks do not match'};
 
         for (let i = 1; i < this.blocks.length; i++) {
-            if (!this.isValidBlock(this.blocks[i], this.blocks[i - 1])) {
-                return { errorMsg: `Invalid block #${chain[i].index} being added to chain`};
+            const invalidBlock = this.isValidBlock(this.blocks[i], this.blocks[i - 1]);
+
+            if (invalidBlock) {
+                return { errorMsg: `Block #${this.blocks[i].index}: ${invalidBlock.errorMsg}`};
             }
         }
 

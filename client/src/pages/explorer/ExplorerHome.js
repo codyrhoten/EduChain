@@ -4,7 +4,7 @@ import SearchBar from "../../components/explorer/SearchBar";
 import LatestBlocks from '../../components/explorer/LatestBlocks';
 import LatestTxs from '../../components/explorer/LatestTxs';
 
-function Home({ latestBlx, latestTxs, navLinks }) {
+function ExplorerHome({ latestBlx, latestTxs, navLinks }) {
     return (
         <>
             <Header navLinks={navLinks} />
@@ -19,4 +19,4 @@ function Home({ latestBlx, latestTxs, navLinks }) {
     );
 }
 
-export default Home;
+export default ExplorerHome;
