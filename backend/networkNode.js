@@ -18,7 +18,7 @@ class NetworkNode {
             chainId: this.schoolChain.blocks[0].hash, // genesis block hash
             url: this.url,
             peers: Object.keys(this.peers).length,
-            difficulty: 1,
+            difficulty: this.schoolChain.difficulty,
             blocks: this.schoolChain.blocks.length,
             confirmedTxs: this.schoolChain.getConfirmedTxs().length,
             pendingTxs: this.schoolChain.pendingTxs.length
@@ -28,6 +28,13 @@ class NetworkNode {
     debug() {
         const confirmedBalances = this.schoolChain.getConfirmedBalances();
         return ({ node: this, importantAccounts: accountsDetails, confirmedBalances });
+    }
+
+    async notifyPeersOfTx(tx) {
+        for (const id in this.peers) {
+            const peer = this.peers[id];
+            axios.post(`${peer}/txs/send`, tx);
+        }
     }
 
     async notifyPeersOfBlock() {
