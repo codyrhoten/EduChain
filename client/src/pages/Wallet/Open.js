@@ -7,7 +7,7 @@ function Open({ navLinks, setWalletStatus, walletStatus }) {
     
     return (
         <>
-            <Header navLinks={links} />
+            <Header navLinks={links} setWalletStatus={setWalletStatus} />
             <Container className='position-relative'>
                 <h1 >Open Wallet</h1>
             </Container>

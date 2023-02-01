@@ -10,7 +10,8 @@
     "second_node": "nodemon backend/api.js 5556 http://localhost:5556",
     "third_node": "nodemon backend/api.js 5557 http://localhost:5557",
     "fourth_node": "nodemon backend/api.js 5558 http://localhost:5558",
-    "fifth_node": "nodemon backend/api.js 5559 http://localhost:5559"
+    "fifth_node": "nodemon backend/api.js 5559 http://localhost:5559",
+    "postinstall": "npm install --workspace-backend --workspace-client"
   },
   "repository": {
     "type": "git",
@@ -33,5 +34,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
-  }
+  },
+  "workspaces": [
+    "backend",
+    "client"
+  ]
 }

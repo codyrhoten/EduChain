@@ -7,7 +7,7 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
     
     return (
         <>
-            <Header navLinks={links} />
+            <Header navLinks={links} setWalletStatus={setWalletStatus} />
             <Container className='position-relative'>
                 <h1 >Wallet Balance</h1>
             </Container>
