@@ -1,7 +1,7 @@
 const navLinks = {
     explorer: [
         { name: 'Home', url: '/' },
-        { name: 'Wallet', url: '/wallet-home' },
+        { name: 'Wallet', url: '/wallet/home' },
         { name: 'Faucet', url: '/faucet' },
         { name: 'Miner', url: '/miner' },
     ],
@@ -21,12 +21,12 @@ const navLinks = {
     },
     faucet: [
         { name: 'Explorer', url: '/' },
-        { name: 'Wallet', url: '/wallet-home' },
+        { name: 'Wallet', url: '/wallet/home' },
         { name: 'Miner', url: '/miner' },
     ],
     miner: [
         { name: 'Home', url: '/' },
-        { name: 'Wallet', url: '/wallet-home' },
+        { name: 'Wallet', url: '/wallet/home' },
         { name: 'Faucet', url: '/faucet' },
     ],
 };

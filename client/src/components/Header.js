@@ -15,7 +15,7 @@ const Header = ({ navLinks }) => {
                         alt='chain'
                     />
                     <span style={{ fontFamily: 'Fragment Mono' }}>
-                        <b>Axiom</b>
+                        <b>School Chain</b>
                     </span>
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>

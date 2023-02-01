@@ -2,10 +2,8 @@ import { useState } from "react";
 import { Container } from "react-bootstrap";
 import Header from "../../components/Header";
 
-function SendTx({ navLinks }) {
-    const [wallet, setWallet] = useState('locked');
-
-    const links = (wallet === 'locked') ? navLinks.locked : navLinks.unlocked;
+function SendTx({ navLinks, setWalletStatus, walletStatus }) {
+    const links = (walletStatus === 'locked') ? navLinks.locked : navLinks.unlocked;
     
     return (
         <>
