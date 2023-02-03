@@ -3,26 +3,25 @@ import { Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 import shortenAddress from '../../utils/shortenAddress';
 
-const LatestBlocks = ({ latestBlx }) => {  
-    console.log(latestBlx);
-     return (
+const LatestBlocks = ({ latestBlx }) => {
+    return (
         <Col className='lg-6'>
             <Card className='text-center'>
                 <Card.Body>
                     <Card.Title>Latest Blocks</Card.Title>
-                    {latestBlx && latestBlx.map((block, i) => (
+                    {latestBlx.length > 0 && latestBlx.map((block, i) => (
                         <Container key={i}>
                             <Row>
                                 <Col>
                                     Block{' '}
-                                    <Link 
+                                    <Link
                                         to={`/block/${block.index}`}
                                         style={{ textDecoration: 'none' }}
                                     >
                                         # {block.index}
                                     </Link>
                                     <br />
-                                    <i>{formatTimestamp(Number(block.timeStamp))}</i>
+                                    {<i>{formatTimestamp(block.timestamp)}</i>}
                                 </Col>
                                 <Col>{block.txs.length} Txs</Col>
                                 <Col>Mined by {shortenAddress(block.minedBy, 4)}</Col>

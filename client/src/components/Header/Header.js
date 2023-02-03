@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { useWallet } from '../../wallet-context';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -6,25 +5,30 @@ import chainImage from '../../assets/chain.webp';
 import styles from './Header.module.css';
 
 const Header = ({ navLinks }) => {
-    const { changeWalletState } = useWallet();
+    const { isLocked, changeWalletState } = useWallet();
 
-    function handleLogOut() {
+    function closeWallet() {
         sessionStorage.removeItem('privKey');
         sessionStorage.removeItem('pubKey');
         sessionStorage.removeItem('address');
         changeWalletState(true);
+        window.location.replace('http://localhost:9999/wallet/home');
     }
 
-    function logOutLink(name, url) {
+    function closeWalletButton(name) {
         return (
-            <Link 
-                className='ms-auto' 
-                to={url} 
-                style={{ textDecoration: 'none', color: 'darkgray' }}
-                onClick={handleLogOut}
+            <button
+                key='4'
+                className='mx-2 rounded border border-1 border-dark px-2'
+                style={{
+                    textDecoration: 'none',
+                    color: 'black',
+                    backgroundColor: 'rgb(255, 223, 0)',
+                }}
+                onClick={closeWallet}
             >
                 {name}
-            </Link>
+            </button>
         );
     }
 
@@ -47,11 +51,13 @@ const Header = ({ navLinks }) => {
                 <Navbar.Collapse id='navbarSupportedContent'>
                     <Nav className='ms-auto'>
                         {navLinks !== undefined && navLinks.map((link, i) => {
-                            if (link.name === 'Log Out') logOutLink(link.name, link.url);
+                            if (link.name === 'Close Wallet') {
+                                return closeWalletButton(link.name);
+                            }
 
                             return (
                                 <Nav.Item key={i.toString()}>
-                                    <Link href={link.url}>
+                                    <Link to={link.url} className={styles._link}>
                                         {link.name}
                                     </Link>
                                 </Nav.Item>

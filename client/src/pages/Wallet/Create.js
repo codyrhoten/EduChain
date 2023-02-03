@@ -11,15 +11,17 @@ function Create({ navLinks, setWalletStatus, walletStatus }) {
     const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     function displayWallet() {
-        return (
-            <>
-                <p><i>Private Key:</i> {sessionStorage['privKey']}</p>
-                <br />
-                <p><i>Public Key:</i> {sessionStorage['pubKey']}</p>
-                <br />
-                <p><i>Address:</i> {sessionStorage['address']}</p>
-            </>
-        );
+        if (!isLocked) {
+            return (
+                <>
+                    <p><i>Private Key:</i> {sessionStorage['privKey']}</p>
+                    <br />
+                    <p><i>Public Key:</i> {sessionStorage['pubKey']}</p>
+                    <br />
+                    <p><i>Address:</i> {sessionStorage['address']}</p>
+                </>
+            );
+        }
     }
 
     function handleClick() {

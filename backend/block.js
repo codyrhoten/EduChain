@@ -11,7 +11,7 @@ class Block {
         if (this.dataHash === undefined) this.getDataHash();
 
         this.nonce = nonce;
-        this.timeStamp = timeStamp;
+        this.timestamp = timeStamp;
         this.hash = hash;
     }
 

@@ -16,7 +16,7 @@ const navLinks = {
             { name: 'Explorer', url: '/' },
             { name: 'Balance', url: '/wallet/balance' },
             { name: 'Send Transaction', url: '/wallet/send-tx' },
-            { name: 'Log Out', url: '/wallet/home' },
+            { name: 'Close Wallet'},
         ]
     },
     faucet: [

@@ -28,7 +28,7 @@ function App() {
     useEffect(() => {
         (async function getAllBlocks() {
             const _blocks = await axios.get('http://localhost:5555/blocks');
-            let _latestBlx = _blocks.data.reverse().slice(0, 5);
+            let _latestBlx = _blocks.data.slice(0, 5);
             let _latestTxs = await axios.get('http://localhost:5555/all-txs');
             _latestTxs = _latestTxs.data.slice(0, 5);
 
