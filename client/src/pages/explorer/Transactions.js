@@ -2,7 +2,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import SearchBar from '../../components/explorer/SearchBar';
 import TxTable from '../../components/explorer/TxTable';
 

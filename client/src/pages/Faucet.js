@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import { faucetAddress, faucetKeyPair } from '../utils/faucetDetails.js';
 const crypto = require("crypto");
 

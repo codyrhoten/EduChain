@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useWallet } from '../../wallet-context';
 import { createWallet } from '../../utils/cryptography.js';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import { Container } from 'react-bootstrap';
 
 function Create({ navLinks, setWalletStatus, walletStatus }) {
     const [isCreated, setIsCreated] = useState(false);
-    const links = (walletStatus === 'locked') ? navLinks.locked : navLinks.unlocked;
+    const { isLocked, changeWalletState } = useWallet();
+
+    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     function displayWallet() {
         return (
@@ -24,8 +27,8 @@ function Create({ navLinks, setWalletStatus, walletStatus }) {
         sessionStorage['privKey'] = wallet.privKey;
         sessionStorage['pubKey'] = wallet.pubKey;
         sessionStorage['address'] = wallet.address;
+        changeWalletState(false);
         setIsCreated(true);
-        setWalletStatus('unlocked');
     }
 
     return (
@@ -50,7 +53,7 @@ function Create({ navLinks, setWalletStatus, walletStatus }) {
                     ) : (
                         <>
                         <button 
-                            className='rounded my-3 px-4 py-3 '
+                            className='rounded my-3 px-4 py-3'
                             onClick={handleClick} 
                             style={{ 
                                 textDecoration: 'none', 

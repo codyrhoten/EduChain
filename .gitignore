@@ -21,4 +21,4 @@ yarn-debug.log*
 yarn-error.log*
 /.vscode
 exp.js
-*privKey.txt
+privKey.txt

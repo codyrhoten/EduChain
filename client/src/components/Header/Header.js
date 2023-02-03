@@ -1,13 +1,18 @@
+import { useContext } from 'react';
+import { useWallet } from '../../wallet-context';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import chainImage from '../assets/chain.webp';
+import chainImage from '../../assets/chain.webp';
+import styles from './Header.module.css';
 
-const Header = ({ navLinks, setWalletStatus }) => {
+const Header = ({ navLinks }) => {
+    const { changeWalletState } = useWallet();
+
     function handleLogOut() {
         sessionStorage.removeItem('privKey');
         sessionStorage.removeItem('pubKey');
         sessionStorage.removeItem('address');
-        setWalletStatus('locked');
+        changeWalletState(true);
     }
 
     function logOutLink(name, url) {
@@ -46,9 +51,9 @@ const Header = ({ navLinks, setWalletStatus }) => {
 
                             return (
                                 <Nav.Item key={i.toString()}>
-                                    <Nav.Link href={link.url}>
+                                    <Link href={link.url}>
                                         {link.name}
-                                    </Nav.Link>
+                                    </Link>
                                 </Nav.Item>
                             );
                         })}

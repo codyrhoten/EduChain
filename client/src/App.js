@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { WalletProvider } from './wallet-context';
 import { Routes, Route } from 'react-router-dom';
 import navLinks from './utils/navLinks';
 import ExplorerHome from './pages/explorer/ExplorerHome';
@@ -23,7 +24,6 @@ function App() {
         latestBlx: [],
         latestTxs: []
     });
-    const [walletStatus, setWalletStatus] = useState('locked');
 
     useEffect(() => {
         (async function getAllBlocks() {
@@ -43,105 +43,102 @@ function App() {
 
     return (
         <div className='App'>
-            <Routes>
-                {/* <-----------------Explorer-----------------> */}
-                <Route
-                    path='/'
-                    element={<ExplorerHome
-                        navLinks={navLinks.explorer}
-                        latestBlx={blockchain.latestBlx}
-                        latestTxs={blockchain.latestTxs}
-                    />}
-                />
-                <Route
-                    path='/blocks'
-                    element={<AllBlocks
-                        navLinks={navLinks.explorer}
-                        blocks={blockchain.blocks}
-                    />}
-                />
-                <Route
-                    path='/transactions'
-                    element={<Transactions
-                        navLinks={navLinks.explorer}
-                    />}
-                />
-                <Route
-                    path='/block/:blockIndex'
-                    element={<Block
-                        navLinks={navLinks.explorer}
-                    />}
-                />
-                <Route
-                    path='/tx/:txHash'
-                    element={<TxDetails navLinks={navLinks.explorer} />}
-                />
-                <Route
-                    path='/address/:address'
-                    element={<Address navLinks={navLinks.explorer} />}
-                />
-                {/* <--------------------Wallet--------------------> */}
-                <Route
-                    path='/wallet/home'
-                    element={
-                        <WalletHome 
-                            navLinks={navLinks.wallet} 
-                            setWalletStatus={setWalletStatus}
-                            walletStatus={walletStatus}
-                        />
-                    }
-                />
-                <Route
-                    path='/wallet/create'
-                    element={
-                        <Create 
-                            navLinks={navLinks.wallet} 
-                            setWalletStatus={setWalletStatus}
-                            walletStatus={walletStatus}
-                        />
-                    }
-                />
-                <Route
-                    path='/wallet/open'
-                    element={
-                        <Open 
-                            navLinks={navLinks.wallet} 
-                            setWalletStatus={setWalletStatus}
-                            walletStatus={walletStatus}
-                        />
-                    }
-                />
-                <Route
-                    path='/wallet/balance'
-                    element={
-                        <Balance 
-                            navLinks={navLinks.wallet} 
-                            setWalletStatus={setWalletStatus}
-                            walletStatus={walletStatus}
-                        />
-                    }
-                />
-                <Route
-                    path='/wallet/send-tx'
-                    element={
-                        <SendTx 
-                            navLinks={navLinks.wallet} 
-                            setWalletStatus={setWalletStatus}
-                            walletStatus={walletStatus}
-                        />
-                    }
-                />
-                {/* <-------------------Faucet-------------------> */}
-                <Route
-                    path='/faucet'
-                    element={<Faucet navLinks={navLinks.faucet} />}
-                />
-                {/* <--------------------Miner--------------------> */}
-                <Route
-                    path='/miner'
-                    element={<Miner navLinks={navLinks.miner} />}
-                />
-            </Routes>
+            <WalletProvider>
+                <Routes>
+                    {/* <-----------------Explorer-----------------> */}
+                    <Route
+                        path='/'
+                        element={<ExplorerHome
+                            navLinks={navLinks.explorer}
+                            latestBlx={blockchain.latestBlx}
+                            latestTxs={blockchain.latestTxs}
+                        />}
+                    />
+                    <Route
+                        path='/blocks'
+                        element={<AllBlocks
+                            navLinks={navLinks.explorer}
+                            blocks={blockchain.blocks}
+                        />}
+                    />
+                    <Route
+                        path='/transactions'
+                        element={<Transactions
+                            navLinks={navLinks.explorer}
+                        />}
+                    />
+                    <Route
+                        path='/block/:blockIndex'
+                        element={<Block
+                            navLinks={navLinks.explorer}
+                        />}
+                    />
+                    <Route
+                        path='/tx/:txHash'
+                        element={<TxDetails navLinks={navLinks.explorer} />}
+                    />
+                    <Route
+                        path='/address/:address'
+                        element={<Address navLinks={navLinks.explorer} />}
+                    />
+                    {/* <--------------------Wallet--------------------> */}
+                    <Route
+                        path='/wallet/home'
+                        element={
+                            <WalletHome
+                                navLinks={navLinks.wallet}
+                                // setWalletStatus={setWalletStatus}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/wallet/create'
+                        element={
+                            <Create
+                                navLinks={navLinks.wallet}
+                                // setWalletStatus={setWalletStatus}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/wallet/open'
+                        element={
+                            <Open
+                                navLinks={navLinks.wallet}
+                                // setWalletStatus={setWalletStatus}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/wallet/balance'
+                        element={
+                            <Balance
+                                navLinks={navLinks.wallet}
+                                // setWalletStatus={setWalletStatus}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/wallet/send-tx'
+                        element={
+                            <SendTx
+                                navLinks={navLinks.wallet}
+                                // setWalletStatus={setWalletStatus}
+                            />
+                        }
+                    />
+                    {/* <-------------------Faucet-------------------> */}
+                    <Route
+                        path='/faucet'
+                        element={<Faucet navLinks={navLinks.faucet} />}
+                    />
+                    {/* <--------------------Miner--------------------> */}
+                    <Route
+                        path='/miner'
+                        element={<Miner navLinks={navLinks.miner} />}
+                    />
+                </Routes>
+            </WalletProvider>
         </div>
     );
 }

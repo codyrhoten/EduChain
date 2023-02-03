@@ -62,8 +62,8 @@ function txContent(data) {
     if (!numberCheck(data.timestamp)) return { errorMsg: `Tx ${data.hash} has invalid timestamp` };
     if (!signature(data.senderSig)) return { errorMsg: `Tx ${data.hash} has invalid signature` };
 
-    if (!hash(data.senderPubKey)) return
-        errorMsg: `Tx ${data.hash} has invalid sender public key`
+    if (!hash(data.senderPubKey)) 
+        return { errorMsg: `Tx ${data.hash} has invalid sender public key` };
 
     if (senderAddress !== data.from)
         return {

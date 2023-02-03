@@ -1,4 +1,4 @@
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import { Container, Row } from 'react-bootstrap';
 import SearchBar from "../../components/explorer/SearchBar";
 import LatestBlocks from '../../components/explorer/LatestBlocks';

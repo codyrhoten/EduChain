@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SearchBar from '../../components/explorer/SearchBar';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 

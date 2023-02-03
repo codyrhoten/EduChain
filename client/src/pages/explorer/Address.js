@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import Header from "../../components/Header";
+import Header from "../../components/Header/Header";
 import { Card, Container } from "react-bootstrap";
 import SearchBar from "../../components/explorer/SearchBar";
 import TxTable from "../../components/explorer/TxTable";

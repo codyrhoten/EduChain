@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useWallet } from '../../wallet-context';
 import { Container, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Header from "../../components/Header";
+import Header from "../../components/Header/Header";
 
-function WalletHome({ navLinks, setWalletStatus, walletStatus }) {
-    const links = (walletStatus === 'locked') ? navLinks.locked : navLinks.unlocked;
+function WalletHome({ navLinks, setWalletStatus }) {
+    const { isLocked } = useWallet();
+    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     return (
         <>
