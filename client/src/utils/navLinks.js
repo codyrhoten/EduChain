@@ -9,7 +9,6 @@ const navLinks = {
         locked: [
             { name: 'Explorer', url: '/' },
             { name: 'Home', url: '/wallet/home' },
-            { name: 'Create', url: '/wallet/create' },
             { name: 'Open', url: '/wallet/open' }
         ],
         unlocked: [

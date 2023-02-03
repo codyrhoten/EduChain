@@ -10,7 +10,6 @@ import TxDetails from './pages/explorer/TxDetails';
 import Address from './pages/explorer/Address';
 import Block from './pages/explorer/Block';
 import WalletHome from './pages/Wallet/WalletHome';
-import Create from './pages/Wallet/Create';
 import Open from './pages/Wallet/Open';
 import Balance from './pages/Wallet/Balance';
 import SendTx from './pages/Wallet/SendTx';
@@ -86,15 +85,6 @@ function App() {
                         path='/wallet/home'
                         element={
                             <WalletHome
-                                navLinks={navLinks.wallet}
-                                // setWalletStatus={setWalletStatus}
-                            />
-                        }
-                    />
-                    <Route
-                        path='/wallet/create'
-                        element={
-                            <Create
                                 navLinks={navLinks.wallet}
                                 // setWalletStatus={setWalletStatus}
                             />
