@@ -32,8 +32,8 @@ const TxTable = ({ txs }) => {
                                     </td>
                                     {/* <td>{t.timestamp}</td> */}
                                     <td>
-                                        {t.minedInBlock !== 'pending' ?
-                                                <i>Confirmed</i> : 
+                                        {t.minedInBlock !== undefined ?
+                                                <b>Confirmed</b> : 
                                                 <i>Pending</i>}
                                     </td>
                                     <td>

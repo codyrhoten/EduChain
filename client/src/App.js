@@ -29,10 +29,10 @@ function App() {
             const _blocks = await axios.get('http://localhost:5555/blocks');
             let _latestBlx = _blocks.data.slice(0, 5);
             let _latestTxs = await axios.get('http://localhost:5555/all-txs');
-            _latestTxs = _latestTxs.data.slice(0, 5);
+            _latestTxs = _latestTxs.data.reverse().slice(0, 5);
 
             setBlockchain({
-                blocks: _blocks,
+                blocks: _blocks.data,
                 latestBlx: _latestBlx,
                 latestTxs: _latestTxs,
             });

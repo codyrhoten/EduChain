@@ -4,11 +4,7 @@ import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-boo
 import { Link } from "react-router-dom";
 import Header from "../components/Header/Header";
 import { faucetAddress, faucetKeyPair } from '../utils/faucetDetails.js';
-const crypto = require("crypto");
-
-const SHA256 = message => {
-    return crypto.createHash("sha256").update(message).digest("hex");
-};
+import { sha256 } from '../utils/cryptography.js';
 
 function Faucet({ navLinks }) {
     const [faucet, setFaucet] = useState({});
@@ -55,7 +51,7 @@ function Faucet({ navLinks }) {
         };
 
         let txJson = JSON.stringify(transaction);
-        transaction.hash = SHA256(txJson);
+        transaction.hash = sha256(txJson);
 
 
         transaction.signature = faucetKeyPair.sign(transaction.hash);

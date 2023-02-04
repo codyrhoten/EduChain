@@ -11,7 +11,7 @@ const Block = ({ navLinks }) => {
     const [block, setBlock] = useState({});
 
     useEffect(() => {
-        (async function() {
+        (async function () {
             const _block = await axios.get(`http://localhost:5555/blocks/${blockIndex}`);
             setBlock(_block.data);
         })();
@@ -28,13 +28,9 @@ const Block = ({ navLinks }) => {
                         {block !== undefined && Object.keys(block).length > 0 ?
                             <Table responsive>
                                 <tbody>
-                                    {/* <tr>
-                                        <th>Status</th>
-                                        <td>{block.status}</td>
-                                    </tr> */}
                                     <tr>
                                         <th>Timestamp</th>
-                                        <td>{formatTimestamp(block)}</td>
+                                        <td>{formatTimestamp(block.timestamp)}</td>
                                     </tr>
                                     <tr>
                                         <th>Transactions</th>
@@ -47,16 +43,23 @@ const Block = ({ navLinks }) => {
                                                     bg='light'
                                                     style={{ color: 'rgb(95,158,160)' }}
                                                 >
-                                                    {block.transactions.length}
+                                                    {block.txs.length}
                                                 </Badge>
                                             </Link>
                                         </td>
                                     </tr>
-                                    {/* <tr>
-                                        <th>Mined by</th>
-                                        <td>{block.minedBy}</td>
-                                    </tr>
                                     <tr>
+                                        <th>Mined by</th>
+                                        <td>
+                                            <Link
+                                                to={`/address/${block.minedBy}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {block.minedBy}
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                    {/* <tr>
                                         <th>Reward</th>
                                         <td>{block.reward}</td>
                                     </tr> */}

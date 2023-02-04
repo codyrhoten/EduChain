@@ -89,7 +89,7 @@ function blockContent(block) {
     if (!hash(block.hash))
         return { errorMsg: `Block #${block.index} has invalid block hash format` };
 
-    if (!numberCheck(block.timeStamp))
+    if (!numberCheck(block.timestamp))
         return { errorMsg: `Block #${block.index} has invalid timestamp` };
 }
 

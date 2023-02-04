@@ -13,7 +13,7 @@ const Address = ({ navLinks }) => {
 
     useEffect(() => {
         (async function () {
-            const _addressData = await axios.get(`http://localhost:5555/address/${address}`);
+            const _addressData = await axios.get(`http://localhost:5555/address-data/${address}`);
             setAddressData({
                 balance: _addressData.data.balance,
                 txs: _addressData.data.txs.reverse()
@@ -28,14 +28,12 @@ const Address = ({ navLinks }) => {
                 <SearchBar />
                 <h4 align='center'>
                     Address: {address}<br />
-                    <i>Confirmed Balance: {addressData.balance.confirmed} SCH</i>
                 </h4>
-                <p align='center'>Safe Balance: {addressData.balance.safe}</p>
-                <p align='center'><i>Pending Balance: {addressData.balance.pending}</i></p>
+                <p align='center'><i>Confirmed Balance: {addressData.balance.confirmed}</i></p>
                 {addressData.txs.length > 0 ?
                     <TxTable txs={addressData.txs} /> :
                     <Card align='center' className='p-5'><b>
-                        There are no matching entries
+                        There are no matching addresses
                     </b></Card>}
             </Container>
         </>

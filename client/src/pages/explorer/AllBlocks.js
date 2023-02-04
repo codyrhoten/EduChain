@@ -4,7 +4,7 @@ import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const AllBlocks = ({ blocks, navLinks }) => {    
+const AllBlocks = ({ blocks, navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
@@ -28,15 +28,22 @@ const AllBlocks = ({ blocks, navLinks }) => {
                                     blocks.map((b, i) => (
                                         <tr key={i}>
                                             <td>
-                                                <Link 
+                                                <Link
                                                     to={`/block/${b.index}`}
                                                 >
                                                     {b.index}
                                                 </Link>
                                             </td>
-                                            <td>{formatTimestamp(b)}</td>
-                                            <td>{b.minedBy}</td>
-                                            <td>{b.transactions.length}</td>
+                                            <td>{formatTimestamp(b.timestamp)}</td>
+                                            <td>
+                                                <Link
+                                                    to={`/address/${b.minedBy}`}
+                                                    style={{ textDecoration: 'none' }}
+                                                >
+                                                    {b.minedBy}
+                                                </Link>
+                                            </td>
+                                            <td>{b.txs.length}</td>
                                             {/* <td>{b.reward}</td> */}
                                         </tr>
                                     ))

@@ -24,7 +24,7 @@ const SearchBar = () => {
     return (
         <Container>
             <Form.Label htmlFor='destination'>
-                <i>Axiom PoW Testnet Explorer</i>
+                <i>School PoW Testnet Explorer</i>
             </Form.Label>
             {error && <p><i>{error}</i></p>}
             <InputGroup className='mb-3'>

@@ -13,8 +13,9 @@ const TxDetails = ({ navLinks }) => {
     useEffect(() => {
         (async function () {
             const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
-            setTx(tx);
+            setTx(tx.data);
         })();
+        console.log(tx)
     }, [tx, txHash]);
 
     return (
@@ -35,10 +36,10 @@ const TxDetails = ({ navLinks }) => {
                                     {<tr>
                                         <th>Status</th>
                                         <td>
-                                            {tx.minedInBlock ? <i>Confirmed</i> : <i>Pending</i>}
+                                            {tx.minedInBlock !== undefined ? <b>Confirmed</b> : <i>Pending</i>}
                                         </td>
                                     </tr>}
-                                    {tx.minedInBlock !== 'pending' &&
+                                    {tx.minedInBlock !== undefined &&
                                         <>
                                             <tr>
                                                 <th>Block</th>
@@ -55,7 +56,7 @@ const TxDetails = ({ navLinks }) => {
                                                 <th>Timestamp</th>
                                                 <td>
                                                     {formatTimestamp(
-                                                        Number(tx.timeStamp)
+                                                        Number(tx.timestamp)
                                                     )}
                                                 </td>
                                             </tr>

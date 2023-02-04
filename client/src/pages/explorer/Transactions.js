@@ -27,7 +27,7 @@ const Transactions = ({ navLinks }) => {
                 );
             } else {
                 const txs = await axios.get('http://localhost:5555/all-txs');
-                setTxs(txs.data);
+                setTxs(txs.data.reverse());
                 setHeading(<h4 align='center'>All Transactions</h4>);
             }
         })();
