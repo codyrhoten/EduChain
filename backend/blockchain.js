@@ -341,10 +341,10 @@ class Blockchain {
             return { errorMsg: 'Genesis blocks do not match'};
 
         for (let i = 1; i < this.blocks.length; i++) {
-            const invalidBlock = this.isValidBlock(this.blocks[i], this.blocks[i - 1]);
+            const validBlock = this.isValidBlock(this.blocks[i], this.blocks[i - 1]);
 
-            if (invalidBlock) {
-                return { errorMsg: `Block #${this.blocks[i].index}: ${invalidBlock.errorMsg}`};
+            if (validBlock.errorMsg) {
+                return { errorMsg: invalidBlock.errorMsg};
             }
         }
 

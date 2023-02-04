@@ -49,7 +49,7 @@ function signature(signature) {
 }
 
 function hash(hash) {
-    if (typeof hash !== 'string' || !(/^[0-9a-f]{64}$/.test(hash))) return false;
+    if (typeof hash !== 'string' || !(/^[0-9a-f]{65}$/.test(hash))) return false;
     return true;
 }
 

@@ -1,10 +1,10 @@
 const elliptic = require("elliptic");
 const ec = new elliptic.ec("secp256k1");
 
-const faucetPrivKey = 'e0e34f0d30bdd3f13cf933e06eec2be0cd51a9f35a69c24672e86b928cef8c9f';
-const faucetPubKey = '26e100c75f11f56255b76b6d8d836c2409ffd7a7d731e2d08c93c4e53de84430';
+const faucetPrivKey = '784fdfed3e9d7f92dbca9639c6de3a07ab1aabed0de1c0c7f5b5672851c5dcea';
+const faucetPubKey = '2acf4b8bbd3fa38956bf859e0cef8d8805dca1f94155b7fb2f8e9401aba9b3171';
 const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
-const faucetAddress = 'ffdf1e6e821336ca9ee468aa4f60f526e440a83e';
+const faucetAddress = 'b89682fa1e3b1bc519a9774a9882e0059591948b';
 
 const schoolChainPubKey = '00000000000000000000000000000000000000000000000000000000000000000';
 const schoolChainAddress = '0000000000000000000000000000000000000000';

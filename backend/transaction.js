@@ -37,7 +37,7 @@ class Transaction {
             senderPubKey: this.senderPubKey
         };
         const txDataJson = JSON.stringify(txData);
-        this.hash = sha256(txDataJson, 'base64');
+        this.hash = sha256(txDataJson);
     }
 
     sign(signerPrivKey) {

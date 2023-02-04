@@ -53,7 +53,7 @@ const TxTable = ({ txs }) => {
                                         </Link>
                                     </td>
                                     <td>{t.amount}</td>
-                                    <td>{t.gas}</td>
+                                    <td>{t.fee}</td>
                                 </tr>
                             ))
                         }

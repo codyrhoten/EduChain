@@ -34,12 +34,12 @@ class Block {
             minedBy: this.minedBy
         };
         const blockDataJson = JSON.stringify(blockData);
-        this.dataHash = sha256(blockDataJson, 'base64');
+        this.dataHash = sha256(blockDataJson);
     }
 
     getHash() {
         const dataString = `${this.dataHash}|${String(this.timestamp)}|${String(this.nonce)}`;
-        this.hash = sha256(dataString, 'base64');
+        this.hash = sha256(dataString);
     }
 
 

@@ -54,12 +54,10 @@ class NetworkNode {
         }
 
         const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
+        const validChain = this.schoolChain.isValidChain(peerBlocks);
 
-        // invalidSchoolChain will be undefined if chain is valid
-        const invalidSchoolChain = this.schoolChain.isValidChain(peerBlocks);
-
-        if (invalidSchoolChain) {
-            return invalidSchoolChain;
+        if (validChain.errorMsg) {
+            return validChain; // errorMsg
         } else {
             this.miningJobs = {};
 
