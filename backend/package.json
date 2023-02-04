@@ -2,7 +2,7 @@
     "name": "blockchain_explorer",
     "version": "1.0.0",
     "description": "interaction with a blockchain with wallet and faucet capability",
-    "main": "index.js",
+    "main": "api.js",
     "scripts": {
         "test": "test",
         "type": "module"
@@ -21,6 +21,11 @@
         "cors": "^2.8.5",
         "elliptic": "^6.5.4",
         "express": "^4.18.2",
-        "js-sha3": "^0.8.0"
+        "ethers": "^6.0.0",
+        "uuid": "^9.0.0",
+        "crypto-js": "^4.1.1",
+        "axios": "^1.2.4",
+        "bip39": "^3.0.4",
+        "body-parser": "^1.20.1"
     }
 }

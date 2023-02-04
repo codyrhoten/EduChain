@@ -46,7 +46,6 @@ class Blockchain {
         return genesisBlock;
     }
 
-
     getConfirmedTxs() {
         let txs = [];
         this.blocks.forEach(block => txs.push(...block.txs));
@@ -143,11 +142,13 @@ class Blockchain {
             return { errorMsg: `Tx ${txData.hash} already exists` };
         }
 
-        if (!verify(tx.hash, tx.senderPubKey, tx.senderSig))
+        if (!verify(tx.hash, tx.senderPubKey, tx.senderSig)) {
             return { errorMsg: `Signature of tx ${tx.hash} could not be verified` };
+        }
 
-        if (balance.confirmed < tx.amount + tx.fee)
+        if (balance.confirmed < tx.amount + tx.fee) {
             return { errorMsg: `Insufficient funds in sender's account at address: ${tx.from}`};
+        }
 
         this.pendingTxs.push(tx);
         return tx;
@@ -350,20 +351,6 @@ class Blockchain {
 
         return true;
     }
-
-
-    /* getLastBlock() {
-        return this.chain[this.chain.length - 1];
-    }
-
-    addBlock(block) {
-        const lastBlockTimestamp = parseInt(this.getLastBlock().timeStamp);
-        block.prevHash = this.getLastBlock().hash;
-        block.hash = block.getHash();
-        block.mine(this.difficulty);
-        this.chain.push(block);
-        this.difficulty += Date.now() - lastBlockTimestamp < this.blockTime ? 1 : -1;
-    } */
 }
 
 module.exports = Blockchain;
