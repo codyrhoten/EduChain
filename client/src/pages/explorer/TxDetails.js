@@ -16,7 +16,7 @@ const TxDetails = ({ navLinks }) => {
             const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
             setTx(tx.data);
             if (tx.data.errorMsg) setError(tx.data.errorMsg);
-            console.log(tx.data, tx.data.errorMsg)
+            console.log(tx.data.errorMsg)
         })();
     }, []);
 

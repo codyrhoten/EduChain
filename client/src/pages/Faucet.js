@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { faucetAddress, faucetPrivKey, faucetPubKey, miningAddress } from '../utils/accounts.js';
+import { sha256, sign } from '../utils/cryptography.js';
+import axios from "axios";
+import Header from "../components/Header/Header";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Header from "../components/Header/Header";
-import { faucetAddress, faucetPrivKey, faucetPubKey } from '../utils/faucetDetails.js';
-import { sha256, sign } from '../utils/cryptography.js';
 
 function Faucet({ navLinks }) {
     const [faucet, setFaucet] = useState({});
@@ -13,7 +13,7 @@ function Faucet({ navLinks }) {
     const [txHash, setTxHash] = useState('');
     const [error, setError] = useState('');
     const [search, setSearch] = useState('');
-    const searchInput = useRef();
+    const searchInput = useRef('');
     const handleShow = () => setShow(true);
 
     async function getBalance() {
@@ -27,27 +27,49 @@ function Faucet({ navLinks }) {
         getBalance();
     }, []);
 
-    async function sendTx (tx) {
-        const config = {
-            Footers: {
-                'Content-Type': 'application/json',
-            },
-        };
+    async function sendTx(tx) {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
 
-        const result = await axios.post(
-            `https://localhost:5555/txs/send`,
-            tx,
-            config
-        );
+            const response = await axios.post(
+                `https://localhost:5555/txs/send`,
+                tx,
+                config
+            );
 
-        if (result.errorMsg) {
-            setError(result.errorMsg);
-            return;
-        } else {
-            setTxHash(tx.hash);
-            handleShow();
+            if (response.data.errorMsg) {
+                setError(response.data.errorMsg);
+                return;
+            } else {
+                setTxHash(tx.hash);
+                handleShow();
+                mineBlock();
+            }
+        } catch (err) {
+            console.log(err);
+            setError('Transaction failed to send.');
         }
     };
+
+    async function mineBlock() {
+        try {
+            const response = await axios.post(
+                `http://localhost:5555/mine/${miningAddress}`,
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            if (response.data.errorMsg) {
+                setError(`Mining Error: ${response.data.errorMsg}`);
+            }
+        } catch (err) {
+            console.log(err);
+            setError('Mining request failed.');
+        }
+    }
 
     const processTx = () => {
         const inputAddress = searchInput.current.value;
@@ -71,7 +93,7 @@ function Faucet({ navLinks }) {
         const txDataJson = JSON.stringify(transaction);
         transaction.hash = sha256(txDataJson);
 
-        transaction.signature = sign(faucetPrivKey, transaction.hash);
+        transaction.senderSig = sign(faucetPrivKey, transaction.hash);
         sendTx(transaction);
         setError('');
     };

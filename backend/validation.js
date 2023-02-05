@@ -40,8 +40,8 @@ function signature(signature) {
     if (
         !Array.isArray(signature) ||
         signature.length !== 2 ||
-        !(/^[0-9a-f]{64}$/.test(signature[0])) ||
-        !(/^[0-9a-f]{64}$/.test(signature[1]))
+        !hash(signature[0]) ||
+        !hash(signature[1])
     )
         return false;
 
@@ -49,7 +49,7 @@ function signature(signature) {
 }
 
 function hash(hash) {
-    if (typeof hash !== 'string' || !(/^[0-9a-f]{65}$/.test(hash))) return false;
+    if (typeof hash !== 'string' || !(/^[0-9a-f]{64}$/.test(hash))) return false;
     return true;
 }
 

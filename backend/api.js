@@ -143,7 +143,6 @@ app.post('/txs/send', (req, res, next) => {
     }
 });
 
-
 app.get('/peers', (req, res, next) => {
     try {
         res.json(node.peers);
@@ -229,13 +228,13 @@ app.post('/peers/new-block', (req, res, next) => {
 app.post('/mine/:address', (req, res, next) => {
     try {
         const address = req.params.address;
-        if (!valid.address(address)) return { errorMsg: 'Invalid address' };
+        if (!valid.address(address)) res.json({ errorMsg: 'Invalid address' });
         const newBlock = node.schoolChain.mineBlock(address);
 
         if (newBlock.errorMsg) {
             res.status(400).json(newBlock);
         } else {
-            res.json({ msg: `Block accepted. Reward paid: ${newBlock.txs[0].amount} microcoins`});
+            res.json({ msg: `Block accepted. Reward of ${newBlock.txs[0].amount} (SCH) paid to ${address}`});
             node.notifyPeersOfBlock();
         }
     } catch (err) {

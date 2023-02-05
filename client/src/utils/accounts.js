@@ -2,4 +2,6 @@ const faucetPrivKey = '784fdfed3e9d7f92dbca9639c6de3a07ab1aabed0de1c0c7f5b567285
 const faucetPubKey = '2acf4b8bbd3fa38956bf859e0cef8d8805dca1f94155b7fb2f8e9401aba9b3171';
 const faucetAddress = 'b89682fa1e3b1bc519a9774a9882e0059591948b';
 
-export { faucetPrivKey, faucetAddress, faucetPubKey };
+const miningAddress = '351fb7f8ec2ac5b4890a6d12616f63f2a05af102';
+
+export { faucetPrivKey, faucetAddress, faucetPubKey, miningAddress };

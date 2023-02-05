@@ -17,8 +17,6 @@ function Open({ navLinks }) {
                 <>
                     <p><i>Private Key:</i> {sessionStorage['privKey']}</p>
                     <br />
-                    <p><i>Public Key:</i> {sessionStorage['pubKey']}</p>
-                    <br />
                     <p><i>Address:</i> {sessionStorage['address']}</p>
                 </>
             );
