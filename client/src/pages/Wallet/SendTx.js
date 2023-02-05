@@ -29,10 +29,13 @@ function SendTx({ navLinks }) {
     }
 
     function signTx() {
-        const validAddress = /^[0-9a-f]{40}$/.test(recipient.current);
-        const validAmount = /^\d*\.?\d*$/.test(amount.current);
+        const { value: _amount } = amount.current;
+        const { value: _recipient } = recipient.current;
+        console.log("amount and recipient", _amount, _recipient)
+        const validAddress = /^[0-9a-f]{40}$/.test(_recipient);
+        const validAmount = /^\d*\.?\d*$/.test(_amount);
 
-        if (!amount || !recipient) {
+        if (!_amount || !_recipient) {
             setError('Make sure there is a recipient and an amount.');
             return;
         } else if (!validAddress) {
@@ -44,9 +47,9 @@ function SendTx({ navLinks }) {
         } else {
             const transaction = {
                 from: sessionStorage['address'],
-                to: recipient.current,
-                amount: Number(amount.current),
-                fee: fee.current,
+                to: _recipient,
+                amount: Number(_amount),
+                fee: fee.current.value,
                 timestamp: Date.now(),
                 senderPubKey: sessionStorage['pubKey'],
             };
@@ -56,9 +59,9 @@ function SendTx({ navLinks }) {
             transaction.senderSig = sign(sessionStorage['privKey'], transaction.hash);
 
             const txJson = JSON.stringify(transaction);
-            signedTx.current.value = txJson;
+            signedTx.current = txJson;
             setIsSigned(true);
-            setShow(false);
+            // setShow(false);
         }
     }
 
@@ -73,7 +76,7 @@ function SendTx({ navLinks }) {
             const response = await axios.post(
                 `http://localhost:5555/txs/send`,
                 signedTx,
-                config
+                config,
             );
 
             if (response.data.errorMsg) {

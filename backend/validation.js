@@ -53,6 +53,11 @@ function hash(hash) {
     return true;
 }
 
+function pubKeyHash(hash) {
+    if (typeof hash !== 'string' || !(/^[0-9a-f]{65}$/.test(hash))) return false;
+    return true;
+}
+
 function txContent(data) {
     const senderAddress = pubKeyToAddress(data.senderPubKey);
     if (!address(data.from)) return { errorMsg: `Tx ${data.hash} has invalid sender address` };
@@ -62,7 +67,7 @@ function txContent(data) {
     if (!numberCheck(data.timestamp)) return { errorMsg: `Tx ${data.hash} has invalid timestamp` };
     if (!signature(data.senderSig)) return { errorMsg: `Tx ${data.hash} has invalid signature` };
 
-    if (!hash(data.senderPubKey)) 
+    if (!pubKeyHash(data.senderPubKey)) 
         return { errorMsg: `Tx ${data.hash} has invalid sender public key` };
 
     if (senderAddress !== data.from)

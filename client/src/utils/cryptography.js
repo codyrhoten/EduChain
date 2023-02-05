@@ -41,12 +41,13 @@ function pubKeyToAddress(pubKey) {
 }
 
 function verify(txHash, senderPubKey, sig) {
-    let pubKeyX = senderPubKey.substring(0, 63);
-    let pubKeyYOdd = parseInt(senderPubKey.substring(63));
+    console.log(txHash, senderPubKey, sig);
+    let pubKeyX = senderPubKey.substring(0, 64);
+    let pubKeyYOdd = parseInt(senderPubKey.substring(64));
     const decompressedPubKey = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
     const keyPair = ec.keyPair({ pub: decompressedPubKey });
     const valid = keyPair.verify(txHash, { r: sig[0], s: sig[1] });
     return valid;
 }
 
-export { generateKeyPair, createWallet, sha256, sign, keyPairFromPrivKey };
+export { generateKeyPair, createWallet, sha256, sign, keyPairFromPrivKey, verify };

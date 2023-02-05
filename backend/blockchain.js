@@ -8,6 +8,10 @@ const {
 } = require('./accounts.js');
 const { verify } = require('./cryptography.js');
 const valid = require('./validation.js');
+// import crypto from 'crypto-js';
+// import elliptic from 'elliptic';
+
+// const ec = new elliptic.ec('secp256k1');
 
 class Blockchain {
     constructor() {
@@ -143,6 +147,7 @@ class Blockchain {
         }
 
         if (!verify(tx.hash, tx.senderPubKey, tx.senderSig)) {
+            // console.log(tx.hash, tx.senderPubKey, tx.senderSig)
             return { errorMsg: `Signature of tx ${tx.hash} could not be verified` };
         }
 
@@ -279,6 +284,14 @@ class Blockchain {
         }
 
         // check signature validity
+            // console.log(txHash, senderPubKey, sig);
+            // let pubKeyX = senderPubKey.substring(0, 63);
+            // let pubKeyYOdd = parseInt(senderPubKey.substring(63));
+            // const decompressedPubKey = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
+            // const keyPair = ec.keyPair({ pub: decompressedPubKey });
+            // const valid = keyPair.verify(txHash, { r: sig[0], s: sig[1] });
+            // console.log(valid)
+
         if (!verify(tx.hash, tx.senderPubKey, tx.senderSig)) {
             return { errorMsg: `Signature in tx ${tx.hash} could not be verified` };
         }

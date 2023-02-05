@@ -1,6 +1,10 @@
 const crypto = require('crypto-js');
-const elliptic = require('elliptic');
-const ec = new elliptic.ec('secp256k1');
+// const elliptic = require('elliptic');
+// const ec = new elliptic.ec('secp256k1');
+
+// const CryptoJS = require("crypto-js");
+const EC = require("elliptic").ec;
+const ec = new EC("secp256k1");
 
 function sha256(message) {
     return crypto.SHA256(message).toString();

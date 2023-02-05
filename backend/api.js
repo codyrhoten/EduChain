@@ -154,39 +154,45 @@ app.get('/peers', (req, res, next) => {
 
 app.post('/peers/connect', async (req, res, next) => {
     const peer = req.body.peer;
+    console.log(peer)
+    let peerInfo = {};
     if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
 
     try {
-        const peerInfo = await axios.get(peer + '/info');
-
-        // Check whether connecting node is also the user's node
-        if (node.id === peerInfo.data.id) {
-            res.status(409).json({ errorMsg: 'Cannot connect to self' });
-            // Check whether connecting node is already connected
-        } else if (node.peers[peerInfo.data.id]) {
-            res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
-        } else {
-            node.peers[peerInfo.data.id] = peer;
-
-            // 2-way connection between peers
-            axios.post(`${peer}/peers/complete-connection`, { peer: node.url });
-
-            const chainSync = node.syncChain(peerInfo.data);
-            if (chainSync.errorMsg) res.status(400).json(chainSync);
-
-            const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
-            if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
-
-            res.json({ msg: `Connected to peer: ${peer}`});
-        }
+        peerInfo = await axios.get(peer + '/info');
     } catch (err) {
-        res.status(400).json({ errorMsg: `Cannot connect to peer: ${peer}`});
-        next(err);
+        res.json({ errorMsg: 'Cannot get peer info due to ' + err.message });
+    }
+
+    // Check whether connecting node is also the user's node
+    if (node.id === peerInfo.data.id) {
+        res.status(409).json({ errorMsg: 'Cannot connect to self' });
+        // Check whether connecting node is already connected
+    } else if (node.peers[peerInfo.data.id]) {
+        res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
+    } else {
+        console.log(peerInfo)
+        node.peers[peerInfo.data.id] = peer;
+
+        // 2-way connection between peers
+        try {
+            const result = await axios.get(`${peer}/peer/${node.url}`);
+        } catch (err) {
+            res.status(400).json({ errorMsg: `Cannot connect other peer ${peer} to this node` });
+        }
+
+        const chainSync = node.syncChain(peerInfo.data);
+        if (chainSync.errorMsg) res.status(400).json(chainSync);
+
+        const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
+        if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
+
+        res.json({ msg: `Connected to peer: ${peer}` });
     }
 });
 
-app.post('/peers/complete-connection', async (req, res, next) => {
-    const peer = req.body.peer;
+app.get('/peer/:peer', async (req, res, next) => {
+    const peer = req.params.peer;
     if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
 
     try {
@@ -199,18 +205,19 @@ app.post('/peers/complete-connection', async (req, res, next) => {
         } else if (node.peers[peerInfo.data.id]) {
             res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
         } else {
+            console.log('peerURL in mutual connection:', node.url)
             node.peers[peerInfo.data.id] = peer;
-            
+
             const chainSync = node.syncChain(peerInfo.data);
             if (chainSync.errorMsg) res.status(400).json(chainSync);
 
             const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
             if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
 
-            res.json({ msg: `Also connected to peer: ${peer}`});
+            res.json({ msg: `Also connected to peer: ${peer}` });
         }
     } catch (err) {
-        res.status(400).json({ errorMsg: `Cannot connect to peer: ${peer}`});
+        res.status(400).json({ errorMsg: `Cannot connect to peer: ${peer}` });
         next(err);
     }
 });
@@ -234,7 +241,7 @@ app.post('/mine/:address', (req, res, next) => {
         if (newBlock.errorMsg) {
             res.status(400).json(newBlock);
         } else {
-            res.json({ msg: `Block accepted. Reward of ${newBlock.txs[0].amount} (SCH) paid to ${address}`});
+            res.json({ msg: `Block accepted. Reward of ${newBlock.txs[0].amount} (SCH) paid to ${address}` });
             node.notifyPeersOfBlock();
         }
     } catch (err) {

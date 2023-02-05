@@ -29,20 +29,31 @@ function Faucet({ navLinks }) {
 
     async function sendTx(tx) {
         try {
-            const config = {
+            /* const config = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                httpsAgent: new https.Agent({ rejectUnauthorized: false})
             };
 
             const response = await axios.post(
                 `https://localhost:5555/txs/send`,
                 tx,
                 config
-            );
+            ); */
 
-            if (response.data.errorMsg) {
-                setError(response.data.errorMsg);
+            const response = await fetch('http://localhost:5555/txs/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tx),
+            });
+
+            const data = await response.json();
+
+            if (data.errorMsg) {
+                setError(data.errorMsg);
                 return;
             } else {
                 setTxHash(tx.hash);
