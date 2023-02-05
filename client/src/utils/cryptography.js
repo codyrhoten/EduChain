@@ -42,4 +42,4 @@ function verify(txHash, senderPubKey, sig) {
     return valid;
 }
 
-export { createWallet, sha256 };
+export { createWallet, sha256, sign };

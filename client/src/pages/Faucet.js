@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../components/Header/Header";
-import { faucetAddress, faucetKeyPair } from '../utils/faucetDetails.js';
-import { sha256 } from '../utils/cryptography.js';
+import { faucetAddress, faucetPrivKey, faucetPubKey } from '../utils/faucetDetails.js';
+import { sha256, sign } from '../utils/cryptography.js';
 
 function Faucet({ navLinks }) {
     const [faucet, setFaucet] = useState({});
@@ -17,8 +17,8 @@ function Faucet({ navLinks }) {
     const handleShow = () => setShow(true);
 
     async function getBalance() {
-        const balance = await axios.get(`http://localhost:5555/address/${faucetAddress}`);
-        setBalance(balance.data.balance);
+        const addressData = await axios.get(`http://localhost:5555/address-data/${faucetAddress}`);
+        setBalance(addressData.data.balance.confirmed);
     }
 
     useEffect(() => {
@@ -27,13 +27,25 @@ function Faucet({ navLinks }) {
         getBalance();
     }, []);
 
-    const sendTx = tx => {
-        setTxHash(tx.hash);
-        handleShow();
-        console.log(`tx ${tx.hash} not sent because there's no node yet`);
+    async function sendTx (tx) {
+        const config = {
+            Footers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        const result = await axios.post(`https://localhost:5555/txs/send`);
+
+        if (result.errorMsg) {
+            setError(result.errorMsg);
+            return;
+        } else {
+            setTxHash(tx.hash);
+            handleShow();
+        }
     };
 
-    const signTx = () => {
+    const processTx = () => {
         const inputAddress = searchInput.current.value;
         setSearch(inputAddress);
         const validAddress = /^[0-9a-f]{40}$/.test(inputAddress);
@@ -46,15 +58,16 @@ function Faucet({ navLinks }) {
         let transaction = {
             from: faucetAddress,
             to: inputAddress,
-            amount: 1,
-            gas: 0
+            amount: 5,
+            fee: 0,
+            timestamp: Date.now(),
+            senderPubKey: faucetPubKey
         };
 
-        let txJson = JSON.stringify(transaction);
-        transaction.hash = sha256(txJson);
+        const txDataJson = JSON.stringify(transaction);
+        transaction.hash = sha256(txDataJson);
 
-
-        transaction.signature = faucetKeyPair.sign(transaction.hash);
+        transaction.signature = sign(faucetPrivKey, transaction.hash);
         sendTx(transaction);
         setError('');
     };
@@ -76,7 +89,7 @@ function Faucet({ navLinks }) {
                     </Modal.Header>
                     <Modal.Body className='text-break'>
                         <p className='text-center fs-5 m-0'>
-                            We sent 3 coins to address{' '}
+                            We sent 5 coins to address{' '}
                             <Link
                                 to={`/address/${search}`}
                                 style={{ fontSize: '16px', textDecoration: 'none' }}
@@ -96,9 +109,9 @@ function Faucet({ navLinks }) {
                     </Modal.Body>
                 </Modal>
                 <Container align='center'>
-                    <h1>Axiom Faucet</h1>
+                    <h1>School Faucet</h1>
                     <Col className='lead'>
-                        This faucet allows you to receive Axiom coins for free.
+                        This faucet allows you to receive School coins for free.
                     </Col>
                     <Col className='fs-4'>available balance: {balance} coins</Col>
                 </Container>
@@ -117,7 +130,7 @@ function Faucet({ navLinks }) {
                         {
                             !txHash &&
                             <Button
-                                onClick={signTx}
+                                onClick={processTx}
                                 className='p-2 mt-3 w-100 button-solid'
                                 style={{
                                     backgroundColor: 'rgb(255, 223, 0)',

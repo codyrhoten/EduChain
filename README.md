@@ -9,8 +9,10 @@ Explore a blockchain and interact with it using a wallet and faucet. Send transa
 ```sh
 npm install
 
+// in one terminal, run:
 npm run dev
 
+// in another terminal, run:
 npm start
 ```
 
@@ -57,7 +59,7 @@ npm start
 
 ## Miner
 
-- Mines when there are pending transactions
+- Auotomatically mines when there are pending transactions
 
 ## Created by
 

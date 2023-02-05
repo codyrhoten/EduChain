@@ -9,14 +9,16 @@ import formatTimestamp from '../../utils/formatTimestamp';
 const TxDetails = ({ navLinks }) => {
     const { txHash } = useParams();
     const [tx, setTx] = useState({});
+    const [error, setError] = useState('')
 
     useEffect(() => {
         (async function () {
             const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
             setTx(tx.data);
+            if (tx.data.errorMsg) setError(tx.data.errorMsg);
+            console.log(tx.data, tx.data.errorMsg)
         })();
-        console.log(tx)
-    }, [tx, txHash]);
+    }, []);
 
     return (
         <>
@@ -26,7 +28,7 @@ const TxDetails = ({ navLinks }) => {
                 <h4 align='center'>Transaction Details</h4>
                 <Card>
                     <Card.Body>
-                        {tx !== undefined && Object.keys(tx).length > 0 ?
+                        {!error && tx !== undefined && Object.keys(tx).length > 0 ?
                             <Table responsive>
                                 <tbody>
                                     <tr>

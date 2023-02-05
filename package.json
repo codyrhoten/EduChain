@@ -26,7 +26,11 @@
   },
   "homepage": "https://github.com/codyrhoten/Blockchain_Explorer#readme",
   "dependencies": {
-    "concurrently": "^7.6.0"
+    "bip39": "^3.0.4",
+    "concurrently": "^7.6.0",
+    "crypto-js": "^4.1.1",
+    "ethers": "^5.7.2",
+    "secp256k1": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
