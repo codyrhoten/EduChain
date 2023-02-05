@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useWallet } from '../../wallet-context';
-import { createWallet } from '../../utils/cryptography.js';
+import { generateKeyPair, createWallet } from '../../utils/cryptography.js';
 import { Container, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
@@ -25,7 +25,8 @@ function WalletHome({ navLinks, setWalletStatus }) {
     }
 
     function handleClick() {
-        const wallet = createWallet();
+        const keyPair = generateKeyPair();
+        const wallet = createWallet(keyPair);
         sessionStorage['privKey'] = wallet.privKey;
         sessionStorage['pubKey'] = wallet.pubKey;
         sessionStorage['address'] = wallet.address;
@@ -35,9 +36,9 @@ function WalletHome({ navLinks, setWalletStatus }) {
 
     return (
         <>
-            <Header navLinks={links} setWalletStatus={setWalletStatus} />
+            <Header navLinks={links} />
             <Container className='text-center'>
-                <h1 className='mt-3'>School Wallet Home</h1>
+                <h1 className='mt-3'>School Wallet</h1>
                 {
                     !isCreated ? (
                         <>
@@ -64,24 +65,22 @@ function WalletHome({ navLinks, setWalletStatus }) {
                             )}
                         </>
                     ) : (
-                        <>
-                            <button
-                                className='rounded my-3 px-4 py-3'
-                                style={{
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                    backgroundColor: 'rgb(255, 255, 51)',
-                                    fontFamily: 'Fragment Mono'
-                                }}
-                                disabled
-                            >
-                                Wallet created successfully!
-                            </button>
-                            <div className='mt-2'>{displayWallet()}</div>
-                        </>
+                        <button
+                            className='rounded my-3 px-4 py-3'
+                            style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                                backgroundColor: 'rgb(255, 255, 51)',
+                                fontFamily: 'Fragment Mono'
+                            }}
+                            disabled
+                        >
+                            Wallet created successfully!
+                        </button>
                     )
                 }
-            </Container>
+                < div className='mt-2'>{displayWallet()}</div>
+        </Container>
         </>
     );
 }

@@ -3,6 +3,14 @@ import elliptic from 'elliptic';
 
 const ec = new elliptic.ec('secp256k1');
 
+function generateKeyPair() {
+    return ec.genKeyPair();
+}
+
+function keyPairFromPrivKey(privKey) {
+    return ec.keyFromPrivate(privKey);
+}
+
 function privKeyToPubKey(privKey) {
     let keyPair = ec.keyFromPrivate(privKey);
     let pubKey = 
@@ -11,8 +19,7 @@ function privKeyToPubKey(privKey) {
     return pubKey;
 }
 
-function createWallet() {
-    const keyPair = ec.genKeyPair();
+function createWallet(keyPair) {
     const privKey = keyPair.getPrivate('hex');
     const pubKey = privKeyToPubKey(privKey);
     const address = pubKeyToAddress(pubKey);
@@ -42,4 +49,4 @@ function verify(txHash, senderPubKey, sig) {
     return valid;
 }
 
-export { createWallet, sha256, sign };
+export { generateKeyPair, createWallet, sha256, sign, keyPairFromPrivKey };

@@ -34,7 +34,11 @@ function Faucet({ navLinks }) {
             },
         };
 
-        const result = await axios.post(`https://localhost:5555/txs/send`);
+        const result = await axios.post(
+            `https://localhost:5555/txs/send`,
+            tx,
+            config
+        );
 
         if (result.errorMsg) {
             setError(result.errorMsg);
