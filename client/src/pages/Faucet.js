@@ -29,19 +29,6 @@ function Faucet({ navLinks }) {
 
     async function sendTx(tx) {
         try {
-            /* const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                httpsAgent: new https.Agent({ rejectUnauthorized: false})
-            };
-
-            const response = await axios.post(
-                `https://localhost:5555/txs/send`,
-                tx,
-                config
-            ); */
-
             const response = await fetch('http://localhost:5555/txs/send', {
                 method: 'POST',
                 headers: {
@@ -96,7 +83,7 @@ function Faucet({ navLinks }) {
             from: faucetAddress,
             to: inputAddress,
             amount: 5,
-            fee: 0,
+            fee: 10,
             timestamp: Date.now(),
             senderPubKey: faucetPubKey
         };

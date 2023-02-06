@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header/Header';
 import { Badge, Card, Container, Table } from 'react-bootstrap';
-import SearchBar from '../../components/explorer/SearchBar';
 import { useParams, Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 
@@ -20,8 +19,8 @@ const Block = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
+            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
             <Container>
-                <SearchBar />
                 <h4 align='center'>Block # {blockIndex}</h4>
                 <Card>
                     <Card.Body>

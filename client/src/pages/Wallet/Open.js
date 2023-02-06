@@ -43,7 +43,7 @@ function Open({ navLinks }) {
         <>
             <Header navLinks={links} />
             <Container className='text-center'>
-                <h1 className='mt-3'>Open Wallet</h1>
+                <h1 className='mt-3'><i>Open Wallet</i></h1>
                 {
                     !isOpen ? (
                         <>

@@ -1,6 +1,5 @@
 import { Card, Container, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
@@ -8,8 +7,8 @@ const AllBlocks = ({ blocks, navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
+            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
             <Container>
-                <SearchBar />
                 <Card>
                     <Card.Body>
                         <Card.Title>Blocks</Card.Title>

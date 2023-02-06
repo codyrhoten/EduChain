@@ -159,7 +159,10 @@ app.post('/peers/connect', async (req, res, next) => {
     if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
 
     try {
-        peerInfo = await axios.get(peer + '/info');
+        peerInfo = await axios.get(peer + '/info')
+            .catch(function (err) {
+                console.log(err.toJSON());
+            });
     } catch (err) {
         res.json({ errorMsg: 'Cannot get peer info due to ' + err.message });
     }
@@ -176,7 +179,10 @@ app.post('/peers/connect', async (req, res, next) => {
 
         // 2-way connection between peers
         try {
-            const result = await axios.get(`${peer}/peer/${node.url}`);
+            const result = await axios.get(`${peer}/peer/${node.url}`)
+                .catch(function (err) {
+                    console.log(err.toJSON());
+                });
         } catch (err) {
             res.status(400).json({ errorMsg: `Cannot connect other peer ${peer} to this node` });
         }
@@ -191,7 +197,7 @@ app.post('/peers/connect', async (req, res, next) => {
     }
 });
 
-app.get('/peer/:peer', async (req, res, next) => {
+app.get('/peer/:nodeId', async (req, res, next) => {
     const peer = req.params.peer;
     if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
 

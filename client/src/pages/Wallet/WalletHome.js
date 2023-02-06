@@ -36,7 +36,7 @@ function WalletHome({ navLinks, setWalletStatus }) {
         <>
             <Header navLinks={links} />
             <Container className='text-center'>
-                <h1 className='mt-3'>School Wallet</h1>
+                <h1 className='mt-3'><i>School Wallet</i></h1>
                 {
                     !isCreated ? (
                         <>

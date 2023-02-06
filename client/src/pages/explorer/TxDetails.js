@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import SearchBar from '../../components/explorer/SearchBar';
 import Header from '../../components/Header/Header';
 import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
@@ -16,15 +15,14 @@ const TxDetails = ({ navLinks }) => {
             const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
             setTx(tx.data);
             if (tx.data.errorMsg) setError(tx.data.errorMsg);
-            console.log(tx.data.errorMsg)
         })();
     }, []);
 
     return (
         <>
             <Header navLinks={navLinks} />
+            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
             <Container>
-                <SearchBar />
                 <h4 align='center'>Transaction Details</h4>
                 <Card>
                     <Card.Body>

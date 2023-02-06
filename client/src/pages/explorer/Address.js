@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import Header from "../../components/Header/Header";
 import { Card, Container } from "react-bootstrap";
-import SearchBar from "../../components/explorer/SearchBar";
 import TxTable from "../../components/explorer/TxTable";
 
 const Address = ({ navLinks }) => {
@@ -24,8 +23,8 @@ const Address = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
+            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
             <Container>
-                <SearchBar />
                 <h4 align='center'>
                     Address: {address}<br />
                 </h4>

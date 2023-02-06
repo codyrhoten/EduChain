@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
-import SearchBar from '../../components/explorer/SearchBar';
 import TxTable from '../../components/explorer/TxTable';
 
 const Transactions = ({ navLinks }) => {
@@ -36,8 +35,8 @@ const Transactions = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
+            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
             <Container>
-                <SearchBar />
                 {heading}
                 {txs.length > 0 && <TxTable txs={txs} />}
             </Container>

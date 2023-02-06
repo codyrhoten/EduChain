@@ -26,7 +26,7 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
         <>
             <Header navLinks={links} />
             <Container >
-                <h1 className='text-center'>Your Balance</h1>
+                <h1 className='text-center'><i>Your Balance</i></h1>
                 <Card>
                     <Table>
                         <thead>
