@@ -1,7 +1,7 @@
 # School Chain
 
 <p align="center">
-  <img  src="public/home-pg.png" alt="home page" />
+  <img  src="/client/public/home-pg.png" alt="home page" />
 </p>
 
 ## About
@@ -38,7 +38,7 @@ npm start
 ### Wallet
 
 <p align="center">
-  <img  src="public/wallet-home-pg.png" alt="wallet home page" />
+  <img  src="/client/public/wallet-home-pg.png" alt="wallet home page" />
 </p>
 
 - Wallet key and address derivation
@@ -49,7 +49,7 @@ npm start
 ### Faucet
 
 <p align="center">
-  <img  src="public/faucet-pg.png" alt="faucet page" />
+  <img  src="/client/public/faucet-pg.png" alt="faucet page" />
 </p>
 
 - The total balnce of the faucet is displayed at all times
@@ -58,11 +58,11 @@ npm start
 ### Block Explorer
 
 <p align="center">
-  <img  src="public/address-pg.png" alt="address page" />
+  <img  src="/client/public/address-pg.png" alt="address page" />
 </p>
 
 <p align="center">
-  <img  src="public/transaction-details-pg.png" alt="transaction details page" />
+  <img  src="/client/public/transaction-details-pg.png" alt="transaction details page" />
 </p>
 
 - Home page has lastest blocks & transactions.
