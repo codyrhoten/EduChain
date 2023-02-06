@@ -48,7 +48,7 @@ function SendTx({ navLinks }) {
                 from: sessionStorage['address'],
                 to: _recipient,
                 amount: Number(_amount),
-                fee,
+                fee: Number(fee),
                 timestamp: Date.now(),
                 senderPubKey: sessionStorage['pubKey'],
             };

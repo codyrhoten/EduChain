@@ -82,7 +82,7 @@ function Faucet({ navLinks }) {
         let transaction = {
             from: faucetAddress,
             to: inputAddress,
-            amount: 5,
+            amount: 50,
             fee: 10,
             timestamp: Date.now(),
             senderPubKey: faucetPubKey
@@ -113,7 +113,7 @@ function Faucet({ navLinks }) {
                     </Modal.Header>
                     <Modal.Body className='text-break'>
                         <p className='text-center fs-5 m-0'>
-                            We sent 5 coins to address{' '}
+                            We sent 50 coins to address{' '}
                             <Link
                                 to={`/address/${search}`}
                                 style={{ fontSize: '16px', textDecoration: 'none' }}

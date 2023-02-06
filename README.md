@@ -1,5 +1,9 @@
 # School Chain
 
+<p align="center">
+  <img  src="public/home-pg.png" alt="home page" />
+</p>
+
 ## About
 
 Explore a blockchain and interact with it using a wallet and faucet. Send transactions and mine them in blocks.
@@ -33,6 +37,10 @@ npm start
 
 ### Wallet
 
+<p align="center">
+  <img  src="public/wallet-home-pg.png" alt="wallet home page" />
+</p>
+
 - Wallet key and address derivation
 - Wallet transaction sign and send
 - Check balances
@@ -40,10 +48,22 @@ npm start
 
 ### Faucet
 
+<p align="center">
+  <img  src="public/faucet-pg.png" alt="faucet page" />
+</p>
+
 - The total balnce of the faucet is displayed at all times
 - Request School Coins (SCH)
 
 ### Block Explorer
+
+<p align="center">
+  <img  src="public/address-pg.png" alt="address page" />
+</p>
+
+<p align="center">
+  <img  src="public/transaction-details-pg.png" alt="transaction details page" />
+</p>
 
 - Home page has lastest blocks & transactions.
 - Displays block and transaction information.

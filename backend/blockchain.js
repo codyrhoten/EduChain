@@ -358,7 +358,7 @@ class Blockchain {
             const validBlock = this.isValidBlock(this.blocks[i], this.blocks[i - 1]);
 
             if (validBlock.errorMsg) {
-                return { errorMsg: invalidBlock.errorMsg};
+                return { errorMsg: validBlock.errorMsg};
             }
         }
 

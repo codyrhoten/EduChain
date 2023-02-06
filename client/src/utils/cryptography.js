@@ -41,7 +41,6 @@ function pubKeyToAddress(pubKey) {
 }
 
 function verify(txHash, senderPubKey, sig) {
-    console.log(txHash, senderPubKey, sig);
     let pubKeyX = senderPubKey.substring(0, 64);
     let pubKeyYOdd = parseInt(senderPubKey.substring(64));
     const decompressedPubKey = ec.curve.pointFromX(pubKeyX, pubKeyYOdd);
