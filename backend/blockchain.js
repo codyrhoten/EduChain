@@ -147,7 +147,6 @@ class Blockchain {
         }
 
         if (!verify(tx.hash, tx.senderPubKey, tx.senderSig)) {
-            // console.log(tx.hash, tx.senderPubKey, tx.senderSig)
             return { errorMsg: `Signature of tx ${tx.hash} could not be verified` };
         }
 

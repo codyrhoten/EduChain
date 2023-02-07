@@ -153,15 +153,14 @@ app.get('/peers', (req, res, next) => {
 });
 
 app.post('/peers/connect', async (req, res, next) => {
-    const peer = req.body.peer;
-    console.log(peer)
+    const peerNodeUrl = req.body.peer;
     let peerInfo = {};
-    if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
+    if (peerNodeUrl === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the request body' });
 
     try {
-        peerInfo = await axios.get(peer + '/info')
+        peerInfo = await axios.get(peerNodeUrl + '/info')
             .catch(function (err) {
-                console.log(err.toJSON());
+                console.log('axios get error', err.toJSON());
             });
     } catch (err) {
         res.json({ errorMsg: 'Cannot get peer info due to ' + err.message });
@@ -172,19 +171,18 @@ app.post('/peers/connect', async (req, res, next) => {
         res.status(409).json({ errorMsg: 'Cannot connect to self' });
         // Check whether connecting node is already connected
     } else if (node.peers[peerInfo.data.id]) {
-        res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
+        res.status(409).json({ errorMsg: `This node is already connected to peer: ${peerNodeUrl}` });
     } else {
-        console.log(peerInfo)
-        node.peers[peerInfo.data.id] = peer;
+        node.peers[peerInfo.data.id] = peerNodeUrl;
 
         // 2-way connection between peers
         try {
-            const result = await axios.get(`${peer}/peer/${node.url}`)
+            await axios.post(`${peerNodeUrl}/peer/sync`, { peer: node.url })
                 .catch(function (err) {
-                    console.log(err.toJSON());
+                    console.log('axios post error:', err.toJSON());
                 });
         } catch (err) {
-            res.status(400).json({ errorMsg: `Cannot connect other peer ${peer} to this node` });
+            res.status(400).json({ errorMsg: `Cannot connect other peer "${peerNodeUrl}" to this node` });
         }
 
         const chainSync = node.syncChain(peerInfo.data);
@@ -193,16 +191,16 @@ app.post('/peers/connect', async (req, res, next) => {
         const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
         if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
 
-        res.json({ msg: `Connected to peer: ${peer}` });
+        res.json({ msg: `Connected to peer: ${peerNodeUrl}` });
     }
 });
 
-app.get('/peer/:nodeId', async (req, res, next) => {
-    const peer = req.params.peer;
-    if (peer === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the form' });
+app.post('/peer/sync', async (req, res, next) => {
+    const peerNodeUrl = req.body.peer;
+    if (peerNodeUrl === '' || undefined) res.json({ errorMsg: 'Missing peer node URL in the request body' });
 
     try {
-        const peerInfo = await axios.get(peer + '/info');
+        const peerInfo = await axios.get(peerNodeUrl + '/info');
 
         // Check whether connecting node is also the user's node
         if (node.id === peerInfo.data.id) {
@@ -211,8 +209,7 @@ app.get('/peer/:nodeId', async (req, res, next) => {
         } else if (node.peers[peerInfo.data.id]) {
             res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
         } else {
-            console.log('peerURL in mutual connection:', node.url)
-            node.peers[peerInfo.data.id] = peer;
+            node.peers[peerInfo.data.id] = peerNodeUrl;
 
             const chainSync = node.syncChain(peerInfo.data);
             if (chainSync.errorMsg) res.status(400).json(chainSync);
@@ -220,10 +217,10 @@ app.get('/peer/:nodeId', async (req, res, next) => {
             const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
             if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
 
-            res.json({ msg: `Also connected to peer: ${peer}` });
+            res.json({ msg: `Also connected to peer: ${peerNodeUrl}` });
         }
     } catch (err) {
-        res.status(400).json({ errorMsg: `Cannot connect to peer: ${peer}` });
+        res.status(400).json({ errorMsg: `Cannot connect to peer: ${peerNodeUrl}` });
         next(err);
     }
 });
@@ -274,7 +271,7 @@ app.post('/mine/:address', (req, res, next) => {
 }); */
 
 app.use((error, req, res, next) => {
-    console.log(error);
+    // console.log(error);
     const message = error.message;
     res.status(error.statusCode || 500).json({ message });
 });

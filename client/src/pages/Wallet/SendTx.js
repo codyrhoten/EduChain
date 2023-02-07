@@ -3,38 +3,34 @@ import { useWallet } from '../../wallet-context';
 import { sha256, sign } from '../../utils/cryptography';
 import axios from 'axios';
 import { miningAddress } from '../../utils/accounts';
-import { Container, Form, InputGroup, Modal } from 'react-bootstrap';
+import { Container, Form, InputGroup, Modal, Row } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 import { Link } from 'react-router-dom';
+import shortenAddress from '../../utils/shortenAddress';
 
 function SendTx({ navLinks }) {
     const [show, setShow] = useState(false);
     const [isSigned, setIsSigned] = useState(false);
-    const [successTx, setSuccessTx] = useState(false);
     const [txHash, setTxHash] = useState('');
     const [error, setError] = useState('');
     const [signedTx, setSignedTx] = useState(null);
-    const recipient = useRef('');
-    const amount = useRef(0);
+    const [recipient, setRecipient] = useState('');
+    const [amount, setAmount] = useState('');
+    const recipientRef = useRef('');
+    const amountRef = useRef(0);
     const [fee, setFee] = useState(25);
     const { isLocked } = useWallet();
     const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    function handleClick() {
-        handleShow();
-        setSuccessTx(false);
-        if (successTx) signedTx.current.value = '';
-    }
-
     function signTx() {
-        const { value: _amount } = amount.current;
-        const { value: _recipient } = recipient.current;
-        const validAddress = /^[0-9a-f]{40}$/.test(_recipient);
-        const validAmount = /^\d*\.?\d*$/.test(_amount);
+        const { value: amount } = amountRef.current;
+        const { value: recipient } = recipientRef.current;
+        const validAddress = /^[0-9a-f]{40}$/.test(recipient);
+        const validAmount = /^\d*\.?\d*$/.test(amount);
 
-        if (!_amount || !_recipient) {
+        if (!amount || !recipient) {
             setError('Make sure there is a recipient and an amount.');
             return;
         } else if (!validAddress) {
@@ -46,14 +42,12 @@ function SendTx({ navLinks }) {
         } else {
             const transaction = {
                 from: sessionStorage['address'],
-                to: _recipient,
-                amount: Number(_amount),
+                to: recipient,
+                amount: Number(amount),
                 fee: Number(fee),
                 timestamp: Date.now(),
                 senderPubKey: sessionStorage['pubKey'],
             };
-
-            console.log('transaction', transaction)
 
             const txDataJson = JSON.stringify(transaction);
             transaction.hash = sha256(txDataJson);
@@ -76,7 +70,6 @@ function SendTx({ navLinks }) {
                 setError(`Mining Error: ${response.data.errorMsg}`);
             }
 
-            console.log(response.data)
         } catch (err) {
             console.log(err);
             setError('Mining request failed.');
@@ -84,6 +77,9 @@ function SendTx({ navLinks }) {
     }
 
     async function sendTransaction() {
+        const { value: _recipient } = recipientRef.current;
+        const { value: _amount } = amountRef.current;
+
         try {
             const config = {
                 headers: {
@@ -97,109 +93,111 @@ function SendTx({ navLinks }) {
                 config,
             );
 
-            setSuccessTx(true);
             mineBlock();
-            recipient.current = '';
-            amount.current = '';
+            setRecipient(_recipient);
+            setAmount(_amount)
+            _recipient = '';
+            _amount = '';
             setIsSigned(false);
-            setShow(false);
+            handleShow();
             setTxHash(response.data.txHash);
         } catch (err) {
-        console.log(err);
-        setError(err.response.data.errorMsg);
+            console.log(err);
+            setError(err.response.data.errorMsg);
+        }
     }
-}
 
-return (
-    <>
-        <Header navLinks={links} />
-        <Container className='text-center mt-3'>
-            <h1><i>Send Transaction</i></h1>
-            <button
-                className='rounded mt-4 px-4 py-3 '
-                onClick={handleClick}
-                style={{
-                    textDecoration: 'none',
-                    color: 'black',
-                    backgroundColor: 'rgb(255, 223, 0)',
-                    fontFamily: 'Fragment Mono'
-                }}
-            >
-                {isSigned ? 'Confirm transaction' : 'Create new transaction'}
-            </button>
-            <Modal show={show} onHide={handleClose} size='lg'>
-                <Modal.Header closeButton>
-                    <Modal.Title>Transaction Requirements</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {error && <p><i>{error}</i></p>}
-                    <InputGroup className='mb-3'>
-                        <InputGroup.Text>Recipient</InputGroup.Text>
-                        <Form.Control type='text' ref={recipient} />
-                    </InputGroup>
-                    <InputGroup className='mb-3'>
-                        <InputGroup.Text>Amount</InputGroup.Text>
-                        <Form.Control type='number' ref={amount} />
-                    </InputGroup>
-                    <InputGroup className='mb-3'>
-                        <InputGroup.Text>Fee</InputGroup.Text>
-                        <Form.Control readOnly value={fee} />
-                    </InputGroup>
-                </Modal.Body>
-                <Modal.Footer>
-                    {
-                        !isSigned ? (
-                            <button
-                                className='rounded mt-4 px-4 py-3 '
-                                onClick={signTx}
-                                style={{
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                    backgroundColor: 'rgb(255, 223, 0)',
-                                    fontFamily: 'Fragment Mono'
-                                }}
+    return (
+        <>
+            <Header navLinks={links} />
+            <Container className='text-center mt-3'>
+                <Modal show={show} onHide={handleClose} size='lg'>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Transaction Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p className='text-center fs-5 m-0'>
+                            <Link
+                                to={`/address/${recipient}`}
+                                style={{ fontSize: '18px', textDecoration: 'none' }}
                             >
-                                Sign transaction
-                            </button>
-                        ) : (
-                            <button
-                                className='rounded mt-4 px-4 py-3 '
-                                onClick={sendTransaction}
-                                style={{
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                    backgroundColor: 'rgb(255, 223, 0)',
-                                    fontFamily: 'Fragment Mono'
-                                }}
-                                disabled={!isSigned ? 'disabled' : ''}
+                                {shortenAddress(sessionStorage['address'], 6)}
+                            </Link>
+                            {' '}sent {amount} &#40;SCH&#41; to{' '}
+                            <Link
+                                to={`/address/${recipient}`}
+                                style={{ fontSize: '18px', textDecoration: 'none' }}
                             >
-                                Send transaction
-                            </button>
-                        )
-                    }
-                </Modal.Footer>
-            </Modal>
-            {
-                successTx && (
-                    <>
-                        <InputGroup className='my-3'>
-                            <Form.Label htmlFor='signedTx'>Signature Details</Form.Label>
-                            <Form.Control id='signedTx' as='textarea' readOnly value={signedTx} />
-                        </InputGroup>
-                        <div className='text-center'>
+                                {shortenAddress(recipient, 6)}
+                            </Link>
+                        </p>
+                        <p className='fs-5 text-center'>
+                            Tx hash:{' '}
                             <Link
                                 to={`/tx/${txHash}`}
                                 style={{ fontSize: '16px', textDecoration: 'none' }}
                             >
                                 {txHash}
                             </Link>
-                        </div>
-                    </>
-                )
-            }
-        </Container>
-    </>
-);
+                        </p>
+                    </Modal.Body>
+                </Modal>
+                <h1><i>Send Transaction</i></h1>
+                <p className='text-center mb-3'>Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on School Chain.</p>
+                {error && <p><i>{error}</i></p>}
+                <InputGroup className='my-3'>
+                    <InputGroup.Text>Recipient</InputGroup.Text>
+                    <Form.Control type='text' ref={recipientRef} />
+                </InputGroup>
+                <InputGroup className='mb-3'>
+                    <InputGroup.Text>Amount</InputGroup.Text>
+                    <Form.Control type='number' ref={amountRef} />
+                </InputGroup>
+                <InputGroup className='mb-3'>
+                    <InputGroup.Text>Fee</InputGroup.Text>
+                    <Form.Control readOnly value={fee} />
+                </InputGroup>
+                <Row>
+                    <button
+                        className='rounded mt-4 px-4 py-3 '
+                        onClick={signTx}
+                        style={!isSigned ? {
+                            textDecoration: 'none',
+                            color: 'black',
+                            backgroundColor: 'rgb(255, 223, 0)',
+                            fontFamily: 'Fragment Mono'
+                        } : {
+                            textDecoration: 'none',
+                            color: 'black',
+                            backgroundColor: 'rgb(95,158,160)',
+                            fontFamily: 'Fragment Mono'
+                        }}
+                        disabled={isSigned ? 'disabled' : ''}
+                    >
+                        {!isSigned ? 'Sign transaction' : 'Transaction Signed'}
+                    </button>
+                    <button
+                        className='rounded mt-4 px-4 py-3 '
+                        onClick={sendTransaction}
+                        style={isSigned ? {
+                            textDecoration: 'none',
+                            color: 'black',
+                            backgroundColor: 'rgb(255, 223, 0)',
+                            fontFamily: 'Fragment Mono'
+                        } : {
+                            textDecoration: 'none',
+                            color: 'black',
+                            backgroundColor: 'rgb(95,158,160)',
+                            fontFamily: 'Fragment Mono'
+                        }}
+                        disabled={isSigned ? '' : 'disabled'}
+                    >
+                        Send transaction
+                    </button>
+                </Row>
+            </Container>
+        </>
+    );
 }
 
 export default SendTx;
