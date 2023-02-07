@@ -155,40 +155,47 @@ app.get('/peers', (req, res, next) => {
 app.post('/peers/connect', async (req, res, next) => {
     const peerNodeUrl = req.body.peer;
     let peerInfo = {};
-    if (peerNodeUrl === '' || undefined) res.json({ errorMsg: 'Missing peer URL in the request body' });
+    let response = {};
+
+    if (peerNodeUrl === '' || undefined) {
+        res.json({ errorMsg: 'Missing peer URL in the request body' });
+    }
 
     try {
-        peerInfo = await axios.get(peerNodeUrl + '/info')
-            .catch(function (err) {
-                console.log('axios get error', err.toJSON());
-            });
+        response = await fetch(peerNodeUrl + '/info');
+        peerInfo = await response.json();
+        console.log(peerInfo)
     } catch (err) {
         res.json({ errorMsg: 'Cannot get peer info due to ' + err.message });
     }
 
     // Check whether connecting node is also the user's node
-    if (node.id === peerInfo.data.id) {
+    if (node.id === peerInfo.id) {
         res.status(409).json({ errorMsg: 'Cannot connect to self' });
         // Check whether connecting node is already connected
-    } else if (node.peers[peerInfo.data.id]) {
+    } else if (node.peers[peerInfo.id]) {
         res.status(409).json({ errorMsg: `This node is already connected to peer: ${peerNodeUrl}` });
     } else {
-        node.peers[peerInfo.data.id] = peerNodeUrl;
+        node.peers[peerInfo.id] = peerNodeUrl;
 
         // 2-way connection between peers
         try {
-            await axios.post(`${peerNodeUrl}/peer/sync`, { peer: node.url })
-                .catch(function (err) {
-                    console.log('axios post error:', err.toJSON());
-                });
+            await fetch(
+                `${peerNodeUrl}/peer/sync`, 
+                { 
+                    method: 'POST',    
+                    body: JSON.stringify({ peer: node.url }), 
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
         } catch (err) {
             res.status(400).json({ errorMsg: `Cannot connect other peer "${peerNodeUrl}" to this node` });
         }
 
-        const chainSync = node.syncChain(peerInfo.data);
+        const chainSync = node.syncChain(peerInfo);
         if (chainSync.errorMsg) res.status(400).json(chainSync);
 
-        const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
+        const pendingTxsSync = node.syncPendingTxs(peerInfo);
         if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
 
         res.json({ msg: `Connected to peer: ${peerNodeUrl}` });
@@ -197,24 +204,29 @@ app.post('/peers/connect', async (req, res, next) => {
 
 app.post('/peer/sync', async (req, res, next) => {
     const peerNodeUrl = req.body.peer;
-    if (peerNodeUrl === '' || undefined) res.json({ errorMsg: 'Missing peer node URL in the request body' });
+    let peerInfo = {};
+
+    if (peerNodeUrl === '' || undefined) {
+        res.json({ errorMsg: 'Missing peer node URL in the request body' });
+    }
 
     try {
-        const peerInfo = await axios.get(peerNodeUrl + '/info');
+        const response = await fetch(peerNodeUrl + '/info');
+        peerInfo = await response.json();
 
         // Check whether connecting node is also the user's node
-        if (node.id === peerInfo.data.id) {
+        if (node.id === peerInfo.id) {
             res.status(409).json({ errorMsg: 'Cannot connect to self' });
             // Check whether connecting node is already connected
-        } else if (node.peers[peerInfo.data.id]) {
+        } else if (node.peers[peerInfo.id]) {
             res.status(409).json({ errorMsg: `This node is already connected to peer: ${peer}` });
         } else {
-            node.peers[peerInfo.data.id] = peerNodeUrl;
+            node.peers[peerInfo.id] = peerNodeUrl;
 
-            const chainSync = node.syncChain(peerInfo.data);
+            const chainSync = node.syncChain(peerInfo);
             if (chainSync.errorMsg) res.status(400).json(chainSync);
 
-            const pendingTxsSync = node.syncPendingTxs(peerInfo.data);
+            const pendingTxsSync = node.syncPendingTxs(peerInfo);
             if (pendingTxsSync.errorMsg) res.status(400).json(pendingTxsSync);
 
             res.json({ msg: `Also connected to peer: ${peerNodeUrl}` });

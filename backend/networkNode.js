@@ -33,7 +33,15 @@ class NetworkNode {
     async notifyPeersOfTx(tx) {
         for (const id in this.peers) {
             const peer = this.peers[id];
-            axios.post(`${peer}/txs/send`, tx);
+
+            await fetch(
+                `${peer}/txs/send`, 
+                { 
+                    method: 'POST',    
+                    body: JSON.stringify(tx), 
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
         }
     }
 
@@ -44,7 +52,7 @@ class NetworkNode {
         };
 
         for (const nodeId in this.peers) {
-            axios.post(`${this.peers[nodeId]}/peers/new-block`, notification);
+            await axios.post(`${this.peers[nodeId]}/peers/new-block`, notification);
         }
     }
 
@@ -53,14 +61,15 @@ class NetworkNode {
             return { errorMsg: 'Peers should have the same chain ID' };
         }
 
-        const peerBlocks = await axios.get(`${peerInfo.url}/blocks`);
+        const response = await fetch(`${peerInfo.url}/blocks`);
+        const peerBlocks = await response.json();
         const validChain = this.schoolChain.isValidChain(peerBlocks);
 
         if (validChain.errorMsg) {
             return validChain; // errorMsg
         } else {
-            if (peerBlocks.data.length > this.schoolChain.blocks.length) {
-                this.schoolChain.blocks = peerBlocks.data;
+            if (peerBlocks.length > this.schoolChain.blocks.length) {
+                this.schoolChain.blocks = peerBlocks;
                 this.miningJobs = {};
 
                 const confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
@@ -76,18 +85,24 @@ class NetworkNode {
 
     async syncPendingTxs(peerInfo) {
         if (peerInfo.pendingTxs > 0) {
-            const pendingTxs = await axios.get(`${peerInfo.url}/pending-txs`)
-                .catch(function (err) {
-                    console.log('sync pending txs axios error:', err.toJSON())
-                });
+            const response = await fetch(`${peerInfo.url}/pending-txs`);
+            const peerPendingTxs = await response.json();
+            console.log('peer pending txs', peerPendingTxs)
 
-            for (const pt of pendingTxs.data) {
+            for (const pt of peerPendingTxs) {
                 if (!(this.schoolChain.pendingTxs.find(tx => tx.hash === pt.hash))) {
                     console.log(`Peer ${this.url} getting the pending tx ${pt.hash} of peer ${peerInfo.url}`)
                     const newTx = this.schoolChain.addPendingTx(pt);
-                    console.log(`Peer ${this.url} looking at newTx from peer ${peerInfo.url}`, newTx)
-                    if (newTx.errorMsg) return newTx;
-                    if (newTx.hash) this.notifyPeersOfTx(newTx);
+
+                    if (newTx.errorMsg) {
+                        console.log('error:', newTx.errorMsg)
+                        return newTx;
+                    }
+
+                    if (newTx.hash) {
+                        console.log('notifying peers of new tx')
+                        this.notifyPeersOfTx(newTx);
+                    }
                 }
             }
         }
