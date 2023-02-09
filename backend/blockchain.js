@@ -99,26 +99,41 @@ class Blockchain {
             }
 
             if (tx.from === address) {
-                if (confirmations > 0 && tx.success) {
+                if (confirmations > 0) {
                     balance.confirmed -= tx.fee;
-                    if (tx.success) balance.confirmed -= tx.amount;
+
+                    if (tx.success) {
+                        balance.confirmed -= tx.amount;
+                    }
+                }
+
+                // safe confirmation amount is 3 blocks
+                if (confirmations >= 3) {
+                    balance.safe -= tx.fee;
+
+                    if (tx.success) {
+                        balance.safe -= tx.amount;
+                    }
+                }
+
+                if (!tx.success) {
+                    balance.pending -= (tx.fee + tx.amount);
+                }
+            }
+
+            if (tx.to === address) {
+                if (!tx.success) {
+                    balance.pending += tx.amount;
+                }
+
+                if (confirmations > 0 && tx.success) {
+                    balance.confirmed += tx.amount;
                 }
 
                 // safe confirmation amount is 6 blocks
                 if (confirmations >= 6 && tx.success) {
-                    balance.safe -= tx.fee;
-                    if (tx.success) balance.safe -= tx.amount;
+                    balance.safe += tx.amount;
                 }
-
-                balance.pending = balance.safe - tx.fee;
-                if (confirmations === 0 && !tx.success) balance.pending -= tx.amount;
-            }
-
-            if (tx.to === address) {
-                if (confirmations === 0 && !tx.success) balance.pending = balance.safe + tx.amount;
-                if (confirmations > 0 && tx.success) balance.confirmed += tx.amount;
-                // safe confirmation amount is 6 blocks
-                if (confirmations >= 6 && tx.success) balance.safe += tx.amount;
             }
         });
 

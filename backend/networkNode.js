@@ -52,7 +52,14 @@ class NetworkNode {
         };
 
         for (const nodeId in this.peers) {
-            await axios.post(`${this.peers[nodeId]}/peers/new-block`, notification);
+            await fetch(
+                `${this.peers[nodeId]}/peers/new-block`, 
+                {
+                    method: 'POST',
+                    body: JSON.stringify(notification),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
         }
     }
 
