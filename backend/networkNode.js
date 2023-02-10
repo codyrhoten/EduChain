@@ -1,6 +1,5 @@
 const uuid = require('uuid');
 const accountsDetails = require('./accounts.js');
-const axios = require('axios');
 const { error } = require('./error.js');
 
 class NetworkNode {

@@ -53,8 +53,7 @@ function SendTx({ navLinks }) {
             transaction.hash = sha256(txDataJson);
             transaction.senderSig = sign(sessionStorage['privKey'], transaction.hash);
 
-            const txJson = JSON.stringify(transaction);
-            setSignedTx(txJson);
+            setSignedTx(transaction);
             setIsSigned(true);
         }
     }
@@ -77,8 +76,8 @@ function SendTx({ navLinks }) {
     }
 
     async function sendTransaction() {
-        const { value: _recipient } = recipientRef.current;
-        const { value: _amount } = amountRef.current;
+        let { value: _recipient } = recipientRef.current;
+        let { value: _amount } = amountRef.current;
 
         try {
             const config = {

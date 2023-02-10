@@ -29,7 +29,7 @@ function Faucet({ navLinks }) {
 
     async function sendTx(tx) {
         try {
-            const response = await fetch('http://localhost:5555/txs/send', {
+            let response = await fetch('http://localhost:5555/txs/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,10 +37,10 @@ function Faucet({ navLinks }) {
                 body: JSON.stringify(tx),
             });
 
-            const data = await response.json();
+            response = await response.json();
 
-            if (data.errorMsg) {
-                setError(data.errorMsg);
+            if (response.errorMsg) {
+                setError(response.errorMsg);
                 return;
             } else {
                 setTxHash(tx.hash);
@@ -70,9 +70,9 @@ function Faucet({ navLinks }) {
     }
 
     const processTx = () => {
-        const inputAddress = searchInput.current.value;
-        setSearch(inputAddress);
-        const validAddress = /^[0-9a-f]{40}$/.test(inputAddress);
+        const {value: recipient} = searchInput.current;
+        setSearch(recipient);
+        const validAddress = /^[0-9a-f]{40}$/.test(recipient);
 
         if (!validAddress) {
             setError('Please enter a valid address');
@@ -81,7 +81,7 @@ function Faucet({ navLinks }) {
 
         let transaction = {
             from: faucetAddress,
-            to: inputAddress,
+            to: recipient,
             amount: 50,
             fee: 10,
             timestamp: Date.now(),
@@ -93,11 +93,13 @@ function Faucet({ navLinks }) {
 
         transaction.senderSig = sign(faucetPrivKey, transaction.hash);
         sendTx(transaction);
+        setSearch(recipient);
         setError('');
     };
 
     const handleClose = () => {
-        searchInput.current.value = '';
+        let { value: search } = searchInput.current;
+        search = '';
         getBalance();
         setShow(false);
         setTxHash('');
@@ -135,7 +137,7 @@ function Faucet({ navLinks }) {
                 <Container align='center'>
                     <h1>School Faucet</h1>
                     <Col className='lead'>
-                        This faucet allows you to receive School coins for free.
+                        This faucet allows you to receive School coins &#40;SCH&#41; for free.
                     </Col>
                     <Col className='fs-4'>available balance: {balance} coins</Col>
                 </Container>
