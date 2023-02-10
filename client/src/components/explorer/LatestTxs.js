@@ -37,7 +37,7 @@ const LatestTxs = ({ latestTxs }) => {
                                             {shortenAddress(tx.to, 4)}
                                         </Link>
                                     </Col>
-                                    <Col>{tx.amount} coins</Col>
+                                    <Col>{Number(tx.amount / 1000000)} SCH</Col>
                                 </Row>
                                 <br />
                             </Container>

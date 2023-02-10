@@ -28,7 +28,9 @@ const Address = ({ navLinks }) => {
                 <h4 align='center'>
                     Address: {address}<br />
                 </h4>
-                <p align='center'><i>Confirmed Balance: {addressData.balance.confirmed}</i></p>
+                <p align='center'>
+                    <i>Confirmed Balance: {Number(addressData.balance.confirmed) / 1000000} SCH</i>
+                </p>
                 {addressData.txs.length > 0 ?
                     <TxTable txs={addressData.txs} /> :
                     <Card align='center' className='p-5'><b>

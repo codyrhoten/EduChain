@@ -8,12 +8,14 @@ const navLinks = {
         locked: [
             { name: 'Explorer', url: '/' },
             { name: 'Create', url: '/wallet/home' },
-            { name: 'Open', url: '/wallet/open' }
+            { name: 'Open', url: '/wallet/open' },
+            { name: 'Faucet', url: '/faucet' }
         ],
         unlocked: [
             { name: 'Explorer', url: '/' },
             { name: 'Balance', url: '/wallet/balance' },
-            { name: 'Send Transaction', url: '/wallet/send-tx' },
+            { name: 'Send', url: '/wallet/send-tx' },
+            { name: 'Faucet', url: '/faucet' },
             { name: 'Close Wallet'},
         ]
     },

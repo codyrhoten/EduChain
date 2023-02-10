@@ -256,7 +256,7 @@ app.post('/mine/:address', (req, res, next) => {
         if (newBlock.errorMsg) {
             res.status(400).json(newBlock);
         } else {
-            res.json({ msg: `Block accepted. Reward of ${newBlock.txs[0].amount} (SCH) paid to ${address}` });
+            res.json({ msg: `Block accepted. Reward of ${newBlock.txs[0].amount} micro-SCH paid to ${address}` });
             node.notifyPeersOfBlock();
         }
     } catch (err) {

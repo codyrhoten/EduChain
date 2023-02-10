@@ -23,7 +23,7 @@ function fee(fee) {
         isNaN(fee) ||
         !Number.isInteger(fee) ||
         fee < 10 ||
-        fee > 1000000
+        fee > 1000000000
     ) {
         return false;
     }

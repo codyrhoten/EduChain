@@ -5,6 +5,7 @@ import axios from "axios";
 import Header from "../components/Header/Header";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import shortenAddress from "../utils/shortenAddress.js";
 
 function Faucet({ navLinks }) {
     const [faucet, setFaucet] = useState({});
@@ -22,7 +23,6 @@ function Faucet({ navLinks }) {
     }
 
     useEffect(() => {
-        searchInput.current.value = '';
         setFaucet(faucetAddress);
         getBalance();
     }, []);
@@ -31,10 +31,8 @@ function Faucet({ navLinks }) {
         try {
             let response = await fetch('http://localhost:5555/txs/send', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tx),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(tx)
             });
 
             response = await response.json();
@@ -82,8 +80,8 @@ function Faucet({ navLinks }) {
         let transaction = {
             from: faucetAddress,
             to: recipient,
-            amount: 50,
-            fee: 10,
+            amount: 5000000,
+            fee: 1000,
             timestamp: Date.now(),
             senderPubKey: faucetPubKey
         };
@@ -115,12 +113,12 @@ function Faucet({ navLinks }) {
                     </Modal.Header>
                     <Modal.Body className='text-break'>
                         <p className='text-center fs-5 m-0'>
-                            We sent 50 &#40;SCH&#41; to address{' '}
+                            We sent 5 SCH to address{' '}
                             <Link
                                 to={`/address/${search}`}
                                 style={{ fontSize: '16px', textDecoration: 'none' }}
                             >
-                                {search}
+                                {shortenAddress(search, 6)}
                             </Link>
                         </p>
                         <p className='fs-5 text-center'>
@@ -135,11 +133,11 @@ function Faucet({ navLinks }) {
                     </Modal.Body>
                 </Modal>
                 <Container align='center'>
-                    <h1>School Faucet</h1>
+                    <h1><i>School Faucet</i></h1>
                     <Col className='lead'>
                         This faucet allows you to receive School coins &#40;SCH&#41; for free.
                     </Col>
-                    <Col className='fs-4'>available balance: {balance} coins</Col>
+                    <Col className='fs-4'>available balance: {Number(balance) / 1000000} SCH</Col>
                 </Container>
                 <Card>
                     <Card.Body>

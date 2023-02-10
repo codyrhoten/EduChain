@@ -19,14 +19,14 @@ class Blockchain {
         this.difficulty = 3;
         this.pendingTxs = [];
         this.miningJobs = {};
-        this.reward = 500;
+        this.reward = 5000000;
     }
 
     getGenesisBlock() {
         const genesisTx = new Transaction(
             schoolChainAddress,         // from
             faucetAddress,              // to
-            100000,                     // amount
+            1000000000,                 // amount
             0,                          // fee
             1674613252417,              // timestamp
             schoolChainPubKey,          // sender public key
@@ -130,8 +130,8 @@ class Blockchain {
                     balance.confirmed += tx.amount;
                 }
 
-                // safe confirmation amount is 6 blocks
-                if (confirmations >= 6 && tx.success) {
+                // safe confirmation amount is 3 blocks
+                if (confirmations >= 3 && tx.success) {
                     balance.safe += tx.amount;
                 }
             }
@@ -183,7 +183,7 @@ class Blockchain {
         let rewardTx = new Transaction(
             schoolChainAddress,         // from
             minerAddress,               // to
-            this.reward,    // amount
+            this.reward,                // amount
             0,                          // fee
             Date.now(),                 // timestamp
             schoolChainPubKey,          // sender public key

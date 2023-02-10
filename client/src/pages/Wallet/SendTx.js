@@ -18,7 +18,7 @@ function SendTx({ navLinks }) {
     const [amount, setAmount] = useState('');
     const recipientRef = useRef('');
     const amountRef = useRef(0);
-    const [fee, setFee] = useState(25);
+    const [fee, setFee] = useState(0.0005);
     const { isLocked } = useWallet();
     const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
     const handleClose = () => setShow(false);
@@ -43,8 +43,8 @@ function SendTx({ navLinks }) {
             const transaction = {
                 from: sessionStorage['address'],
                 to: recipient,
-                amount: Number(amount),
-                fee: Number(fee),
+                amount: (Number(amount) * 1000000),
+                fee: (Number(fee) * 1000000),
                 timestamp: Date.now(),
                 senderPubKey: sessionStorage['pubKey'],
             };
@@ -80,11 +80,7 @@ function SendTx({ navLinks }) {
         let { value: _amount } = amountRef.current;
 
         try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
+            const config = { headers: { 'Content-Type': 'application/json' } };
 
             const response = await axios.post(
                 `http://localhost:5555/txs/send`,
@@ -122,7 +118,7 @@ function SendTx({ navLinks }) {
                             >
                                 {shortenAddress(sessionStorage['address'], 6)}
                             </Link>
-                            {' '}sent {amount} &#40;SCH&#41; to{' '}
+                            {' '}sent {Number(amount) / 1000000} SCH to{' '}
                             <Link
                                 to={`/address/${recipient}`}
                                 style={{ fontSize: '18px', textDecoration: 'none' }}
@@ -146,15 +142,17 @@ function SendTx({ navLinks }) {
                 {error && <p><i>{error}</i></p>}
                 <InputGroup className='my-3'>
                     <InputGroup.Text>Recipient</InputGroup.Text>
-                    <Form.Control type='text' ref={recipientRef} />
+                    <Form.Control type='text' ref={recipientRef} placeholder='address' />
                 </InputGroup>
                 <InputGroup className='mb-3'>
                     <InputGroup.Text>Amount</InputGroup.Text>
-                    <Form.Control type='number' ref={amountRef} />
+                    <Form.Control type='number' ref={amountRef} placeholder='0' />
+                    <InputGroup.Text>SCH</InputGroup.Text>
                 </InputGroup>
                 <InputGroup className='mb-3'>
                     <InputGroup.Text>Fee</InputGroup.Text>
                     <Form.Control readOnly value={fee} />
+                    <InputGroup.Text>SCH</InputGroup.Text>
                 </InputGroup>
                 <Row>
                     <button

@@ -23,7 +23,7 @@ const TxTable = ({ txs }) => {
                             txs.map((t, i) => (
                                 <tr key={i}>
                                     <td>
-                                        <Link 
+                                        <Link
                                             to={`/tx/${t.hash}`}
                                             style={{ textDecoration: 'none' }}
                                         >
@@ -32,9 +32,11 @@ const TxTable = ({ txs }) => {
                                     </td>
                                     {/* <td>{t.timestamp}</td> */}
                                     <td>
-                                        {t.minedInBlock !== undefined ?
-                                                <b>Confirmed</b> : 
-                                                <i>Pending</i>}
+                                        {
+                                            t.minedInBlock !== undefined ?
+                                                <b>Confirmed</b> :
+                                                <i>Pending</i>
+                                        }
                                     </td>
                                     <td>
                                         <Link
@@ -52,8 +54,8 @@ const TxTable = ({ txs }) => {
                                             {shortenAddress(t.to, 6)}
                                         </Link>
                                     </td>
-                                    <td>{t.amount}</td>
-                                    <td>{t.fee}</td>
+                                    <td>{t.amount} micro-SCH</td>
+                                    <td>{t.fee} micro-SCH</td>
                                 </tr>
                             ))
                         }
