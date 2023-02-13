@@ -1,8 +1,19 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import shortenAddress from '../../utils/shortenAddress';
 
-const LatestTxs = ({ latestTxs }) => {
+const LatestTxs = () => {
+    const [latestTxs, setLatestTxs] = useState([]);
+
+    useEffect(() => {
+        (async function () {
+            const txs = await axios.get('http://localhost:5555/all-txs');
+            setLatestTxs(txs.data.reverse().slice(0, 5));
+        })();
+    }, []);
+
     return (
         <Col className='lg-6'>
             <Card className='text-center'>

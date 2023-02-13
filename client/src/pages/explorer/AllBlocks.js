@@ -1,9 +1,20 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Card, Container, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const AllBlocks = ({ blocks, navLinks }) => {
+const AllBlocks = ({ navLinks }) => {
+    const [blocks, setBlocks] = useState([]);
+
+    useEffect(() => {
+        (async function () {
+            const _blocks = await axios.get('http://localhost:5555/blocks');
+            setBlocks(_blocks.data.slice(0, 5));
+        })();
+    }, []);
+
     return (
         <>
             <Header navLinks={navLinks} />

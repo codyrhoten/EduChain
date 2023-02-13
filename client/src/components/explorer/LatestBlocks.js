@@ -1,9 +1,20 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Col, Row, Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 import shortenAddress from '../../utils/shortenAddress';
 
-const LatestBlocks = ({ latestBlx }) => {
+const LatestBlocks = () => {
+    const [latestBlx, setLatestBlx] = useState([]);
+
+    useEffect(() => {
+        (async function () {
+            const blocks = await axios.get('http://localhost:5555/blocks');
+            setLatestBlx(blocks.data.slice(0, 5));
+        })();
+    }, []);
+
     return (
         <Col className='lg-6'>
             <Card className='text-center'>

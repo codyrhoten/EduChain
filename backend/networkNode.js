@@ -92,11 +92,9 @@ class NetworkNode {
         if (peerInfo.pendingTxs > 0) {
             const response = await fetch(`${peerInfo.url}/pending-txs`);
             const peerPendingTxs = await response.json();
-            console.log('peer pending txs', peerPendingTxs)
 
             for (const pt of peerPendingTxs) {
                 if (!(this.schoolChain.pendingTxs.find(tx => tx.hash === pt.hash))) {
-                    console.log(`Peer ${this.url} getting the pending tx ${pt.hash} of peer ${peerInfo.url}`)
                     const newTx = this.schoolChain.addPendingTx(pt);
 
                     if (newTx.errorMsg) {
