@@ -9,8 +9,8 @@ const axios = require('axios');
 const valid = require('./validation.js');
 
 const app = express();
-const schoolChain = new Blockchain();
-const node = new NetworkNode(nodeUrl, schoolChain);
+const eduChain = new Blockchain();
+const node = new NetworkNode(nodeUrl, eduChain);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,7 +39,7 @@ app.get('/debug', (req, res, next) => {
 
 app.get('/debug/reset-chain', (req, res, next) => {
     try {
-        node.schoolChain = new Blockchain();
+        node.eduChain = new Blockchain();
         res.json({ message: 'The chain was reset to its genesis block' });
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
@@ -49,7 +49,7 @@ app.get('/debug/reset-chain', (req, res, next) => {
 
 app.get('/blocks', (req, res, next) => {
     try {
-        res.json(node.schoolChain.blocks);
+        res.json(node.eduChain.blocks);
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
@@ -59,7 +59,7 @@ app.get('/blocks', (req, res, next) => {
 app.get('/blocks/:index', (req, res, next) => {
     try {
         const blockIndex = req.params.index;
-        const block = node.schoolChain.blocks.find(b => blockIndex == b.index);
+        const block = node.eduChain.blocks.find(b => blockIndex == b.index);
 
         if (block) {
             res.json(block);
@@ -74,7 +74,7 @@ app.get('/blocks/:index', (req, res, next) => {
 
 app.get('/all-txs', (req, res, next) => {
     try {
-        res.json(node.schoolChain.getAllTxs());
+        res.json(node.eduChain.getAllTxs());
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
@@ -83,7 +83,7 @@ app.get('/all-txs', (req, res, next) => {
 
 app.get('/pending-txs', (req, res, next) => {
     try {
-        res.json(node.schoolChain.pendingTxs);
+        res.json(node.eduChain.pendingTxs);
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
@@ -95,7 +95,7 @@ app.get('/txs/:hash', (req, res, next) => {
         const txHash = req.params.hash;
         if (!valid.hash(txHash)) res.json({ errorMsg: 'Invalid transaction hash' });
 
-        const allTxs = node.schoolChain.getAllTxs();
+        const allTxs = node.eduChain.getAllTxs();
         const tx = allTxs.find(t => t.hash === txHash);
         res.json(tx);
     } catch (err) {
@@ -107,7 +107,7 @@ app.get('/txs/:hash', (req, res, next) => {
 // not sure what this is for yet
 app.get('/balances', (req, res, next) => {
     try {
-        res.json(node.schoolChain.getConfirmedBalances());
+        res.json(node.eduChain.getConfirmedBalances());
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
         next(err);
@@ -118,8 +118,8 @@ app.get('/address-data/:address', (req, res, next) => {
     try {
         const address = req.params.address;
         if (!valid.address(address)) return { errorMsg: 'Invalid address' };
-        const txHistory = node.schoolChain.getTxHistory(address);
-        const balance = node.schoolChain.getBalance(address);
+        const txHistory = node.eduChain.getTxHistory(address);
+        const balance = node.eduChain.getBalance(address);
         res.json({ balance, txs: txHistory });
     } catch (err) {
         if (!err.statusCode) err.statusCode = 500;
@@ -129,7 +129,7 @@ app.get('/address-data/:address', (req, res, next) => {
 
 app.post('/txs/send', (req, res, next) => {
     try {
-        const tx = node.schoolChain.addPendingTx(req.body);
+        const tx = node.eduChain.addPendingTx(req.body);
 
         if (tx.errorMsg) {
             res.status(400).json(tx);
@@ -251,7 +251,7 @@ app.post('/mine/:address', (req, res, next) => {
     try {
         const address = req.params.address;
         if (!valid.address(address)) res.json({ errorMsg: 'Invalid address' });
-        const newBlock = node.schoolChain.mineBlock(address);
+        const newBlock = node.eduChain.mineBlock(address);
 
         if (newBlock.errorMsg) {
             res.status(400).json(newBlock);
@@ -268,7 +268,7 @@ app.post('/mine/:address', (req, res, next) => {
 /* app.post('/mine', (req, res, next) => {
     try {
         const { blockDataHash, blockHash } = req.body;
-        const newBlock = node.schoolChain.mineBlock(blockDataHash, blockHash);
+        const newBlock = node.eduChain.mineBlock(blockDataHash, blockHash);
 
         if (newBlock.errorMsg) {
             res.status(400).json(newBlock);

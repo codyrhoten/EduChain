@@ -18,7 +18,7 @@ const AllBlocks = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
-            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
+            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
             <Container>
                 <Card>
                     <Card.Body>

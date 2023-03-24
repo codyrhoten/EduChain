@@ -35,7 +35,7 @@ const Transactions = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
-            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
+            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
             <Container>
                 {heading}
                 {txs.length > 0 && <TxTable txs={txs} />}

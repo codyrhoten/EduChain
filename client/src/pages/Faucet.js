@@ -113,7 +113,7 @@ function Faucet({ navLinks }) {
                     </Modal.Header>
                     <Modal.Body className='text-break'>
                         <p className='text-center fs-5 m-0'>
-                            We sent 5 SCH to address{' '}
+                            We sent 5 EDU to address{' '}
                             <Link
                                 to={`/address/${search}`}
                                 style={{ fontSize: '16px', textDecoration: 'none' }}
@@ -133,11 +133,11 @@ function Faucet({ navLinks }) {
                     </Modal.Body>
                 </Modal>
                 <Container align='center'>
-                    <h1><i>School Faucet</i></h1>
+                    <h1><i>EduFaucet</i></h1>
                     <Col className='lead'>
-                        This faucet allows you to receive School coins &#40;SCH&#41; for free.
+                        This faucet allows you to receive EduChain coins &#40;EDU&#41; for free.
                     </Col>
-                    <Col className='fs-4'>available balance: {Number(balance) / 1000000} SCH</Col>
+                    <Col className='fs-4'>available balance: {Number(balance) / 1000000} EDU</Col>
                 </Container>
                 <Card>
                     <Card.Body>

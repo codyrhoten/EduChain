@@ -118,7 +118,7 @@ function SendTx({ navLinks }) {
                             >
                                 {shortenAddress(sessionStorage['address'], 6)}
                             </Link>
-                            {' '}sent {Number(amount) / 1000000} SCH to{' '}
+                            {' '}sent {Number(amount) / 1000000} EDU to{' '}
                             <Link
                                 to={`/address/${recipient}`}
                                 style={{ fontSize: '18px', textDecoration: 'none' }}
@@ -138,7 +138,7 @@ function SendTx({ navLinks }) {
                     </Modal.Body>
                 </Modal>
                 <h1><i>Send Transaction</i></h1>
-                <p className='text-center mb-3'>Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on School Chain.</p>
+                <p className='text-center mb-3'>Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on EduChain Chain.</p>
                 {error && <p><i>{error}</i></p>}
                 <InputGroup className='my-3'>
                     <InputGroup.Text>Recipient</InputGroup.Text>
@@ -147,12 +147,12 @@ function SendTx({ navLinks }) {
                 <InputGroup className='mb-3'>
                     <InputGroup.Text>Amount</InputGroup.Text>
                     <Form.Control type='number' ref={amountRef} placeholder='0' />
-                    <InputGroup.Text>SCH</InputGroup.Text>
+                    <InputGroup.Text>EDU</InputGroup.Text>
                 </InputGroup>
                 <InputGroup className='mb-3'>
                     <InputGroup.Text>Fee</InputGroup.Text>
                     <Form.Control readOnly value={fee} />
-                    <InputGroup.Text>SCH</InputGroup.Text>
+                    <InputGroup.Text>EDU</InputGroup.Text>
                 </InputGroup>
                 <Row>
                     <button

@@ -6,25 +6,25 @@ class NetworkNode {
         this.id = uuid.v4().split('-').join('');
         this.url = url;
         this.peers = {};
-        this.schoolChain = chain;
+        this.eduChain = chain;
     }
 
     getInfo() {
         return {
-            about: 'SchoolChain/v1',
+            about: 'eduChain/v1',
             id: this.id,
-            chainId: this.schoolChain.blocks[0].hash, // genesis block hash
+            chainId: this.eduChain.blocks[0].hash, // genesis block hash
             url: this.url,
             peers: Object.keys(this.peers).length,
-            difficulty: this.schoolChain.difficulty,
-            blocks: this.schoolChain.blocks.length,
-            confirmedTxs: this.schoolChain.getConfirmedTxs().length,
-            pendingTxs: this.schoolChain.pendingTxs.length
+            difficulty: this.eduChain.difficulty,
+            blocks: this.eduChain.blocks.length,
+            confirmedTxs: this.eduChain.getConfirmedTxs().length,
+            pendingTxs: this.eduChain.pendingTxs.length
         };
     }
 
     debug() {
-        const confirmedBalances = this.schoolChain.getConfirmedBalances();
+        const confirmedBalances = this.eduChain.getConfirmedBalances();
         return ({ node: this, importantAccounts: accountsDetails, confirmedBalances });
     }
 
@@ -45,7 +45,7 @@ class NetworkNode {
 
     async notifyPeersOfBlock() {
         const notification = {
-            blocks: this.schoolChain.blocks.length,
+            blocks: this.eduChain.blocks.length,
             URL: this.url
         };
 
@@ -62,24 +62,24 @@ class NetworkNode {
     }
 
     async syncChain(peerInfo) {
-        if (peerInfo.chainId !== this.schoolChain.blocks[0].hash) {
+        if (peerInfo.chainId !== this.eduChain.blocks[0].hash) {
             return { errorMsg: 'Peers should have the same chain ID' };
         }
 
         const response = await fetch(`${peerInfo.url}/blocks`);
         const peerBlocks = await response.json();
-        const validChain = this.schoolChain.isValidChain(peerBlocks);
+        const validChain = this.eduChain.isValidChain(peerBlocks);
 
         if (validChain.errorMsg) {
             return validChain; // errorMsg
         } else {
-            if (peerBlocks.length > this.schoolChain.blocks.length) {
-                this.schoolChain.blocks = peerBlocks;
+            if (peerBlocks.length > this.eduChain.blocks.length) {
+                this.eduChain.blocks = peerBlocks;
                 this.miningJobs = {};
 
-                const confirmedTxHashes = this.schoolChain.getConfirmedTxs().map(tx => tx.hash);
+                const confirmedTxHashes = this.eduChain.getConfirmedTxs().map(tx => tx.hash);
 
-                this.schoolChain.pendingTxs = this.schoolChain.pendingTxs.filter(t => {
+                this.eduChain.pendingTxs = this.eduChain.pendingTxs.filter(t => {
                     t.hash !== confirmedTxHashes.includes(t.hash);
                 });
 
@@ -94,8 +94,8 @@ class NetworkNode {
             const peerPendingTxs = await response.json();
 
             for (const pt of peerPendingTxs) {
-                if (!(this.schoolChain.pendingTxs.find(tx => tx.hash === pt.hash))) {
-                    const newTx = this.schoolChain.addPendingTx(pt);
+                if (!(this.eduChain.pendingTxs.find(tx => tx.hash === pt.hash))) {
+                    const newTx = this.eduChain.addPendingTx(pt);
 
                     if (newTx.errorMsg) {
                         console.log('error:', newTx.errorMsg)

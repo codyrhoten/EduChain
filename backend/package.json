@@ -1,5 +1,5 @@
 {
-    "name": "blockchain_explorer",
+    "name": "educhain_explorer",
     "version": "1.0.0",
     "description": "interaction with a blockchain with wallet and faucet capability",
     "main": "api.js",

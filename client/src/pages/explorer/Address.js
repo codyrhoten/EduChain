@@ -23,13 +23,13 @@ const Address = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
-            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
+            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
             <Container>
                 <h4 align='center'>
                     Address: {address}<br />
                 </h4>
                 <p align='center'>
-                    <i>Confirmed Balance: {Number(addressData.balance.confirmed) / 1000000} SCH</i>
+                    <i>Confirmed Balance: {Number(addressData.balance.confirmed) / 1000000} EDU</i>
                 </p>
                 {addressData.txs.length > 0 ?
                     <TxTable txs={addressData.txs} /> :

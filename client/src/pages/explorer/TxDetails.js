@@ -21,7 +21,7 @@ const TxDetails = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
-            <h4 className='text-center my-4'><i>School PoW Testnet Explorer</i></h4>
+            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
             <Container>
                 <h4 align='center'>Transaction Details</h4>
                 <Card>
@@ -86,11 +86,11 @@ const TxDetails = ({ navLinks }) => {
                                     </tr>
                                     <tr>
                                         <th>Amount</th>
-                                        <td>{tx.amount} micro-SCH</td>
+                                        <td>{tx.amount} micro-EDU</td>
                                     </tr>
                                     <tr>
                                         <th>Fee</th>
-                                        <td>{tx.fee} micro-SCH</td>
+                                        <td>{tx.fee} micro-EDU</td>
                                     </tr>
                                 </tbody>
                             </Table> :

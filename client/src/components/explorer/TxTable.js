@@ -54,8 +54,8 @@ const TxTable = ({ txs }) => {
                                             {shortenAddress(t.to, 6)}
                                         </Link>
                                     </td>
-                                    <td>{t.amount} micro-SCH</td>
-                                    <td>{t.fee} micro-SCH</td>
+                                    <td>{t.amount} micro-EDU</td>
+                                    <td>{t.fee} micro-EDU</td>
                                 </tr>
                             ))
                         }

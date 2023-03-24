@@ -17,7 +17,7 @@ const LatestBlocks = () => {
 
     return (
         <Col className='lg-6'>
-            <Card className='text-center'>
+            <Card className='text-center h-100'>
                 <Card.Body>
                     <Card.Title>Latest Blocks</Card.Title>
                     {latestBlx.length > 0 && latestBlx.map((block, i) => (

@@ -6,16 +6,16 @@ const faucetPubKey = '2acf4b8bbd3fa38956bf859e0cef8d8805dca1f94155b7fb2f8e9401ab
 const faucetKeyPair = ec.keyFromPrivate(faucetPrivKey);
 const faucetAddress = 'b89682fa1e3b1bc519a9774a9882e0059591948b';
 
-const schoolChainPubKey = '00000000000000000000000000000000000000000000000000000000000000000';
-const schoolChainAddress = '0000000000000000000000000000000000000000';
-const schoolChainSignature = [
+const eduChainPubKey = '00000000000000000000000000000000000000000000000000000000000000000';
+const eduChainAddress = '0000000000000000000000000000000000000000';
+const eduChainSignature = [
     '0000000000000000000000000000000000000000000000000000000000000000',
     '0000000000000000000000000000000000000000000000000000000000000000'
 ];
 
 module.exports = { 
     faucetAddress, 
-    schoolChainSignature, 
-    schoolChainPubKey, 
-    schoolChainAddress 
+    eduChainSignature, 
+    eduChainPubKey, 
+    eduChainAddress 
 };

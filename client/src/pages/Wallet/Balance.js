@@ -39,17 +39,17 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
                         <tbody>
                             <tr>
                                 <td>Confirmed</td>
-                                <td>{Number(confirmedBalance) / 1000000} SCH</td>
+                                <td>{Number(confirmedBalance) / 1000000} EDU</td>
                                 <td>Transactions have been mined and are on the blockchain</td>
                             </tr>
                             <tr>
                                 <td>Safe</td>
-                                <td>{Number(safeBalance) / 1000000} SCH</td>
+                                <td>{Number(safeBalance) / 1000000} EDU</td>
                                 <td>This balance is safe, as 3 blocks have been mined since its initial confirmation to the blockchain.</td>
                             </tr>
                             <tr>
                                 <td>Pending</td>
-                                <td>{Number(pendingBalance) / 1000000} SCH</td>
+                                <td>{Number(pendingBalance) / 1000000} EDU</td>
                                 <td>This balance will be confirmed once the next block is mined.</td>
                             </tr>
                         </tbody>

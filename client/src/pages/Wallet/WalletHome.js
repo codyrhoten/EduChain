@@ -36,14 +36,14 @@ function WalletHome({ navLinks, setWalletStatus }) {
         <>
             <Header navLinks={links} />
             <Container className='text-center'>
-                <h1 className='mt-3'><i>School Wallet</i></h1>
+                <h1 className='mt-3'><i>EduWallet</i></h1>
                 {
                     !isCreated ? (
                         <>
                             <Col className='p-5'>
                                 <div className='px-5'>
                                     <p className='px-5'>
-                                        School Wallet is used to hold, send and receive School Coins &#40;SCH&#41;. It can generate a new address for you to use, and you can access it any time with your private key.
+                                        EduWallet is used to hold, send and receive EduChain Coins &#40;EDU&#41;. It can generate a new address for you to use, and you can access it any time with your private key.
                                     </p>
                                 </div>
                             </Col>

@@ -16,7 +16,7 @@ const LatestTxs = () => {
 
     return (
         <Col className='lg-6'>
-            <Card className='text-center'>
+            <Card className='text-center h-100'>
                 <Card.Body>
                     <Card.Title>Latest Transactions</Card.Title>
                     {latestTxs && latestTxs.map((tx, i) => {
@@ -48,7 +48,7 @@ const LatestTxs = () => {
                                             {shortenAddress(tx.to, 4)}
                                         </Link>
                                     </Col>
-                                    <Col>{Number(tx.amount / 1000000)} SCH</Col>
+                                    <Col>{Number(tx.amount / 1000000)} EDU</Col>
                                 </Row>
                                 <br />
                             </Container>

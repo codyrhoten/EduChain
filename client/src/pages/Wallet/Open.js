@@ -50,7 +50,7 @@ function Open({ navLinks }) {
                             <Col className='p-5'>
                                 <div className='px-5'>
                                     <p className='px-5'>
-                                        School Wallet is used to hold, send and receive School Coins &#40;SCH&#41;. Open it to start sending transactions and view your balance.
+                                        EduWallet is used to hold, send and receive EduChain Coins &#40;EDU&#41;. Open it to start sending transactions and view your balance.
                                     </p>
                                 </div>
                             </Col>

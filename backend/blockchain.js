@@ -2,9 +2,9 @@ const Block = require('./block.js');
 const Transaction = require('./transaction.js');
 const {
     faucetAddress,
-    schoolChainPubKey,
-    schoolChainAddress,
-    schoolChainSignature
+    eduChainPubKey,
+    eduChainAddress,
+    eduChainSignature
 } = require('./accounts.js');
 const { verify } = require('./cryptography.js');
 const valid = require('./validation.js');
@@ -24,14 +24,14 @@ class Blockchain {
 
     getGenesisBlock() {
         const genesisTx = new Transaction(
-            schoolChainAddress,         // from
+            eduChainAddress,         // from
             faucetAddress,              // to
             1000000000,                 // amount
             0,                          // fee
             1674613252417,              // timestamp
-            schoolChainPubKey,          // sender public key
+            eduChainPubKey,          // sender public key
             undefined,                  // hash
-            schoolChainSignature,       // sender signature
+            eduChainSignature,       // sender signature
             0,                          // block this was mined in
             true                        // success?
         );
@@ -40,7 +40,7 @@ class Blockchain {
             0,                          // index
             [genesisTx],                // transactions array
             undefined,                  // previous block hash
-            schoolChainAddress,         // miner
+            eduChainAddress,         // miner
             undefined,                  // block data hash
             0,                          // nonce
             1674613252417,              // timestamp
@@ -181,14 +181,14 @@ class Blockchain {
 
         // create transaction for mining this block
         let rewardTx = new Transaction(
-            schoolChainAddress,         // from
+            eduChainAddress,         // from
             minerAddress,               // to
             this.reward,                // amount
             0,                          // fee
             Date.now(),                 // timestamp
-            schoolChainPubKey,          // sender public key
+            eduChainPubKey,          // sender public key
             undefined,                  // hash
-            schoolChainSignature,       // sender signature
+            eduChainSignature,       // sender signature
             nextBlockIndex,             // block this was mined in
             true                        // success?
         );
@@ -294,7 +294,7 @@ class Blockchain {
         }
 
         if (typeof (tx.hash) !== 'string' || txHash !== tx.hash) {
-            return { errorMsg: `Tx ${tx.hash} not hashed with school chain algorithm` };
+            return { errorMsg: `Tx ${tx.hash} not hashed with edu chain algorithm` };
         }
 
         // check signature validity

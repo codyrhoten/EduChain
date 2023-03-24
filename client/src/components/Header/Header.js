@@ -41,7 +41,7 @@ const Header = ({ navLinks }) => {
                 <Navbar.Brand as={Link} to='/' style={{ fontFamily: 'Fragment Mono' }}>
                     <div>
                         <img src={chainImage} height='40' alt='chain' />
-                        <span><b>School Chain</b></span>
+                        <span><b>EduChain</b></span>
                     </div>
                 </Navbar.Brand>
                 <Navbar.Collapse id='navbarSupportedContent'>
