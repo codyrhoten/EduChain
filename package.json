@@ -8,7 +8,7 @@
     "preinstall": "cd backend && npm install",
     "postinstall": "cd client && npm install",
     "start": "cd client && npm start",
-    "dev": "concurrently \"npm run primary_node\" \"npm run second_node\" \"npm run third_node\"",
+    "dev": "concurrently \"npm run primary_node\" \"npm run second_node\" \"npm run third_node\" \"cd client && npm start\"",
     "primary_node": "nodemon backend/api.js 5555 http://localhost:5555",
     "second_node": "nodemon backend/api.js 5556 http://localhost:5556",
     "third_node": "nodemon backend/api.js 5557 http://localhost:5557",
