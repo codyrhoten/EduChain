@@ -1,11 +1,10 @@
 import { useWallet } from "../../wallet-context";
-import { Navbar, Nav, Dropdown, Col } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Col } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 import chainImage from "../../assets/chain.webp";
 import styles from "./Header.module.css";
-import { Children, forwardRef, useState } from "react";
 
-const Header = ({ navLinks }) => {
+const Header = () => {
     const { isLocked, changeWalletState } = useWallet();
 
     function closeWallet() {
@@ -13,24 +12,7 @@ const Header = ({ navLinks }) => {
         sessionStorage.removeItem("pubKey");
         sessionStorage.removeItem("address");
         changeWalletState(true);
-        window.location.replace("http://localhost:9999/wallet/home");
-    }
-
-    function closeWalletButton(name) {
-        return (
-            <button
-                key="4"
-                className="mx-2 rounded border border-1 border-dark px-2"
-                style={{
-                    textDecoration: "none",
-                    color: "black",
-                    backgroundColor: "rgb(255, 223, 0)",
-                }}
-                onClick={closeWallet}
-            >
-                {name}
-            </button>
-        );
+        window.location.replace("https://educhain.codyrhoten.com/wallet/home");
     }
 
     return (
@@ -48,24 +30,6 @@ const Header = ({ navLinks }) => {
                     </span>
                 </div>
             </Navbar.Brand>
-            {/* <Navbar.Collapse id="navbarSupportedContent">
-        <Nav className="ms-auto">
-          {navLinks !== undefined &&
-            navLinks.map((link, i) => {
-              if (link.name === "Close Wallet") {
-                return closeWalletButton(link.name);
-              }
-
-              return (
-                <Nav.Item key={i.toString()}>
-                  <Link to={link.url} className={styles._link}>
-                    {link.name}
-                  </Link>
-                </Nav.Item>
-              );
-            })}
-        </Nav>
-       </Navbar.Collapse> */}
             <Navbar.Collapse id="navbarSupportedContent">
                 <Nav className='ms-auto me-5'>
                     <Nav.Item className="mx-1">
@@ -73,28 +37,44 @@ const Header = ({ navLinks }) => {
                             Explorer
                         </Link>
                     </Nav.Item>
+                    <NavDropdown className={`mx-1`} title="Wallet" id={styles.dropdowntitle}>
+                        {isLocked ? (
+                            <>
+                                <NavDropdown.Item>
+                                    <Link to='/wallet/home' className={styles._dropdownitem}>
+                                        Create
+                                    </Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link to='/wallet/open' className={styles._dropdownitem}>
+                                        Open
+                                    </Link>
+                                </NavDropdown.Item>
+                            </>
+                        ) : (
+                            <>
+                                <NavDropdown.Item>
+                                    <Link to='/wallet/balance' className={styles._dropdownitem}>
+                                        Balance
+                                    </Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link to='/wallet/send-tx' className={styles._dropdownitem}>
+                                        Send
+                                    </Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={closeWallet}>
+                                    Close Wallet
+                                </NavDropdown.Item>
+                            </>
+                        )}
+                    </NavDropdown>
                     <Nav.Item className="mx-1">
                         <Link to="/faucet" className={styles._link}>
                             Faucet
                         </Link>
                     </Nav.Item>
-                    <Dropdown className="mx-1">
-                        <Dropdown.Toggle className={styles._link}>
-                            Wallet
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Link to='/wallet/home' className={styles._dropdownitem}>
-                                    Create
-                                </Link>
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Link to='/wallet/open' className={styles._dropdownitem}>
-                                    Open
-                                </Link>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

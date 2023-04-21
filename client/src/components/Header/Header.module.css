@@ -3,7 +3,14 @@
     padding: 0.5rem;
     color: black;
     text-decoration: none;
-    transition: color 0.3s ease-in-out, background-color 0.30s ease-in-out, border-color 0.30s ease-in-out;
+    transition: color 0.3s ease-in-out, white 0.30s ease-in-out, black 0.30s ease-in-out;
+}
+
+#dropdowntitle {
+    display: block;
+    color: black !important;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, white 0.30s ease-in-out, black 0.30s ease-in-out;
 }
 
 ._dropdownitem {
@@ -30,4 +37,12 @@
 
 ._link:hover {
     color: white;
+}
+
+#dropdowntitle:hover {
+    color: white !important;
+}
+
+._dropdownitem:hover {
+    color: rgb(95,158,160);
 }
