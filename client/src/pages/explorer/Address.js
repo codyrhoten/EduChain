@@ -23,8 +23,8 @@ const Address = ({ navLinks }) => {
     return (
         <>
             <Header navLinks={navLinks} />
+            <Container style={{ marginTop: "7rem" }}>
             <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
-            <Container>
                 <h4 align='center'>
                     Address: {address}<br />
                 </h4>

@@ -25,7 +25,7 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
     return (
         <>
             <Header navLinks={links} />
-            <Container >
+            <Container style={{ marginTop: "7rem" }}>
                 <h1 className='text-center'><i>Your Balance</i></h1>
                 <Card>
                     <Table>

@@ -1,6 +1,6 @@
 import { useWallet } from "../../wallet-context";
 import { Navbar, Nav, NavDropdown, Col } from "react-bootstrap";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import chainImage from "../../assets/chain.webp";
 import styles from "./Header.module.css";
 
@@ -19,16 +19,19 @@ const Header = () => {
         <Navbar
             fixed="top"
             style={{
-                backgroundColor: "rgb(95,158,160)"
+                backgroundColor: "rgb(95,158,160)",
+                borderBottom: "0.1rem solid black"
             }}
         >
-            <Navbar.Brand as={Link} to="/" style={{ fontFamily: "Fragment Mono", marginLeft: '1.25rem' }}>
-                <div>
-                    <img src={chainImage} height="40" alt="chain" />
-                    <span>
-                        <b>EduChain</b>
-                    </span>
-                </div>
+            <Navbar.Brand 
+                as={Link} 
+                to="/" 
+                style={{ fontFamily: "Fragment Mono", marginLeft: '1.25rem' }}
+            >
+                <img src={chainImage} height="40" alt="chain" />
+                <span>
+                    <b>EduChain</b>
+                </span>
             </Navbar.Brand>
             <Navbar.Collapse id="navbarSupportedContent">
                 <Nav className='ms-auto me-5'>

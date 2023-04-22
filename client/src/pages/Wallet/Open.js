@@ -42,7 +42,7 @@ function Open({ navLinks }) {
     return (
         <>
             <Header navLinks={links} />
-            <Container className='text-center'>
+            <Container className='text-center' style={{ marginTop: "7rem" }}>
                 <h1 className='mt-3'><i>Open Wallet</i></h1>
                 {
                     !isOpen ? (

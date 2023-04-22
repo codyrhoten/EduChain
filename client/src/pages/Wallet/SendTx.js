@@ -105,7 +105,7 @@ function SendTx({ navLinks }) {
     return (
         <>
             <Header navLinks={links} />
-            <Container className='text-center mt-3'>
+            <Container style={{ marginTop: "7rem" }}>
                 <Modal show={show} onHide={handleClose} size='lg'>
                     <Modal.Header closeButton>
                         <Modal.Title>Transaction Details</Modal.Title>
@@ -137,8 +137,10 @@ function SendTx({ navLinks }) {
                         </p>
                     </Modal.Body>
                 </Modal>
-                <h1><i>Send Transaction</i></h1>
-                <p className='text-center mb-3'>Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on EduChain Chain.</p>
+                <h1 className='text-center'><i>Send Transaction</i></h1>
+                <p className='text-center my-4'>
+                    Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on EduChain Chain.
+                </p>
                 {error && <p><i>{error}</i></p>}
                 <InputGroup className='my-3'>
                     <InputGroup.Text>Recipient</InputGroup.Text>

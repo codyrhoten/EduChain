@@ -35,7 +35,7 @@ function WalletHome({ navLinks, setWalletStatus }) {
     return (
         <>
             <Header navLinks={links} />
-            <Container className='text-center'>
+            <Container className='text-center' style={{ marginTop: "7rem" }}>
                 <h1 className='mt-3'><i>EduWallet</i></h1>
                 {
                     !isCreated ? (

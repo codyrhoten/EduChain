@@ -68,7 +68,7 @@ function Faucet({ navLinks }) {
     }
 
     const processTx = () => {
-        const {value: recipient} = searchInput.current;
+        const { value: recipient } = searchInput.current;
         setSearch(recipient);
         const validAddress = /^[0-9a-f]{40}$/.test(recipient);
 
@@ -106,7 +106,7 @@ function Faucet({ navLinks }) {
     return (
         <>
             <Header navLinks={navLinks} />
-            <Container className='postion-relative'>
+            <Container style={{ marginTop: "7rem" }}>
                 <Modal show={show} onHide={handleClose} size='lg'>
                     <Modal.Header closeButton>
                         <Modal.Title>Transaction Details</Modal.Title>
@@ -134,10 +134,10 @@ function Faucet({ navLinks }) {
                 </Modal>
                 <Container align='center'>
                     <h1><i>EduFaucet</i></h1>
-                    <Col className='lead'>
+                    <Col className='lead my-3'>
                         This faucet allows you to receive EduChain coins &#40;EDU&#41; for free.
                     </Col>
-                    <Col className='fs-4'>available balance: {Number(balance) / 1000000} EDU</Col>
+                    <Col className='fs-4 mb-4'>available balance: {Number(balance) / 1000000} EDU</Col>
                 </Container>
                 <Card>
                     <Card.Body>
