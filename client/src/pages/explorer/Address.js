@@ -24,19 +24,22 @@ const Address = ({ navLinks }) => {
     }, [address]);
 
     const AddressPg = () => {
-        <Container className="mt-4">
-            <h4 align='center'>
-                Address: {address}<br />
-            </h4>
-            <p align='center'>
-                <i>Confirmed Balance: {Number(addressData.balance.confirmed) / 1000000} EDU</i>
-            </p>
-            {addressData.txs.length > 0 ?
-                <TxTable txs={addressData.txs} /> :
-                <Card align='center' className='p-5'><b>
-                    There are no matching addresses
-                </b></Card>}
-        </Container>
+        return (
+            <Container className="mt-4">
+                <h4 align='center'>
+                    Address: {address}<br />
+                </h4>
+                <p className='text-center my-4'>
+                    <i>Confirmed Balance: {Number(addressData.balance.confirmed) / 1000000} EDU</i>
+                </p>
+                {addressData.txs.length > 0 ?
+                    <TxTable txs={addressData.txs} /> :
+                    <Card align='center' className='p-5'>
+                        <b>There are no matching addresses</b>
+                    </Card>
+                }
+            </Container>
+        );
     };
 
     return (
@@ -45,7 +48,7 @@ const Address = ({ navLinks }) => {
             <h4 className='text-center' style={{ marginTop: "7rem" }}>
                 <i>EduChain PoW Testnet Explorer</i>
             </h4>
-            {address ?  <AddressPg /> : <h5>No addresses have transacted on this chain yet.</h5>}
+            {address ? <AddressPg /> : <h5>No addresses have transacted on this chain yet.</h5>}
         </>
     );
 };

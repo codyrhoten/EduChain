@@ -29,7 +29,7 @@ const TxDetails = ({ navLinks }) => {
                 <i>EduChain PoW Testnet Explorer</i>
             </h4>
             <Container>
-                <h4 align='center'>Transaction Details</h4>
+                <h4 className='text-center my-4'>Transaction Details</h4>
                 <Card>
                     <Card.Body>
                         {!error && tx !== undefined && Object.keys(tx).length > 0 ?

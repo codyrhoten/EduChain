@@ -5,6 +5,7 @@
     "main": "api.js",
     "scripts": {
         "test": "test",
+        "start": "node api.js 5555 http://localhost:5555",
         "type": "module"
     },
     "repository": {
