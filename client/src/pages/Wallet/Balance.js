@@ -12,13 +12,17 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
     const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     useEffect(() => {
-        (async function() {
-            const userAddress = sessionStorage['address'];
-            const addressData = await axios.get(`http://localhost:5555/address-data/${userAddress}`);
-            const { confirmed, pending, safe } = addressData.data.balance;
-            setConfirmedBalance(confirmed);
-            setPendingBalance(pending);
-            setSafeBalance(safe);
+        (async function () {
+            try {
+                const userAddress = sessionStorage['address'];
+                const addressData = await axios.get(`http://localhost:5555/address-data/${userAddress}`);
+                const { confirmed, pending, safe } = addressData.data.balance;
+                setConfirmedBalance(confirmed);
+                setPendingBalance(pending);
+                setSafeBalance(safe);
+            } catch (err) {
+                console.log(err.message);
+            }
         })();
     }, []);
 

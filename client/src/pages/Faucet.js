@@ -18,8 +18,12 @@ function Faucet({ navLinks }) {
     const handleShow = () => setShow(true);
 
     async function getBalance() {
-        const addressData = await axios.get(`http://localhost:5555/address-data/${faucetAddress}`);
-        setBalance(addressData.data.balance.confirmed);
+        try {
+            const addressData = await axios.get(`http://localhost:5555/address-data/${faucetAddress}`);
+            setBalance(addressData.data.balance.confirmed);
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     useEffect(() => {

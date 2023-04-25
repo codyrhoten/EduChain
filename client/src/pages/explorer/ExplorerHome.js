@@ -8,9 +8,7 @@ function ExplorerHome({ latestBlx, latestTxs, navLinks }) {
         <>
             <Header navLinks={navLinks} />
             <Container style={{ marginTop: "7rem" }}>
-                <h4 className="text-center my-4">
-                    <i>EduChain PoW Testnet Explorer</i>
-                </h4>
+                <h4 className="text-center my-5"><i>EduChain PoW Testnet Explorer</i></h4>
                 <Container className="position-relative">
                     <Row>
                         <LatestBlocks latestBlx={latestBlx} />

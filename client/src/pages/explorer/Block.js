@@ -76,7 +76,7 @@ const Block = ({ navLinks }) => {
                                     </tr>
                                 </tbody>
                             </Table> :
-                            <p align='center'><b>This block hasn't yet been mined...</b></p>
+                            <h5 className='text-center mt-4'>This block hasn't yet been mined...</h5>
                         }
                     </Card.Body>
                 </Card>

@@ -12,17 +12,23 @@ const TxDetails = ({ navLinks }) => {
 
     useEffect(() => {
         (async function () {
-            const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
-            setTx(tx.data);
-            if (tx.data.errorMsg) setError(tx.data.errorMsg);
+            try {
+                const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
+                setTx(tx.data);
+            } catch (err) {
+                console.log(err.message);
+                setError(tx.data.errorMsg);
+            }
         })();
     }, []);
 
     return (
         <>
             <Header navLinks={navLinks} />
-            <Container style={{ marginTop: "7rem" }}>
-            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
+            <h4 className='text-center' style={{ marginTop: "7rem" }}>
+                <i>EduChain PoW Testnet Explorer</i>
+            </h4>
+            <Container>
                 <h4 align='center'>Transaction Details</h4>
                 <Card>
                     <Card.Body>

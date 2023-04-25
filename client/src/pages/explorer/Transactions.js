@@ -25,9 +25,17 @@ const Transactions = ({ navLinks }) => {
                     </h4>
                 );
             } else {
-                const txs = await axios.get('http://localhost:5555/all-txs');
-                setTxs(txs.data.reverse());
-                setHeading(<h4 align='center'>All Transactions</h4>);
+                try {
+                    const txs = await axios.get('http://localhost:5555/all-txs');
+                    setTxs(txs.data.reverse());
+                    setHeading(<h4 align='center'>All Transactions</h4>);
+                } catch (err) {
+                    console.log(err.message);
+                    setHeading(
+                        <h5 align='center'>There are no transactions on this chain yet.</h5>
+                    );
+                }
+
             }
         })();
     }, [blockIndex]);
@@ -36,7 +44,7 @@ const Transactions = ({ navLinks }) => {
         <>
             <Header navLinks={navLinks} />
             <Container style={{ marginTop: "7rem" }}>
-            <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
+                <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
                 {heading}
                 {txs.length > 0 && <TxTable txs={txs} />}
             </Container>

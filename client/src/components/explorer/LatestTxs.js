@@ -9,8 +9,12 @@ const LatestTxs = () => {
 
     useEffect(() => {
         (async function () {
-            const txs = await axios.get('http://localhost:5555/all-txs');
-            setLatestTxs(txs.data.reverse().slice(0, 5));
+            try {
+                const txs = await axios.get('http://localhost:5555/all-txs');
+                setLatestTxs(txs.data.reverse().slice(0, 5));
+            } catch (err) {
+                console.log(err.message);
+            }
         })();
     }, []);
 
@@ -19,44 +23,45 @@ const LatestTxs = () => {
             <Card className='text-center h-100'>
                 <Card.Body>
                     <Card.Title>Latest Transactions</Card.Title>
-                    {latestTxs && latestTxs.map((tx, i) => {
-                        return (
-                            <Container key={i}>
-                                <Row>
-                                    <Col>
-                                        Tx{' '}
-                                        <Link 
-                                            to={`/tx/${tx.hash}`}
-                                            style={{ textDecoration: 'none' }}
-                                        >
-                                            {tx.hash.substring(0, 12)}...
-                                        </Link>
-                                    </Col>
-                                    <Col>
-                                        From:{' '}
-                                        <Link
-                                            to={`/address/${tx.from}`}
-                                            style={{ textDecoration: 'none' }}
-                                        >
-                                            {shortenAddress(tx.from, 4)}
-                                        </Link><br />
-                                        To:{' '}
-                                        <Link
-                                            to={`/address/${tx.to}`}
-                                            style={{ textDecoration: 'none' }}
-                                        >
-                                            {shortenAddress(tx.to, 4)}
-                                        </Link>
-                                    </Col>
-                                    <Col>{Number(tx.amount / 1000000)} EDU</Col>
-                                </Row>
-                                <br />
-                            </Container>
-                        );
-                    })}
-                    <Link to='/transactions'>
-                        See all transactions
-                    </Link>
+                    {latestTxs.length > 0 ?
+                        latestTxs.map((tx, i) => {
+                            return (
+                                <Container key={i}>
+                                    <Row>
+                                        <Col>
+                                            Tx{' '}
+                                            <Link
+                                                to={`/tx/${tx.hash}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {tx.hash.substring(0, 12)}...
+                                            </Link>
+                                        </Col>
+                                        <Col>
+                                            From:{' '}
+                                            <Link
+                                                to={`/address/${tx.from}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {shortenAddress(tx.from, 4)}
+                                            </Link><br />
+                                            To:{' '}
+                                            <Link
+                                                to={`/address/${tx.to}`}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {shortenAddress(tx.to, 4)}
+                                            </Link>
+                                        </Col>
+                                        <Col>{Number(tx.amount / 1000000)} EDU</Col>
+                                    </Row>
+                                    <br />
+                                </Container>
+                            );
+                        }) :
+                        <p className='mt-5'>There are no transactions in this chain yet.</p>
+                    }
+                    {latestTxs.length > 0 && <Link to='/transactions'>See all transactions</Link>}
                 </Card.Body>
             </Card>
         </Col>
