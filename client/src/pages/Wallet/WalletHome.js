@@ -5,10 +5,9 @@ import { Container, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 
-function WalletHome({ navLinks, setWalletStatus }) {
-    const [isCreated, setIsCreated] = useState(false);
+function WalletHome({ setWalletStatus }) {
     const { isLocked, changeWalletState } = useWallet();
-    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
+    const [isCreated, setIsCreated] = useState(false);
 
     function displayWallet() {
         if (!isLocked) {
@@ -34,7 +33,7 @@ function WalletHome({ navLinks, setWalletStatus }) {
 
     return (
         <>
-            <Header navLinks={links} />
+            <Header/>
             <Container className='text-center' style={{ marginTop: "7rem" }}>
                 <h1 className='mt-3'><i>EduWallet</i></h1>
                 {

@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { config } from '../../environments';
 import { Card, Container, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const AllBlocks = ({ navLinks }) => {
+    const siteUrl = config.url;
     const [blocks, setBlocks] = useState([]);
 
     useEffect(() => {
         (async function () {
             try {
-                const _blocks = await axios.get('http://localhost:5555/blocks');
+                const _blocks = await axios.get(`${siteUrl}/blocks`);
                 setBlocks(_blocks.data.slice(0, 5));
             } catch (err) {
                 console.log(err.message);

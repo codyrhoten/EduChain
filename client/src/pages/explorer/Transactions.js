@@ -1,23 +1,24 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { config } from '../../environments';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 import TxTable from '../../components/explorer/TxTable';
 
 const Transactions = ({ navLinks }) => {
     const blockIndex = useLocation().state;
+    const siteUrl = config.url;
     const [txs, setTxs] = useState([]);
     const [heading, setHeading] = useState(null);
 
     useEffect(() => {
         (async function () {
             if (blockIndex) {
-                const _block = await axios.get(`http://localhost:5555/blocks/${blockIndex}`);
+                const _block = await axios.get(`${siteUrl}/blocks/${blockIndex}`);
                 setTxs(_block.data.txs);
-
                 setHeading(
-                    <h4 align='center'>
+                    <h4 className='text-center mb-4'>
                         <Link to={`/block/${blockIndex}`} style={{ textDecoration: 'none' }}>
                             Block {blockIndex}
                         </Link>

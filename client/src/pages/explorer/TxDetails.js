@@ -1,11 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { config } from '../../environments';
 import Header from '../../components/Header/Header';
 import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const TxDetails = ({ navLinks }) => {
+    const siteUrl = config.url;
     const { txHash } = useParams();
     const [tx, setTx] = useState({});
     const [error, setError] = useState('')
@@ -13,7 +15,7 @@ const TxDetails = ({ navLinks }) => {
     useEffect(() => {
         (async function () {
             try {
-                const tx = await axios.get(`http://localhost:5555/txs/${txHash}`);
+                const tx = await axios.get(`${siteUrl}/txs/${txHash}`);
                 setTx(tx.data);
             } catch (err) {
                 console.log(err.message);

@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { faucetAddress, faucetPrivKey, faucetPubKey, miningAddress } from '../utils/accounts.js';
-import { sha256, sign } from '../utils/cryptography.js';
 import axios from "axios";
+import { config } from '../environments';
+import { sha256, sign } from '../utils/cryptography.js';
 import Header from "../components/Header/Header";
 import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import shortenAddress from "../utils/shortenAddress.js";
 
 function Faucet({ navLinks }) {
+    const siteUrl = config.url;
     const [faucet, setFaucet] = useState({});
     const [balance, setBalance] = useState(0);
     const [show, setShow] = useState(false);
@@ -19,7 +21,7 @@ function Faucet({ navLinks }) {
 
     async function getBalance() {
         try {
-            const addressData = await axios.get(`http://localhost:5555/address-data/${faucetAddress}`);
+            const addressData = await axios.get(`${siteUrl}/address-data/${faucetAddress}`);
             setBalance(addressData.data.balance.confirmed);
         } catch (err) {
             console.log(err.message);
@@ -33,7 +35,7 @@ function Faucet({ navLinks }) {
 
     async function sendTx(tx) {
         try {
-            let response = await fetch('http://localhost:5555/txs/send', {
+            let response = await fetch(`${siteUrl}/txs/send`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(tx)
@@ -58,7 +60,7 @@ function Faucet({ navLinks }) {
     async function mineBlock() {
         try {
             const response = await axios.post(
-                `http://localhost:5555/mine/${miningAddress}`,
+                `${siteUrl}/mine/${miningAddress}`,
                 { headers: { 'Content-Type': 'application/json' } }
             );
 

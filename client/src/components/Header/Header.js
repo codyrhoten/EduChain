@@ -1,10 +1,12 @@
 import { useWallet } from "../../wallet-context";
+import { config } from '../../environments';
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import chainImage from "../../assets/chain.webp";
 import styles from "./Header.module.css";
 
 const Header = () => {
+    const siteUrl = config.url;
     const { isLocked, changeWalletState } = useWallet();
 
     function closeWallet() {
@@ -12,7 +14,7 @@ const Header = () => {
         sessionStorage.removeItem("pubKey");
         sessionStorage.removeItem("address");
         changeWalletState(true);
-        window.location.replace("https://educhain.codyrhoten.com/wallet/home");
+        window.location.replace(`${siteUrl}/wallet/home`);
     }
 
     return (
@@ -38,31 +40,35 @@ const Header = () => {
                             Explorer
                         </Link>
                     </Nav.Item>
-                    <NavDropdown className={`mx-1`} title="Wallet" id={styles.dropdowntitle}>
+                    <NavDropdown className='mx-1' title="Wallet" id={styles.dropdowntitle}>
                         {isLocked ? (
                             <>
-                                <NavDropdown.Item>
-                                    <Link to='/wallet/home' className={styles._dropdownitem}>
-                                        Create
-                                    </Link>
+                                <NavDropdown.Item
+                                    href='/wallet/home'
+                                    className={styles._dropdownitem}
+                                >
+                                    Create
                                 </NavDropdown.Item>
-                                <NavDropdown.Item>
-                                    <Link to='/wallet/open' className={styles._dropdownitem}>
-                                        Open
-                                    </Link>
+                                <NavDropdown.Item
+                                    href='/wallet/open'
+                                    className={styles._dropdownitem}
+                                >
+                                    Open
                                 </NavDropdown.Item>
                             </>
                         ) : (
                             <>
-                                <NavDropdown.Item>
-                                    <Link to='/wallet/balance' className={styles._dropdownitem}>
-                                        Balance
-                                    </Link>
+                                <NavDropdown.Item
+                                    href='/wallet/balance'
+                                    className={styles._dropdownitem}
+                                >
+                                    Balance
                                 </NavDropdown.Item>
-                                <NavDropdown.Item>
-                                    <Link to='/wallet/send-tx' className={styles._dropdownitem}>
-                                        Send
-                                    </Link>
+                                <NavDropdown.Item
+                                    href='/wallet/send-tx'
+                                    className={styles._dropdownitem}
+                                >
+                                    Send
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={closeWallet}>

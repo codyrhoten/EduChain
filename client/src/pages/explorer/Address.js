@@ -1,18 +1,20 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import { config } from '../../environments';
 import Header from "../../components/Header/Header";
 import { Card, Container } from "react-bootstrap";
 import TxTable from "../../components/explorer/TxTable";
 
 const Address = ({ navLinks }) => {
+    const siteUrl = config.url;
     const { address } = useParams();
     const [addressData, setAddressData] = useState({ balance: 0, txs: [] });
 
     useEffect(() => {
         (async function () {
             try {
-                const _addressData = await axios.get(`http://localhost:5555/address-data/${address}`);
+                const _addressData = await axios.get(`${siteUrl}/address-data/${address}`);
                 setAddressData({
                     balance: _addressData.data.balance,
                     txs: _addressData.data.txs.reverse()

@@ -4,14 +4,16 @@ import { Col, Row, Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 import shortenAddress from '../../utils/shortenAddress';
+import { config } from '../../environments';
 
 const LatestBlocks = () => {
+    const siteUrl = config.url;
     const [latestBlx, setLatestBlx] = useState([]);
 
     useEffect(() => {
         (async function () {
             try {
-                const blocks = await axios.get('http://localhost:5555/blocks');
+                const blocks = await axios.get(`${siteUrl}/blocks`);
                 setLatestBlx(blocks.data.slice(0, 5));
             } catch (err) {
                 console.log(err.message);
@@ -23,7 +25,7 @@ const LatestBlocks = () => {
         <Col className='lg-6'>
             <Card className='text-center h-100'>
                 <Card.Body>
-                    <Card.Title>Latest Blocks</Card.Title>
+                    <Card.Title>Latest Blocks from {process.env.NODE_ENV}</Card.Title>
                     {latestBlx.length > 0 ?
                         latestBlx.map((block, i) => (
                             <Container key={i}>
@@ -39,7 +41,7 @@ const LatestBlocks = () => {
                                         <br />
                                         {<i>{formatTimestamp(block.timestamp)}</i>}
                                     </Col>
-                                    <Col>{block.txs.length} Txs</Col>
+                                    <Col>{block.txs.length}{' '}{block.txs.length > 1 ? 'Txs' : 'Tx'}</Col>
                                     <Col>Mined by {shortenAddress(block.minedBy, 4)}</Col>
                                 </Row>
                                 <br />

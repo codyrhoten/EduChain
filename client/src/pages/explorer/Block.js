@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { config } from '../../environments';
 import Header from '../../components/Header/Header';
 import { Badge, Card, Container, Table } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const Block = ({ navLinks }) => {
+    const siteUrl = config.url;
     const { blockIndex } = useParams();
     const [block, setBlock] = useState({});
 
     useEffect(() => {
         (async function () {
-            const _block = await axios.get(`http://localhost:5555/blocks/${blockIndex}`);
+            const _block = await axios.get(`${siteUrl}/blocks/${blockIndex}`);
             setBlock(_block.data);
         })();
     }, [blockIndex]);
@@ -21,7 +23,7 @@ const Block = ({ navLinks }) => {
             <Header navLinks={navLinks} />
             <Container style={{ marginTop: "7rem" }}>
                 <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
-                <h4 align='center'>Block # {blockIndex}</h4>
+                <h4 className='text-center mb-4'>Block # {blockIndex}</h4>
                 <Card>
                     <Card.Body>
                         {block !== undefined && Object.keys(block).length > 0 ?

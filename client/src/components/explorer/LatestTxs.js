@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { config } from '../../environments';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import shortenAddress from '../../utils/shortenAddress';
+const siteUrl = config.url;
 
 const LatestTxs = () => {
     const [latestTxs, setLatestTxs] = useState([]);
@@ -10,7 +12,7 @@ const LatestTxs = () => {
     useEffect(() => {
         (async function () {
             try {
-                const txs = await axios.get('http://localhost:5555/all-txs');
+                const txs = await axios.get(`${siteUrl}/all-txs`);
                 setLatestTxs(txs.data.reverse().slice(0, 5));
             } catch (err) {
                 console.log(err.message);

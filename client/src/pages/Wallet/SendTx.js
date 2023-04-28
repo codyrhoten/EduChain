@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useWallet } from '../../wallet-context';
 import { sha256, sign } from '../../utils/cryptography';
 import axios from 'axios';
+import { config } from '../../environments';
 import { miningAddress } from '../../utils/accounts';
 import { Container, Form, InputGroup, Modal, Row } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
@@ -9,6 +10,7 @@ import { Link } from 'react-router-dom';
 import shortenAddress from '../../utils/shortenAddress';
 
 function SendTx({ navLinks }) {
+    const siteUrl = config.url;
     const [show, setShow] = useState(false);
     const [isSigned, setIsSigned] = useState(false);
     const [txHash, setTxHash] = useState('');
@@ -61,7 +63,7 @@ function SendTx({ navLinks }) {
     async function mineBlock() {
         try {
             const response = await axios.post(
-                `http://localhost:5555/mine/${miningAddress}`,
+                `${siteUrl}/mine/${miningAddress}`,
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
@@ -83,7 +85,7 @@ function SendTx({ navLinks }) {
             const config = { headers: { 'Content-Type': 'application/json' } };
 
             const response = await axios.post(
-                `http://localhost:5555/txs/send`,
+                `${siteUrl}/txs/send`,
                 signedTx,
                 config,
             );

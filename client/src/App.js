@@ -1,6 +1,5 @@
 import { WalletProvider } from './wallet-context';
 import { Routes, Route } from 'react-router-dom';
-import navLinks from './utils/navLinks';
 import ExplorerHome from './pages/explorer/ExplorerHome';
 import AllBlocks from './pages/explorer/AllBlocks';
 import Transactions from './pages/explorer/Transactions';
@@ -22,49 +21,49 @@ function App() {
                     {/* <-----------------Explorer-----------------> */}
                     <Route
                         path='/'
-                        element={<ExplorerHome navLinks={navLinks.explorer} />}
+                        element={<ExplorerHome/>}
                     />
                     <Route
                         path='/blocks'
-                        element={<AllBlocks navLinks={navLinks.explorer} />}
+                        element={<AllBlocks/>}
                     />
                     <Route
                         path='/transactions'
-                        element={<Transactions navLinks={navLinks.explorer} />}
+                        element={<Transactions/>}
                     />
                     <Route
                         path='/block/:blockIndex'
-                        element={<Block navLinks={navLinks.explorer} />}
+                        element={<Block/>}
                     />
                     <Route
                         path='/tx/:txHash'
-                        element={<TxDetails navLinks={navLinks.explorer} />}
+                        element={<TxDetails/>}
                     />
                     <Route
                         path='/address/:address'
-                        element={<Address navLinks={navLinks.explorer} />}
+                        element={<Address/>}
                     />
                     {/* <--------------------Wallet--------------------> */}
                     <Route
                         path='/wallet/home'
-                        element={<WalletHome navLinks={navLinks.wallet} />}
+                        element={<WalletHome/>}
                     />
                     <Route
                         path='/wallet/open'
-                        element={<Open navLinks={navLinks.wallet} />}
+                        element={<Open/>}
                     />
                     <Route
                         path='/wallet/balance'
-                        element={<Balance navLinks={navLinks.wallet} />}
+                        element={<Balance/>}
                     />
                     <Route
                         path='/wallet/send-tx'
-                        element={<SendTx navLinks={navLinks.wallet} />}
+                        element={<SendTx/>}
                     />
                     {/* <-------------------Faucet-------------------> */}
                     <Route
                         path='/faucet'
-                        element={<Faucet navLinks={navLinks.faucet} />}
+                        element={<Faucet/>}
                     />
                 </Routes>
             </WalletProvider>

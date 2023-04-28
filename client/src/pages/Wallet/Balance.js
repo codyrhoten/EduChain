@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useWallet } from '../../wallet-context';
+import axios from "axios";
+import { config } from '../../environments';
 import { Card, Container, Table } from "react-bootstrap";
 import Header from "../../components/Header/Header";
-import axios from "axios";
 
 function Balance({ navLinks, setWalletStatus, walletStatus }) {
+    const siteUrl = config.url;
     const [confirmedBalance, setConfirmedBalance] = useState('0');
     const [pendingBalance, setPendingBalance] = useState('0');
     const [safeBalance, setSafeBalance] = useState('0');
@@ -15,7 +17,7 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
         (async function () {
             try {
                 const userAddress = sessionStorage['address'];
-                const addressData = await axios.get(`http://localhost:5555/address-data/${userAddress}`);
+                const addressData = await axios.get(`${siteUrl}/address-data/${userAddress}`);
                 const { confirmed, pending, safe } = addressData.data.balance;
                 setConfirmedBalance(confirmed);
                 setPendingBalance(pending);
