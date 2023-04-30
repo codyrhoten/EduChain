@@ -3,10 +3,10 @@ import { Container, Row } from "react-bootstrap";
 import LatestBlocks from "../../components/explorer/LatestBlocks";
 import LatestTxs from "../../components/explorer/LatestTxs";
 
-function ExplorerHome({ latestBlx, latestTxs, navLinks }) {
+function ExplorerHome({ latestBlx, latestTxs }) {
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <h4 className="text-center my-5"><i>EduChain PoW Testnet Explorer</i></h4>
                 <Container className="position-relative">

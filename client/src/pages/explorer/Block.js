@@ -6,8 +6,8 @@ import { Badge, Card, Container, Table } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const Block = ({ navLinks }) => {
-    const siteUrl = config.url;
+const Block = () => {
+    const siteUrl = config.apiUrl;
     const { blockIndex } = useParams();
     const [block, setBlock] = useState({});
 
@@ -20,7 +20,7 @@ const Block = ({ navLinks }) => {
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
                 <h4 className='text-center mb-4'>Block # {blockIndex}</h4>

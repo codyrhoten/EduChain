@@ -6,7 +6,7 @@ import chainImage from "../../assets/chain.webp";
 import styles from "./Header.module.css";
 
 const Header = () => {
-    const siteUrl = config.url;
+    const siteUrl = config.frontEndUrl;
     const { isLocked, changeWalletState } = useWallet();
 
     function closeWallet() {
@@ -14,7 +14,7 @@ const Header = () => {
         sessionStorage.removeItem("pubKey");
         sessionStorage.removeItem("address");
         changeWalletState(true);
-        window.location.replace('https://educhain.codyrhoten.com/wallet/home');
+        window.location.replace(`${siteUrl}/wallet/home`);
     }
 
     return (

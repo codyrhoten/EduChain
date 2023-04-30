@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
-import { useWallet } from '../../wallet-context';
 import axios from "axios";
 import { config } from '../../environments';
 import { Card, Container, Table } from "react-bootstrap";
 import Header from "../../components/Header/Header";
 
-function Balance({ navLinks, setWalletStatus, walletStatus }) {
-    const siteUrl = config.url;
+function Balance({ setWalletStatus, walletStatus }) {
+    const siteUrl = config.apiUrl;
     const [confirmedBalance, setConfirmedBalance] = useState('0');
     const [pendingBalance, setPendingBalance] = useState('0');
     const [safeBalance, setSafeBalance] = useState('0');
-    const { isLocked } = useWallet();
-    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     useEffect(() => {
         (async function () {
@@ -30,7 +27,7 @@ function Balance({ navLinks, setWalletStatus, walletStatus }) {
 
     return (
         <>
-            <Header navLinks={links} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <h1 className='text-center'><i>Your Balance</i></h1>
                 <Card>

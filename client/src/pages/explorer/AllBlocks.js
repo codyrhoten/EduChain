@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const AllBlocks = ({ navLinks }) => {
-    const siteUrl = config.url;
+const AllBlocks = () => {
+    const siteUrl = config.apiUrl;
     const [blocks, setBlocks] = useState([]);
+    console.log(blocks)
 
     useEffect(() => {
         (async function () {
@@ -23,57 +24,59 @@ const AllBlocks = ({ navLinks }) => {
     }, []);
 
     const AllBlocksPg = () => {
-        <Container className='mt-4'>
-            <Card>
-                <Card.Body>
-                    <Card.Title>Blocks</Card.Title>
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>Index</th>
-                                <th>Timestamp</th>
-                                <th>Mined By</th>
-                                <th>Transactions</th>
-                                {/* <th>Reward</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {blocks.length > 0 &&
-                                blocks.map((b, i) => (
-                                    <tr key={i}>
-                                        <td>
-                                            <Link
-                                                to={`/block/${b.index}`}
-                                            >
-                                                {b.index}
-                                            </Link>
-                                        </td>
-                                        <td>{formatTimestamp(b.timestamp)}</td>
-                                        <td>
-                                            <Link
-                                                to={`/address/${b.minedBy}`}
-                                                style={{ textDecoration: 'none' }}
-                                            >
-                                                {b.minedBy}
-                                            </Link>
-                                        </td>
-                                        <td>{b.txs.length}</td>
-                                        {/* <td>{b.reward}</td> */}
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </Table>
-                </Card.Body>
-            </Card>
-        </Container>
+        return (
+            <Container className='mt-4'>
+                <Card>
+                    <Card.Body>
+                        <Card.Title>Blocks</Card.Title>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Timestamp</th>
+                                    <th>Mined By</th>
+                                    <th>Transactions</th>
+                                    {/* <th>Reward</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {blocks.length > 0 &&
+                                    blocks.map((b, i) => (
+                                        <tr key={i}>
+                                            <td>
+                                                <Link
+                                                    to={`/block/${b.index}`}
+                                                >
+                                                    {b.index}
+                                                </Link>
+                                            </td>
+                                            <td>{formatTimestamp(b.timestamp)}</td>
+                                            <td>
+                                                <Link
+                                                    to={`/address/${b.minedBy}`}
+                                                    style={{ textDecoration: 'none' }}
+                                                >
+                                                    {b.minedBy}
+                                                </Link>
+                                            </td>
+                                            <td>{b.txs.length}</td>
+                                            {/* <td>{b.reward}</td> */}
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </Table>
+                    </Card.Body>
+                </Card>
+            </Container>
+        );
     };
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <h4 className='text-center' style={{ marginTop: "7rem" }}><i>EduChain PoW Testnet Explorer</i></h4>
-            {blocks ? <AllBlocksPg /> : <h5 className='text-center mt-5'>There are not blocks in this chain yet.</h5>}
+            {blocks.length > 0 ? <AllBlocksPg /> : <h5 className='text-center mt-5'>There are not blocks in this chain yet.</h5>}
         </>
     );
 };

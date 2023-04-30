@@ -6,7 +6,7 @@ import Header from '../../components/Header/Header';
 import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 
-const TxDetails = ({ navLinks }) => {
+const TxDetails = () => {
     const siteUrl = config.url;
     const { txHash } = useParams();
     const [tx, setTx] = useState({});
@@ -26,7 +26,7 @@ const TxDetails = ({ navLinks }) => {
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <h4 className='text-center' style={{ marginTop: "7rem" }}>
                 <i>EduChain PoW Testnet Explorer</i>
             </h4>

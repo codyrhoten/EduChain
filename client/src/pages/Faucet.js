@@ -8,8 +8,8 @@ import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-boo
 import { Link } from "react-router-dom";
 import shortenAddress from "../utils/shortenAddress.js";
 
-function Faucet({ navLinks }) {
-    const siteUrl = config.url;
+function Faucet() {
+    const siteUrl = config.apiUrl;
     const [faucet, setFaucet] = useState({});
     const [balance, setBalance] = useState(0);
     const [show, setShow] = useState(false);
@@ -111,7 +111,7 @@ function Faucet({ navLinks }) {
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <Modal show={show} onHide={handleClose} size='lg'>
                     <Modal.Header closeButton>

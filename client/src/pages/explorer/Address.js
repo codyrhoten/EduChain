@@ -6,8 +6,8 @@ import Header from "../../components/Header/Header";
 import { Card, Container } from "react-bootstrap";
 import TxTable from "../../components/explorer/TxTable";
 
-const Address = ({ navLinks }) => {
-    const siteUrl = config.url;
+const Address = () => {
+    const siteUrl = config.apiUrl;
     const { address } = useParams();
     const [addressData, setAddressData] = useState({ balance: 0, txs: [] });
 
@@ -46,7 +46,7 @@ const Address = ({ navLinks }) => {
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <h4 className='text-center' style={{ marginTop: "7rem" }}>
                 <i>EduChain PoW Testnet Explorer</i>
             </h4>

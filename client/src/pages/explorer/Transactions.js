@@ -6,9 +6,9 @@ import { Container } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 import TxTable from '../../components/explorer/TxTable';
 
-const Transactions = ({ navLinks }) => {
+const Transactions = () => {
     const blockIndex = useLocation().state;
-    const siteUrl = config.url;
+    const siteUrl = config.apiUrl;
     const [txs, setTxs] = useState([]);
     const [heading, setHeading] = useState(null);
 
@@ -43,7 +43,7 @@ const Transactions = ({ navLinks }) => {
 
     return (
         <>
-            <Header navLinks={navLinks} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <h4 className='text-center my-4'><i>EduChain PoW Testnet Explorer</i></h4>
                 {heading}

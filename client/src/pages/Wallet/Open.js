@@ -4,12 +4,11 @@ import { keyPairFromPrivKey, createWallet } from '../../utils/cryptography';
 import { Container, Col, Form } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 
-function Open({ navLinks }) {
+function Open() {
     const [isOpen, setIsOpen] = useState(false);
     const userPrivateKey = useRef();
     const [error, setError] = useState('');
     const { isLocked, changeWalletState } = useWallet();
-    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
 
     function displayWallet() {
         if (!isLocked) {
@@ -41,7 +40,7 @@ function Open({ navLinks }) {
 
     return (
         <>
-            <Header navLinks={links} />
+            <Header />
             <Container className='text-center' style={{ marginTop: "7rem" }}>
                 <h1 className='mt-3'><i>Open Wallet</i></h1>
                 {

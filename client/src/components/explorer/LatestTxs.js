@@ -4,9 +4,9 @@ import { config } from '../../environments';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import shortenAddress from '../../utils/shortenAddress';
-const siteUrl = config.url;
 
 const LatestTxs = () => {
+    const siteUrl = config.apiUrl;
     const [latestTxs, setLatestTxs] = useState([]);
 
     useEffect(() => {

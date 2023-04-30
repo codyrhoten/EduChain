@@ -9,8 +9,8 @@ import Header from '../../components/Header/Header';
 import { Link } from 'react-router-dom';
 import shortenAddress from '../../utils/shortenAddress';
 
-function SendTx({ navLinks }) {
-    const siteUrl = config.url;
+function SendTx() {
+    const siteUrl = config.apiUrl;
     const [show, setShow] = useState(false);
     const [isSigned, setIsSigned] = useState(false);
     const [txHash, setTxHash] = useState('');
@@ -22,7 +22,6 @@ function SendTx({ navLinks }) {
     const amountRef = useRef(0);
     const [fee, setFee] = useState(0.0005);
     const { isLocked } = useWallet();
-    const links = (isLocked === true) ? navLinks.locked : navLinks.unlocked;
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -106,7 +105,7 @@ function SendTx({ navLinks }) {
 
     return (
         <>
-            <Header navLinks={links} />
+            <Header />
             <Container style={{ marginTop: "7rem" }}>
                 <Modal show={show} onHide={handleClose} size='lg'>
                     <Modal.Header closeButton>

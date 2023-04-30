@@ -7,7 +7,7 @@ import shortenAddress from '../../utils/shortenAddress';
 import { config } from '../../environments';
 
 const LatestBlocks = () => {
-    const siteUrl = config.url;
+    const siteUrl = config.apiUrl;
     const [latestBlx, setLatestBlx] = useState([]);
 
     useEffect(() => {

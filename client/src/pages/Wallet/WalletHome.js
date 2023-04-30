@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useWallet } from '../../wallet-context';
 import { generateKeyPair, createWallet } from '../../utils/cryptography.js';
 import { Container, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 
-function WalletHome({ setWalletStatus }) {
+function WalletHome() {
     const { isLocked, changeWalletState } = useWallet();
     const [isCreated, setIsCreated] = useState(false);
 
