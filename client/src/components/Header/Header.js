@@ -14,7 +14,7 @@ const Header = () => {
         sessionStorage.removeItem("pubKey");
         sessionStorage.removeItem("address");
         changeWalletState(true);
-        window.location.replace(`${siteUrl}/wallet/home`);
+        window.location.replace('https://educhain.codyrhoten.com/wallet/home');
     }
 
     return (
