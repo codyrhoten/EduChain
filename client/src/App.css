@@ -1,3 +1,7 @@
+html * {
+    font-family: 'Fragment Mono';
+}
+
 div {
     position: relative;
 }

@@ -28,10 +28,10 @@ const Header = () => {
             <Navbar.Brand
                 as={Link}
                 to="/"
-                style={{ fontFamily: "Fragment Mono", marginLeft: '1.25rem' }}
+                className={styles._brand}
             >
-                <img src={chainImage} height="40" alt="three yellow chain links" />
-                <b>EduChain</b>
+                {/* <img src={chainImage} height="40" alt="three yellow chain links" /> */}
+                EduChain
             </Navbar.Brand>
             <Navbar.Collapse id="navbarSupportedContent">
                 <Nav className='ms-auto me-5'>
@@ -40,7 +40,7 @@ const Header = () => {
                             Explorer
                         </Link>
                     </Nav.Item>
-                    <NavDropdown className='mx-1' title="Wallet" id={styles.dropdowntitle}>
+                    <NavDropdown className='mx-4' title="Wallet" id={styles.dropdowntitle}>
                         {isLocked ? (
                             <>
                                 <NavDropdown.Item

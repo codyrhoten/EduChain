@@ -21,14 +21,12 @@
 }
 
 ._brand {
-    display: block;
-    padding: 0.5rem;
-    color: black;
+    color: rgb(255, 223, 0) !important;
     text-decoration: none;
-    font-size: 22px;
-    font-family: 'Fragment Mono';
-    display: flex;
-    align-items: center;
+    font-weight: bold;
+    font-size: 1.75rem !important;
+    margin-left: 3.25rem;
+    -webkit-text-stroke: 1px rgb(255, 172, 28);
 }
 
 ._brand:hover {
@@ -44,5 +42,5 @@
 }
 
 ._dropdownitem:hover {
-    color: rgb(95,158,160);
+    background-color: rgb(255, 223, 0) !important;
 }

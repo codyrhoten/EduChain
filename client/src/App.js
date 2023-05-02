@@ -12,6 +12,7 @@ import Balance from './pages/Wallet/Balance';
 import SendTx from './pages/Wallet/SendTx';
 import Faucet from './pages/Faucet';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 function App() {
     return (
