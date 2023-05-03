@@ -3,6 +3,7 @@ import { useWallet } from '../../wallet-context';
 import { keyPairFromPrivKey, createWallet } from '../../utils/cryptography';
 import { Container, Col, Form } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
+import Button from '../../components/Button';
 
 function Open() {
     const [isOpen, setIsOpen] = useState(false);
@@ -57,22 +58,11 @@ function Open() {
                                 <>
                                     {error && <p><i>{error}</i></p>}
                                     <Form.Control 
-                                        className='my-2' 
+                                        className='mb-5' 
                                         placeholder='Enter the private key of your wallet'
                                         ref={userPrivateKey}
                                     />
-                                    <button
-                                        className='rounded my-3 px-4 py-3 '
-                                        onClick={handleSubmit}
-                                        style={{
-                                            textDecoration: 'none',
-                                            color: 'black',
-                                            backgroundColor: 'rgb(255, 223, 0)',
-                                            fontFamily: 'Fragment Mono'
-                                        }}
-                                    >
-                                        Open Wallet
-                                    </button>
+                                    <Button title="Open Wallet" clickHandler={handleSubmit} />
                                 </>
 
                             )}
@@ -85,7 +75,6 @@ function Open() {
                                     textDecoration: 'none',
                                     color: 'black',
                                     backgroundColor: 'rgb(255, 255, 51)',
-                                    fontFamily: 'Fragment Mono'
                                 }}
                                 disabled
                             >

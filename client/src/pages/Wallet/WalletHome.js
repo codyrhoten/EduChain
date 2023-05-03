@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useWallet } from '../../wallet-context';
 import { generateKeyPair, createWallet } from '../../utils/cryptography.js';
-import { Container, Col, Button } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
 import Header from "../../components/Header/Header";
+import Button from "../../components/Button";
 
 function WalletHome() {
     const { isLocked, changeWalletState } = useWallet();
@@ -46,28 +47,17 @@ function WalletHome() {
                                 </div>
                             </Col>
                             {isLocked && (
-                                <button
-                                    className='rounded mt-2 px-4 py-3 '
-                                    onClick={handleClick}
-                                    style={{
-                                        textDecoration: 'none',
-                                        color: 'black',
-                                        backgroundColor: 'rgb(255, 223, 0)',
-                                        fontFamily: 'Fragment Mono'
-                                    }}
-                                >
-                                    Create Wallet
-                                </button>
+                                <Button title="Create Wallet" clickHandler={handleClick} />
                             )}
                         </>
                     ) : (
                         <button
-                            className='rounded my-3 px-4 py-3'
+                            className='rounded my-5 px-4 py-3'
                             style={{
                                 textDecoration: 'none',
                                 color: 'black',
-                                backgroundColor: 'rgb(255, 255, 51)',
-                                fontFamily: 'Fragment Mono'
+                                backgroundColor: 'rgb(255, 223, 0)',
+                                border: '1px solid black',
                             }}
                             disabled
                         >

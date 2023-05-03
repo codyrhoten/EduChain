@@ -25,14 +25,14 @@ const Header = () => {
                 borderBottom: "0.1rem solid black"
             }}
         >
-            <Navbar.Brand
+            <Navbar.Text
                 as={Link}
                 to="/"
                 className={styles._brand}
             >
                 {/* <img src={chainImage} height="40" alt="three yellow chain links" /> */}
                 EduChain
-            </Navbar.Brand>
+            </Navbar.Text>
             <Navbar.Collapse id="navbarSupportedContent">
                 <Nav className='ms-auto me-5'>
                     <Nav.Item className="mx-1">

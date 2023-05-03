@@ -4,9 +4,10 @@ import axios from "axios";
 import { config } from '../environments';
 import { sha256, sign } from '../utils/cryptography.js';
 import Header from "../components/Header/Header";
-import { Button, Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
+import { Card, Col, Container, Form, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import shortenAddress from "../utils/shortenAddress.js";
+import Button from "../components/Button.js";
 
 function Faucet() {
     const siteUrl = config.apiUrl;
@@ -159,17 +160,7 @@ function Faucet() {
                         </InputGroup>
                         {
                             !txHash &&
-                            <Button
-                                onClick={processTx}
-                                className='p-2 mt-3 w-100 button-solid'
-                                style={{
-                                    backgroundColor: 'rgb(255, 223, 0)',
-                                    color: 'black',
-                                    border: '0px'
-                                }}
-                            >
-                                Submit
-                            </Button>
+                            <Button title="Send Funds" clickHandler={processTx}/>
                         }
                     </Card.Body>
                 </Card>

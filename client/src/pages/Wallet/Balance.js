@@ -4,7 +4,7 @@ import { config } from '../../environments';
 import { Card, Container, Table } from "react-bootstrap";
 import Header from "../../components/Header/Header";
 
-function Balance({ setWalletStatus, walletStatus }) {
+function Balance() {
     const siteUrl = config.apiUrl;
     const [confirmedBalance, setConfirmedBalance] = useState('0');
     const [pendingBalance, setPendingBalance] = useState('0');

@@ -7,7 +7,7 @@ import { Card, Container, Table } from 'react-bootstrap';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const TxDetails = () => {
-    const siteUrl = config.url;
+    const siteUrl = config.apiUrl;
     const { txHash } = useParams();
     const [tx, setTx] = useState({});
     const [error, setError] = useState('')
@@ -15,8 +15,8 @@ const TxDetails = () => {
     useEffect(() => {
         (async function () {
             try {
-                const tx = await axios.get(`${siteUrl}/txs/${txHash}`);
-                setTx(tx.data);
+                const _tx = await axios.get(`${siteUrl}/txs/${txHash}`);
+                setTx(_tx.data);
             } catch (err) {
                 console.log(err.message);
                 setError(tx.data.errorMsg);
@@ -44,7 +44,11 @@ const TxDetails = () => {
                                     {<tr>
                                         <th>Status</th>
                                         <td>
-                                            {tx.minedInBlock !== undefined ? <b>Confirmed</b> : <i>Pending</i>}
+                                            {
+                                                tx.minedInBlock !== undefined ? 
+                                                    <b>Confirmed</b> : 
+                                                    <i>Pending</i>
+                                            }
                                         </td>
                                     </tr>}
                                     {tx.minedInBlock !== undefined &&
@@ -102,7 +106,7 @@ const TxDetails = () => {
                                     </tr>
                                 </tbody>
                             </Table> :
-                            <p align='center'><b>This transaction doesn't exist</b></p>
+                            <p align='center'><b>This transaction doesn't exist. {error}</b></p>
                         }
                     </Card.Body>
                 </Card>

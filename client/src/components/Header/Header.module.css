@@ -21,12 +21,12 @@
 }
 
 ._brand {
-    color: rgb(255, 223, 0) !important;
+    color: #e8cb0f !important;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.75rem !important;
     margin-left: 3.25rem;
-    -webkit-text-stroke: 1px rgb(255, 172, 28);
+    text-shadow: 1px 1px 3px black;
 }
 
 ._brand:hover {

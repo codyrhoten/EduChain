@@ -159,36 +159,36 @@ function SendTx() {
                 </InputGroup>
                 <Row>
                     <button
-                        className='rounded mt-4 px-4 py-3 '
+                        className='rounded mt-4 px-4 py-3 shadow'
                         onClick={signTx}
                         style={!isSigned ? {
                             textDecoration: 'none',
                             color: 'black',
                             backgroundColor: 'rgb(255, 223, 0)',
-                            fontFamily: 'Fragment Mono'
+                            border: '0px'
                         } : {
                             textDecoration: 'none',
                             color: 'black',
                             backgroundColor: 'rgb(95,158,160)',
-                            fontFamily: 'Fragment Mono'
+                            border: '0px'
                         }}
                         disabled={isSigned ? 'disabled' : ''}
                     >
                         {!isSigned ? 'Sign transaction' : 'Transaction Signed'}
                     </button>
                     <button
-                        className='rounded mt-4 px-4 py-3 '
+                        className='rounded mt-4 px-4 py-3 shadow'
                         onClick={sendTransaction}
                         style={isSigned ? {
                             textDecoration: 'none',
                             color: 'black',
                             backgroundColor: 'rgb(255, 223, 0)',
-                            fontFamily: 'Fragment Mono'
+                            border: '0px'
                         } : {
                             textDecoration: 'none',
                             color: 'black',
                             backgroundColor: 'rgb(95,158,160)',
-                            fontFamily: 'Fragment Mono'
+                            border: '0px'
                         }}
                         disabled={isSigned ? '' : 'disabled'}
                     >
