@@ -139,8 +139,8 @@ function SendTx() {
                     </Modal.Body>
                 </Modal>
                 <h1 className='text-center'><i>Send Transaction</i></h1>
-                <p className='text-center my-4'>
-                    Sign the transaction once the form is filled out. Then you may send the signed transaction to be mined and stored on EduChain Chain.
+                <p className='text-center mt-4 mb-5'>
+                    Sign the transaction, then you may send the signed transaction to be mined and stored on EduChain.
                 </p>
                 {error && <p><i>{error}</i></p>}
                 <InputGroup className='my-3'>

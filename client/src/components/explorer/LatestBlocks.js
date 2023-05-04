@@ -24,8 +24,8 @@ const LatestBlocks = () => {
     return (
         <Col className='lg-6'>
             <Card className='text-center h-100'>
-                <Card.Body>
-                    <Card.Title>Latest Blocks from {process.env.NODE_ENV}</Card.Title>
+                <Card.Body className='d-flex flex-column'>
+                    <Card.Title className='mb-4'>Latest Blocks</Card.Title>
                     {latestBlx.length > 0 ?
                         latestBlx.map((block, i) => (
                             <Container key={i}>
@@ -49,7 +49,7 @@ const LatestBlocks = () => {
                         )) :
                         <p className='mt-5'>There are no blocks in this chain yet.</p>
                     }
-                    {latestBlx.length > 0 && <Link to='/blocks'>See all blocks</Link>}
+                    {latestBlx.length > 0 && <Link className='mt-auto' to='/blocks'>See all blocks</Link>}
                 </Card.Body>
             </Card>
         </Col>

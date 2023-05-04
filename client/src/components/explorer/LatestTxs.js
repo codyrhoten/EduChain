@@ -23,8 +23,8 @@ const LatestTxs = () => {
     return (
         <Col className='lg-6'>
             <Card className='text-center h-100'>
-                <Card.Body>
-                    <Card.Title>Latest Transactions</Card.Title>
+                <Card.Body className='d-flex flex-column'>
+                    <Card.Title className='mb-4'>Latest Transactions</Card.Title>
                     {latestTxs.length > 0 ?
                         latestTxs.map((tx, i) => {
                             return (
@@ -63,7 +63,7 @@ const LatestTxs = () => {
                         }) :
                         <p className='mt-5'>There are no transactions in this chain yet.</p>
                     }
-                    {latestTxs.length > 0 && <Link to='/transactions'>See all transactions</Link>}
+                    {latestTxs.length > 0 && <Link className='mt-auto' to='/transactions'>See all transactions</Link>}
                 </Card.Body>
             </Card>
         </Col>
