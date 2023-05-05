@@ -13,9 +13,9 @@ function WalletHome() {
         if (!isLocked) {
             return (
                 <>
-                    <p><i>Private Key:</i> {sessionStorage['privKey']}</p>
+                    <p align="left"><i>Public Key:</i> {sessionStorage['pubKey']}</p>
                     <br />
-                    <p><i>Address:</i> {sessionStorage['address']}</p>
+                    <p align="left"><i>Address:</i> {sessionStorage['address']}</p>
                 </>
             );
         }

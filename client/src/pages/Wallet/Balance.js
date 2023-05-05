@@ -29,8 +29,9 @@ function Balance() {
         <>
             <Header />
             <Container style={{ marginTop: "7rem" }}>
-                <h1 className='text-center'><i>Your Balance</i></h1>
-                <Card>
+                <p align="left">Address: <i>{sessionStorage['address']}</i></p>
+                <p align="left">Public Key: <i>{sessionStorage['pubKey']}</i></p>
+                <Card className="mt-5">
                     <Table>
                         <thead>
                             <tr>
