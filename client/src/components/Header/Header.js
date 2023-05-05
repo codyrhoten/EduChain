@@ -2,7 +2,7 @@ import { useWallet } from "../../wallet-context";
 import { config } from '../../environments';
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import chainImage from "../../assets/chain.webp";
+// import chainImage from "../../assets/chain.webp";
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -44,13 +44,15 @@ const Header = () => {
                         {isLocked ? (
                             <>
                                 <NavDropdown.Item
-                                    href='/wallet/home'
+                                    as={Link}
+                                    to='/wallet/home'
                                     className={styles._dropdownitem}
                                 >
                                     Create
                                 </NavDropdown.Item>
                                 <NavDropdown.Item
-                                    href='/wallet/open'
+                                    as={Link}
+                                    to='/wallet/open'
                                     className={styles._dropdownitem}
                                 >
                                     Open
@@ -59,19 +61,24 @@ const Header = () => {
                         ) : (
                             <>
                                 <NavDropdown.Item
-                                    href='/wallet/balance'
+                                    as={Link}
+                                    to='/wallet/balance'
                                     className={styles._dropdownitem}
                                 >
                                     Balance
                                 </NavDropdown.Item>
                                 <NavDropdown.Item
-                                    href='/wallet/send-tx'
+                                    as={Link}
+                                    to='/wallet/send-tx'
                                     className={styles._dropdownitem}
                                 >
                                     Send
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={closeWallet}>
+                                <NavDropdown.Item
+                                    onClick={closeWallet}
+                                    className={styles._dropdownitem}
+                                >
                                     Close Wallet
                                 </NavDropdown.Item>
                             </>
