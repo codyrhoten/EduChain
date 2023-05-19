@@ -27,7 +27,7 @@ const Transactions = () => {
                 );
             } else {
                 try {
-                    const txs = await axios.get('http://localhost:5555/all-txs');
+                    const txs = await axios.get(`${siteUrl}/all-txs`);
                     setTxs(txs.data.reverse());
                     setHeading(<h4 align='center'>All Transactions</h4>);
                 } catch (err) {
