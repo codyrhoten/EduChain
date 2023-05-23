@@ -38,7 +38,7 @@ npm start
 ### Wallet
 
 <p align="center">
-  <img  src="/client/public/wallet-home-pg.png" alt="wallet home page" />
+  <img  src="/client/public/wallet-balance-pg.png" alt="wallet balance page" />
 </p>
 
 - Wallet key and address derivation
@@ -74,12 +74,13 @@ npm start
 
 - REST API
 - Validates transactions and blocks
-- Synchronizes mutliple nodes and their chains
-- Mining jobs
+- Synchronizes mutliple nodes and their chains (back end only)
+- Mining jobs (back end only)
 
 ## Miner
 
 - Auotomatically mines when there are pending transactions
+- Has yet to be implemented on the front end
 
 ## Created by
 
